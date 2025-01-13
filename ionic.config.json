@@ -1,0 +1,7 @@
+{
+  "name": "APP-AMD-V5",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
