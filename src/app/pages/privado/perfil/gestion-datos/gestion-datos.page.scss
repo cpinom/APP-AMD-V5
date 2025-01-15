@@ -1,0 +1,16 @@
+p.label {
+  font-size: var(--FS14);
+  margin-bottom: 6px;
+  white-space: normal;
+}
+p.detail {
+  font-size: var(--FS16);
+  color: #222 !important;
+  white-space: normal;
+}
+
+::ng-deep body.dark {
+  p.detail {
+    color: #eee !important;
+  }
+}

@@ -1,0 +1,30 @@
+ion-header {
+    ion-icon[slot="start"] {
+        margin-inline-end: 5px;
+    }
+}
+
+#main {
+    flex: 1 1 0%;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow-y: auto;
+}
+
+ion-menu {
+    ion-item {
+        &.selected {
+            ion-label {
+                font-weight: 500;
+                color: var(--ion-color-primary);
+            }
+        }
+    }
+}
+
+::ng-deep body.dark {
+    ion-menu {
+        border-inline-end: 1px solid var(--ion-color-dark-tint);
+    }
+}

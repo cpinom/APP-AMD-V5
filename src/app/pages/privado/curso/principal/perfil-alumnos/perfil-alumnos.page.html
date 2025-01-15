@@ -1,0 +1,50 @@
+<ion-header class="tab-content">
+  <ion-toolbar>
+    <ion-title>Perfil del Estudiante</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button text="Volver Atrás"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ion-card class="perfiles" *ngIf="alumnos">
+    <ion-card-content>
+      <section class="tabla">
+        <table matSort (matSortChange)="ordenarAlumnos($event)">
+          <thead>
+            <th mat-sort-header="persTapePaterno">Nombre Estudiante</th>
+            <th mat-sort-header="tcolTdesc">Tipo Colegio</th>
+            <th mat-sort-header="coleTdesc">Nombre Colegio</th>
+            <th mat-sort-header="comuna">Comuna</th>
+            <th class="ion-text-center" mat-sort-header="persNanoEgrMedia">Año Egreso</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of alumnos">
+              <td>
+                <div class="avatar">
+                  <app-cached-image [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                  <span>{{item.persTapePaterno}} {{item.persTapeMaterno}}, {{item.persTnombre}}</span>
+                </div>
+              </td>
+              <td>{{item.tcolTdesc}}</td>
+              <td>{{item.coleTdesc}}</td>
+              <td>{{item.comuna}}</td>
+              <td class="ion-text-center">{{item.persNanoEgrMedia}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

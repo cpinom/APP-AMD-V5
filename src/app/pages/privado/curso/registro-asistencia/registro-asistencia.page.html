@@ -1,0 +1,110 @@
+<ion-header>
+  <ion-toolbar class="curso">
+    <ion-title *ngIf="seccion">
+      <h2>{{ seccion.asigTdesc }} / {{ seccion.ssecTdesc }}</h2>
+      <span>Sede {{ seccion.sedeTdesc }}</span>
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="AMD" defaultHref="/privado/curso"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-toolbar class="asistencia">
+    <ion-title>Asistencia</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="info" shape="round" fill="solid" (click)="reportar()" [disabled]="!permitirReportar">Reportar Excepción</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ion-card class="alumnos" *ngIf="alumnos && alumnos.length">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-button color="info" shape="round" fill="outline" (click)="marcarPresentes()">Marcar Todos Presentes</ion-button>
+        <div class="indicadores">
+          <div>
+            <strong>{{ alumnos.length }}</strong> Total
+          </div>
+          <div>
+            <strong>{{ resolverPorEstado(2) }}</strong> Presentes
+          </div>
+          <div>
+            <strong>{{ resolverPorEstado(1) }}</strong> Ausentes
+          </div>
+        </div>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <section class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th class="ion-text-left">Nombre Estudiante</th>
+              <th>% Asistencia</th>
+              <th class="blue">
+                {{ resolverDia(alumnos[0].lclaFclase) }}<br />{{ alumnos[0].lclaFclase }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of alumnos; let i = index;">
+              <td>
+                <div class="avatar">
+                  <ion-avatar>
+                    <img [src]="resolverFoto(item.persNcorr)" />
+                  </ion-avatar>
+                  <span>{{ item.persTapePaterno }}, {{ item.persTnombre }}</span>
+                  <ng-container *ngIf="item.alnoNoportunidad >= 3">
+                    <ion-badge id="est-oportunidad-{{ i }}" color="medium">{{ item.alnoNoportunidad }}</ion-badge>
+                    <ion-popover trigger="est-oportunidad-{{ i }}" side="right" alignment="end">
+                      <ng-template>
+                        <ion-content class="ion-padding">{{ resolverOportunidad(item.alnoNoportunidad) }}</ion-content>
+                      </ng-template>
+                    </ion-popover>
+                  </ng-container>
+                  <ng-container *ngIf="item.estadoCumpleanos == 1">
+                    <ion-icon id="est-cumple-{{ i }}" src="assets/icon/cake.svg"></ion-icon>
+                    <ion-popover trigger="est-cumple-{{ i }}" side="right" alignment="end">
+                      <ng-template>
+                        <ion-content class="ion-padding">Estudiante de cumpleaños</ion-content>
+                      </ng-template>
+                    </ion-popover>
+                  </ng-container>                  
+                </div>
+              </td>
+              <td>{{ item.asistencia }}%</td>
+              <td class="blue">
+                <div (click)="procesarAsistencia(item)">
+                  <ion-icon class="no-informada" src="assets/icon/radio_button_unchecked.svg" *ngIf="item.asistenciaActual == 0"></ion-icon>
+                  <ion-icon class="ausente" src="assets/icon/cancel.svg" *ngIf="item.asistenciaActual == 1"></ion-icon>
+                  <ion-icon class="presente" src="assets/icon/check_circle.svg" *ngIf="item.asistenciaActual == 2"></ion-icon>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="alumnos && alumnos.length == 0">
+              <td colspan="3" class="ion-text-center">Curso sin estudiantes...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="empty-state" *ngIf="alumnos && alumnos.length == 0">
+    <div>
+      <ion-icon src="assets/icon/class.svg"></ion-icon>
+      <p>Curso sin Estudiantes.</p>
+    </div>            
+  </div>
+
+  <section class="btn-volver" *ngIf="!mostrarCargando">
+    <ion-button color="info" shape="round" expand="block" routerLink="/privado/curso">Volver al Curso</ion-button>
+  </section>
+
+</ion-content>

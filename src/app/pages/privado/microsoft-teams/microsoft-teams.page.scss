@@ -1,0 +1,108 @@
+ion-content {
+  ion-toolbar {
+    --background: #fff;
+    box-shadow: 0px 2px 6px #00000033;
+    --color: #333;
+    --min-height: 56px;
+
+    ion-title {
+      font-size: 24px;
+      padding-inline: 15px;
+      text-align: left;
+      font-weight: 600;
+    }
+  }
+  section {
+    margin-top: 15px;
+
+    ion-button {
+      --border-width: 2px;
+      height: 25px;
+
+      ion-icon[name="add"] {
+        font-size: 32px;
+      }
+    }
+  }
+}
+
+ion-popover.detalle-evento {
+  &::part(content) {
+    width: 450px;
+    height: 450px;
+  }
+
+  ion-header {
+    ion-toolbar {
+      --background: #fff;
+      --color: #333;
+      --ion-safe-area-top: 0px !important;
+
+      ion-buttons[slot="end"] {
+        ion-button {
+          ion-label {
+            color: var(--ion-color-info);
+            font-weight: 500;
+            font-size: var(--FS16);
+          }
+        }
+      }
+    }
+  }
+
+  ion-content {
+    // --padding-top: 5px;
+
+    ion-card {
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2) !important;
+      margin: 0;
+      border-radius: 0;
+    }
+
+    ion-item {
+      --min-height: 40px;
+
+      ion-label {
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+        &.valor {
+          white-space: normal;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep body.dark {
+  ion-content {
+    ion-toolbar {
+      --background: var(--ion-color-dark-shade) !important;
+      --color: white !important;
+
+      ion-back-button {
+        --ion-toolbar-color: white !important;
+      }
+    }
+  }
+
+  ion-popover.detalle-evento {
+    ion-header {
+      ion-toolbar {
+        --background: var(--ion-color-dark-shade) !important;
+        --color: white !important;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  ion-content {
+    ion-toolbar {
+      ion-title {
+        font-size: 18px;
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+ion-header,
+ion-footer {
+  ion-toolbar {
+    --background: #fff;
+    --color: #444;
+    --ion-safe-area-top: 0px !important;
+
+    &.md {
+      --min-height: 47px;
+    }
+  }
+}
+ion-content {
+  ion-list.mensajes {
+    ion-item {
+      .subject {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .date {
+          flex: 0 0 90px;
+          font-weight: bold;
+          font-size: 12px;
+          text-align: right;
+          color: var(--ion-color-medium);
+        }
+      }
+
+      &.selected {
+        --background: rgba(0, 0, 0, 0.12) !important;
+      }
+
+      &.unread {
+        .sender-name {
+          font-weight: bold;
+        }
+        .subject {
+          color: var(--ion-color-primary) !important;
+        }
+      }
+    }
+  }
+  ion-infinite-scroll-content {
+    padding-top: 22px;
+  }
+}
+
+::ng-deep body.dark {
+  ion-header {
+    ion-toolbar {
+      --background: var(--ion-color-dark-shade) !important;
+      color: #fff !important;
+    }
+  }
+}

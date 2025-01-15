@@ -1,0 +1,5 @@
+<img [src]="_src" *ngIf="_src; else loading;" (click)="onClick($event)" />
+
+<ng-template #loading>
+  <ion-spinner></ion-spinner>
+</ng-template>

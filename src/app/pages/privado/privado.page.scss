@@ -1,0 +1,490 @@
+ion-toolbar.periodos {
+    --border-width: 1px 0px 1px 0px;
+    --border-color: var(--ion-color-dark-tint);
+    --min-height: 0;
+    border-radius: 0 0 5px 5px;
+
+    &.md {
+        border-top: 1px solid var(--ion-color-dark-tint);
+    }
+
+    ion-item {
+        --background: var(--ion-toolbar-background);
+        --inner-border-width: 0;
+        --min-height: 0;
+        --padding-start: 0;
+        --inner-padding-end: 0;
+        --color: #fff !important;
+
+        ion-select {
+            font-size: var(--FS12);
+            min-height: 0;
+
+            &.md {
+                min-height: 22px;
+            }
+
+            &::part(container) {
+                flex: 1;
+                justify-content: center;
+            }
+
+            &::part(text) {
+                flex: none;
+            }
+
+            &.md::part(text) {
+                margin-left: 10px;
+            }
+
+            &::part(icon) {
+                color: #fff;
+            }
+        }
+    }
+}
+
+ion-toolbar {
+    .mat-badge-content {
+        background: #ffa000 !important;
+        width: 7px;
+        height: 7px;
+        left: 17px;
+        top: 2px !important;
+    }
+    // ion-title {
+    //     text-align: center;
+    // }
+}
+
+ion-card {
+    box-shadow: 0px 1px 3px #00000033 !important;
+}
+
+section.cursos {
+    overflow: scroll;
+    white-space: nowrap;
+    padding: 15px 15px 0;
+
+    ion-card {
+        display: inline-block;
+        height: 185px;
+        width: 300px;
+        margin: 0 15px 0 0;
+
+        ion-card-header {
+            --background: var(--ion-color-info);
+            padding: 8px 10px;
+
+            ion-card-title {
+                font-size: 12px;
+                font-weight: 400;
+                color: var(--ion-color-white);
+
+                b {
+                    display: block;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    font-weight: 500;
+                }
+            }
+        }
+
+        ion-card-content {
+            padding: 10px 15px;
+
+            .notificaciones {
+                display: flex;
+                align-items: center;
+                height: 100px;
+
+                .fecha {
+                    flex: 0 0 80px;
+                    height: 80px;
+                    width: 80px;
+                    background: #f0f0f0;
+                    border-radius: 50%;
+                    margin-right: 15px;
+                    text-align: center;
+                    color: #333;
+                    font-weight: 500;
+                    padding: 5px;
+
+                    span {
+                        display: block;
+                    }
+
+                    .num {
+                        font-size: 42px;
+                        letter-spacing: -0.945px;
+                        line-height: 49px;
+                    }
+
+                    .mes {
+                        font-size: 16px;
+                        line-height: 19px;
+                    }
+                }
+
+                .detalle {
+                    color: #333;
+
+                    h2 {
+                        margin: 0;
+                        font-size: 16px;
+                        line-height: 19px;
+                        font-weight: 700;
+                    }
+                    p {
+                        font-size: 14px;
+                        font-weight: normal;
+                        line-height: 19px;
+                        white-space: break-spaces;
+                    }
+                }
+            }
+        }
+    }
+
+    ion-card:last-child {
+        margin-right: 0;
+    }
+}
+
+ion-card.destacado {
+    margin: 15px 15px 0px;
+    box-shadow: 0px 1px 3px #00000033 !important;
+
+    ion-card-content {
+        padding: 0;
+
+        ion-label h2 {
+            font-size: var(--FS14);
+            white-space: normal !important;
+        }
+
+        ion-icon {
+            color: var(--ion-color-medium);
+            margin-right: 15px;
+
+            &[name="close"] {
+                margin: 0;
+                font-size: 24px;
+            }
+        }
+    }
+}
+
+.menu-principal {
+    ion-content {
+        --background: #333;
+    }
+    ion-footer {
+        background: #333;
+        ion-list {
+            margin-bottom: 20px;
+        }
+    }
+    ion-list {
+        background: #333;
+
+        &.list-md {
+            padding: 0;
+
+            ion-item {
+                ion-icon {
+                    margin-right: 15px;
+                    color: #fff;
+                }
+            }
+        }
+        ion-item {
+            --background: #333;
+            --border-color: #d8d8d8;
+            --color: #fff;
+            font-size: 14px;
+        }
+
+        p.acceso-directo {
+            margin: 16px 20px 8px;
+            color: #fff;
+            font-size: 12px;
+        }
+    }
+}
+
+section.clases {
+    margin-top: 15px;
+}
+
+div.tabs {
+    background: #fff;
+
+    ion-segment {
+        display: flex;
+
+        ion-segment-button {
+            flex: 1;
+            font-size: var(--FS16);
+            font-weight: 600;
+            letter-spacing: 0;
+            text-transform: none;
+            --indicator-height: 6px;
+            --color: #999;
+
+            max-width: 100%;
+
+            &::part(indicator) {
+                --indicator-color: #999;
+                opacity: 1;
+            }
+
+            &.segment-button-checked {
+                color: #000000;
+
+                ion-icon,
+                ion-label {
+                    color: var(--ion-color-primary);
+                }
+
+                &::part(indicator) {
+                    --indicator-color: var(--ion-color-primary);
+                }
+            }
+
+            ion-icon {
+                margin-top: 10px;
+            }
+
+            ion-label {
+                margin-top: 5px;
+                margin-bottom: 9px;
+            }
+        }
+    }
+}
+
+ion-list.clases {
+    div.horario {
+        font-size: 16px;
+        color: #333;
+        border-right: 1px solid var(--border-color);
+        padding: 10px 20px 10px 0;
+
+        span {
+            display: block;
+        }
+    }
+    ion-item {
+        &.md {
+            div.horario {
+                margin-inline-end: 20px;
+            }
+        }
+        &.button-action {
+            ion-button {
+                --padding-start: 16px;
+                --padding-end: 16px;
+                font-size: 16px;
+            }
+        }
+        &:not(.button-action) {
+            --padding-end: 11px;
+        }
+        ion-label {
+            // padding-top: 15px;
+            // padding-bottom: 15px;
+
+            h2 {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+            }
+            p {
+                font-size: 14px;
+                color: #666;
+            }
+
+            p.estado {
+                display: none;
+                margin: 0;
+                font-style: italic;
+                font-size: 14px;
+                line-height: 16.4px;
+                margin-bottom: 4px;
+
+                i {
+                    height: 8px;
+                    width: 8px;
+                    border-radius: 50%;
+                    display: inline-block;
+                    margin-right: 3px;
+                }
+            }
+        }
+        &.clase-en-curso {
+            div.horario {
+                border-color: var(--ion-color-success);
+            }
+            p.estado {
+                color: var(--ion-color-success) !important;
+                display: block !important;
+
+                i {
+                    background-color: var(--ion-color-success);
+                }
+            }
+        }
+        &.clase-finalizada {
+            p.estado {
+                display: block !important;
+
+                i {
+                    background-color: #999;
+                }
+            }
+        }
+    }
+}
+
+ion-list.apuntes {
+    ion-item {
+        h2 {
+            font-weight: bold;
+        }
+    }
+}
+
+ion-grid.botones {
+    margin-inline: 7px;
+
+    ion-row {
+        ion-col {
+            padding: 5px;
+
+            ion-button {
+                height: 54px;
+                margin: 0;
+                --padding-top: 10px;
+                --padding-bottom: 10px;
+                --padding-start: 25px;
+                --padding-end: 25px;
+                --box-shadow: 0px 1px 3px #00000033 !important;
+                --border-radius: 30px;
+
+                div {
+                    width: 100%;
+                    justify-content: flex-start;
+                    display: flex;
+                    align-items: center;
+
+                    span {
+                        text-align: left;
+                    }
+                }
+                ion-icon {
+                    color: var(--ion-color-medium);
+                    font-size: 24px;
+                    flex: 0 0 24px;
+                    margin-right: 16px;
+
+                    &.md {
+                        margin-right: 8px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+section.eval-docente {
+    margin: 15px 15px 60px;
+
+    ion-button {
+        min-height: 36px;
+        height: 36px;
+        font-size: 16px;
+        font-weight: normal;
+        letter-spacing: 0.3px;
+    }
+}
+
+section.btn-cerrar {
+    margin: 15px 18px;
+
+    ion-button {
+        margin: 0;
+        height: 55px;
+        font-size: 18px;
+        --box-shadow: 0px 1px 3px #00000033 !important;
+
+        &::part(native) {
+            color: var(--ion-color-danger);
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    ion-header ion-title span {
+        display: none;
+    }
+    ion-list.clases {
+        ion-item {
+            &.button-action {
+                ion-button {
+                    font-size: 14px;
+
+                    span.md {
+                        display: none;
+                    }
+
+                    ion-icon {
+                        margin-left: 0;
+                    }
+                }
+            }
+        }
+    }
+    .botones {
+        span span {
+            display: none;
+        }
+    }
+}
+
+p.version {
+    margin: 0 0 15px;
+    text-align: center;
+    color: var(--ion-color-medium);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+::ng-deep body.dark {
+    section.cursos {
+        ion-card {
+            ion-card-content {
+                .fecha {
+                    background-color: #aaa !important;
+                }
+                p {
+                    color: #eee !important;
+                }
+                .detalle {
+                    color: #eee !important;
+                }
+            }
+        }
+    }
+    ion-list.clases {
+        div.horario {
+            color: #fff !important;
+        }
+        ion-label {
+            h2 {
+                color: #fff !important;
+            }
+        }
+    }
+}

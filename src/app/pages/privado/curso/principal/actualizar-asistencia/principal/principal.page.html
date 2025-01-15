@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Actualizar Asistencia Rápida</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ng-container *ngIf="alumnosFiltrados">
+
+    <p class="nota">Aquí podrá actualizar de manera rápida la asistencia de los estudiantes.</p>
+
+    <ion-card class="asistencia">
+      <ion-card-header>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button [color]="resolverColor(1)" shape="round" expand="block" (click)="aplicarFiltro(1)">{{resolverContador(1)}}</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button [color]="resolverColor(2)" shape="round" expand="block" (click)="aplicarFiltro(2)">{{resolverContador(2)}}</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button [color]="resolverColor(3)" shape="round" expand="block" (click)="aplicarFiltro(3)">{{resolverContador(3)}}</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-header>
+      <ion-card-content>
+        <section class="tabla" *ngIf="alumnosFiltrados">
+          <table>
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th class="ion-text-left">Nombre Estudiante</th>
+                <th *ngIf="alumnos.length">{{ resolverDia(alumnos[0].lclaFclase) }}<br/>{{ alumnos[0].lclaFclase }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of alumnosFiltrados; let i = index;">
+                <td>{{ i + 1 }}</td>
+                <td>
+                  <div class="avatar">
+                    <ion-avatar>
+                      <img [src]="resolverFoto(item.persNcorr)" />
+                    </ion-avatar>
+                    <span>{{ item.persTapePaterno }}, {{ item.persTnombre }}</span>
+                    <ng-container *ngIf="item.alnoNoportunidad >= 3">
+                      <ion-badge id="est-oportunidad-{{ i }}" color="medium">{{ item.alnoNoportunidad }}</ion-badge>
+                      <ion-popover trigger="est-oportunidad-{{ i }}" side="right" alignment="end">
+                        <ng-template>
+                          <ion-content class="ion-padding">{{ resolverOportunidad(item.alnoNoportunidad) }}</ion-content>
+                        </ng-template>
+                      </ion-popover>
+                    </ng-container>
+                    <ng-container *ngIf="item.estadoCumpleanos == 1">
+                      <ion-icon id="est-cumple-{{ i }}" src="assets/icon/cake.svg"></ion-icon>
+                      <ion-popover trigger="est-cumple-{{ i }}" side="right" alignment="end">
+                        <ng-template>
+                          <ion-content class="ion-padding">Estudiante de cumpleaños</ion-content>
+                        </ng-template>
+                      </ion-popover>
+                    </ng-container>                  
+                  </div>
+                </td>
+                <td *ngIf="alumnos.length" (click)="procesarAsistencia(item)">
+                  <ion-icon class="no-informada" src="assets/icon/radio_button_unchecked.svg" *ngIf="item.asistenciaActual == 0"></ion-icon>
+                  <ion-icon class="ausente" src="assets/icon/cancel.svg" *ngIf="item.asistenciaActual == 1"></ion-icon>
+                  <ion-icon class="presente" src="assets/icon/check_circle.svg" *ngIf="item.asistenciaActual == 2"></ion-icon>
+                </td>
+              </tr>
+              <tr *ngIf="alumnosFiltrados && alumnosFiltrados.length == 0">
+                <td colspan="3" class="ion-text-center" *ngIf="filtroAsistencia == 1">Curso sin estudiantes...</td>
+                <td colspan="3" class="ion-text-center" *ngIf="filtroAsistencia == 2">Curso sin presentes...</td>
+                <td colspan="3" class="ion-text-center" *ngIf="filtroAsistencia == 3">Curso sin ausentes...</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- <div class="empty-state" *ngIf="alumnosFiltrados.length == 0">
+      <div>
+        <ion-icon src="assets/icon/class.svg"></ion-icon>
+        <p>Curso sin Estudiantes.</p>
+      </div>            
+    </div> -->
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button color="info" fill="outline" shape="round" expand="block" (click)="reportarExcepcion()" [disabled]="!permitirReportar">Reportar Excepción</ion-button>
+        </ion-col>
+        <!-- <ion-col>
+          <ion-button color="info" shape="round" expand="block">Actualizar Asistencia</ion-button>
+        </ion-col> -->
+      </ion-row>
+    </ion-grid>
+
+  </ng-container>
+
+</ion-content>

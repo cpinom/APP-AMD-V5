@@ -1,0 +1,46 @@
+.network-status {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  height: 20px;
+  background: #000;
+  width: 100%;
+  color: white;
+  font-size: 11px;
+  text-align: center;
+  line-height: 20px;
+
+  span {
+    display: none;
+  }
+}
+
+::ng-deep body {
+  &.off-line {
+    ion-router-outlet {
+      bottom: 20px;
+    }
+
+    .network-status {
+      display: block;
+
+      .off-text {
+        display: block;
+      }
+    }
+  }
+  &.on-line {
+    ion-router-outlet {
+      bottom: 20px;
+    }
+
+    .network-status {
+      display: block;
+      background-color: var(--ion-color-success);
+
+      .on-text {
+        display: block;
+      }
+    }
+  }
+}

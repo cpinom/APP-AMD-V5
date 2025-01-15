@@ -1,0 +1,41 @@
+@import "../../curso.common.scss";
+@import "src/theme/tabla.scss";
+
+ion-buttons {
+  margin-right: 10px;
+
+  ion-back-button {
+      --ion-toolbar-color: #333;
+  }
+}
+
+ion-card.oportunidades {
+  margin: 0;
+  border-radius: 0;
+  box-shadow: 0px 2px 4px #00000012;
+
+  ion-card-header {
+      padding-inline: 12px;
+
+      .botones-filtros {
+        display: flex;
+        flex-wrap: nowrap;
+  
+        div {
+          flex: 1;
+  
+          ion-button {
+            white-space: normal;
+            min-height: 40px;
+            font-size: 14px;
+          }
+        }
+      }
+  }
+
+  ion-card-content {
+    section.tabla {
+      overflow: auto;
+    }
+  }
+}

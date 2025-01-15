@@ -1,0 +1,44 @@
+/** FONTS **/
+$font-path: "/assets/fonts/";
+
+@font-face {
+    font-family: "Roboto";
+    src: url($font-path + "Roboto-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url($font-path + "Roboto-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url($font-path + "Roboto-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "RobotoCondensed";
+    src: url($font-path + "RobotoCondensed-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "RobotoCondensed";
+    src: url($font-path + "RobotoCondensed-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "RobotoCondensed";
+    src: url($font-path + "RobotoCondensed-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}

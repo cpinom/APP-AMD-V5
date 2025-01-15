@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="AMD" defaultHref="/privado"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-toolbar>
+    <ion-title>Contactos en Sede</ion-title>
+  </ion-toolbar>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <section *ngFor="let item of sedes">
+    <ion-list>
+      <ion-item>
+        <ion-label>
+          <h2>Sede {{item.sedeTdesc}}</h2>
+        </ion-label>
+      </ion-item>
+      <ion-item class="persona" *ngIf="item.vicerrector">
+        <app-cached-image slot="start" [src]="resolverFoto(item.vicerrector.persNcorr)"></app-cached-image>
+        <ion-label>
+          <h2>{{item.vicerrector.nombre}}</h2>
+          <span>Vicerrector</span>
+        </ion-label>
+        <ion-button slot="end" color="info" shape="round" fill="outline" *ngIf="item.vicerrector.persTemailInacap" (click)="correo(item.vicerrector.persTemailInacap)">
+          <ion-icon src="assets/icon/mail.svg"></ion-icon>
+          <span>Enviar Correo</span>
+        </ion-button>
+      </ion-item>
+      <ion-item class="persona" *ngIf="item.directorCarrera">
+        <app-cached-image slot="start" [src]="resolverFoto(item.directorCarrera.persNcorr)"></app-cached-image>
+        <ion-label>
+          <h2>{{item.directorCarrera.nombre}}</h2>
+          <span>Director de Carrera</span>
+        </ion-label>
+        <ion-button slot="end" color="info" shape="round" fill="outline" *ngIf="item.directorCarrera.persTemailInacap" (click)="correo(item.directorCarrera.persTemailInacap)">
+          <ion-icon src="assets/icon/mail.svg"></ion-icon>
+          <span>Enviar Correo</span>
+        </ion-button>
+      </ion-item>
+      <ion-item class="persona" *ngIf="item.directorAcademico">
+        <app-cached-image slot="start" [src]="resolverFoto(item.directorAcademico.persNcorr)"></app-cached-image>
+        <ion-label>
+          <h2>{{item.directorAcademico.nombre}}</h2>
+          <span>Director Académico</span>
+        </ion-label>
+        <ion-button slot="end" color="info" shape="round" fill="outline" *ngIf="item.directorAcademico.persTemailInacap" (click)="correo(item.directorAcademico.persTemailInacap)">
+          <ion-icon src="assets/icon/mail.svg"></ion-icon>
+          <span>Enviar Correo</span>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </section>
+
+</ion-content>

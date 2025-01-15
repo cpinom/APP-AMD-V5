@@ -1,0 +1,44 @@
+ion-header.tab-content {
+
+    ion-toolbar {
+        --background: #fff;
+        --color: #333;
+        --min-height: 56px;
+        --ion-safe-area-top: 0px !important;
+
+        ion-title {
+            font-size: 24px;
+            padding-inline: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+    }
+}
+ion-content.contenido {
+    --padding-top: 15px;
+}
+
+@media only screen and (max-width: 500px) {
+    ion-header {    
+        ion-toolbar {
+            --min-height: 46px;
+    
+            ion-title {
+                font-size: 20px;
+            }
+        }
+    }
+}
+
+::ng-deep body.dark {
+    ion-header {    
+        ion-toolbar {
+            --background: var(--ion-color-dark-shade) !important;
+            --color: white !important;
+
+            ion-back-button {
+                --ion-toolbar-color: white !important;
+            }
+        }
+    }
+}

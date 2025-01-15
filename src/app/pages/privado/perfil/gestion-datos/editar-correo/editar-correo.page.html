@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="Configuración de Datos"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card class="primary-card" color="white">
+    <ion-card-header>
+      <ion-card-title>Confirmar correo</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <ng-container *ngIf="perfil && !mostrarCodigo">
+    <form [formGroup]="form">
+      <section>
+        <div class="section-header">Datos Personales</div>
+        <div class="section-content">
+          <ion-list>
+            <ion-item>
+              <ion-label position="stacked">Correo</ion-label>
+              <ion-input type="email" formControlName="persTemail" placeholder="Ingrese un correo" clearInput></ion-input>
+            </ion-item>
+            <div class="invalid" *ngIf="submitted && correo?.hasError('email')">Correo inválido</div>
+            <div class="invalid" *ngIf="submitted && correo?.hasError('required')">Campo obligatorio</div>
+            <ion-item>
+              <ion-label position="stacked">Confirmar correo</ion-label>
+              <ion-input type="email" formControlName="persTemailConfirma" placeholder="Ingrese un correo de confirmación" clearInput></ion-input>
+            </ion-item>
+            <div class="invalid" *ngIf="submitted && correoConfirma?.hasError('email')">Correo inválido</div>
+            <div class="invalid" *ngIf="submitted && correoConfirma?.hasError('required')">Campo obligatorio</div>
+            <div class="invalid" *ngIf="submitted && !correosIguales">Los correos deben ser iguales.</div>
+          </ion-list>
+        </div>
+      </section>
+      <section>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-nav-link router-direction="back">
+                <ion-button ion-nav-link color="secondary" shape="round" expand="full">
+                  Cancelar
+                </ion-button>
+              </ion-nav-link>
+            </ion-col>
+            <ion-col>
+              <ion-button color="info" shape="round" expand="full" (click)="validar()">
+                Siguiente
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </section>
+    </form>
+  </ng-container>
+
+  <ng-container *ngIf="mostrarCodigo">
+    <section>
+      <div class="section-header">CÓDIGO DE CONFIRMACIÓN</div>
+      <div class="section-content">
+        <ion-list>
+          <ion-item>
+            <ion-icon color="success" src="assets/icon/check_circle.svg" slot="start"></ion-icon>
+            <ion-label>Se enviará un mail con el código de confirmación al correo ingresado. Si éste no llega en los próximos minutos, reenviar el código aquí.</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </section>
+
+    <div class="pin-contenedor">
+      <code-input #codeInput [isCodeHidden]="false" [codeLength]="6" (codeChanged)="onPinChanged($event)" (codeCompleted)="onPinCompleted($event)"></code-input>
+    </div>
+
+    <section>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="cancelar()" color="secondary" shape="round" expand="full">
+              Cancelar
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button color="info" shape="round" expand="full" (click)="confirmar()" [disabled]="!codigoValido">
+              Enviar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </section>
+  </ng-container>
+
+</ion-content>

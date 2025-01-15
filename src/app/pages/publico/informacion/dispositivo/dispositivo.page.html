@@ -1,0 +1,150 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Configuración Dispositivo</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="Versión"></ion-back-button>
+    </ion-buttons>
+    <ion-progress-bar *ngIf="mostrarCargando" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <swiper-container #swiper>
+    <!-- pin 0-->
+    <swiper-slide>
+      <div class="section-pin">
+        <form [formGroup]="pinForm" (ngSubmit)="validarPin()">
+          <h3><ion-icon src="assets/icon/lock.svg"></ion-icon>PIN de seguridad Sede</h3>
+          <ion-list>
+            <!-- <ion-item> -->
+            <ion-input mode="md" #pinEl type="password" inputmode="numeric" fill="solid"
+              label="Ingrese un PIN de 6 digitos" labelPlacement="floating" formControlName="pin"
+              helperText="El PIN es provisto por el Administrador de Casa Central" (ionInput)="onPinInput($event)"
+              maxlength="6">
+            </ion-input>
+          </ion-list>
+          <section>
+            <ion-button type="submit" color="primary" shape="round" [disabled]="!pinForm.valid || mostrarCargando">Siguiente</ion-button>
+          </section>
+        </form>
+      </div>
+    </swiper-slide>
+    <!-- opciones 1-->
+    <swiper-slide>
+      <ng-container *ngIf="data">
+        <ion-card>
+          <ion-card-content>
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="start" src="assets/icon/tablet.svg" style="font-size: 48px;"></ion-icon>
+                <ion-label>
+                  <h2 class="configurado" *ngIf="!data.tablet.nuevo">
+                    Código: <ion-icon src="assets/icon/check_circle.svg"></ion-icon>{{data.tablet.aptaCtablets}}
+                  </h2>
+                  <h2 class="no-configurado" *ngIf="data.tablet.nuevo">
+                    Código: <ion-icon src="assets/icon/warning.svg"></ion-icon>No configurado
+                  </h2>
+                  <p>UUID: {{data.tablet.aptaTuuid}}</p>
+                  <p>ID APP: {{data.tablet.aptaNcorr}}</p>
+                  <p>Sede: {{data.sedeTdesc}}</p>
+                  <p class="estado">
+                    Estado: {{resolverEstado(data.tablet.estaCcod)}} <ion-icon src="assets/icon/info.svg"></ion-icon>
+                  </p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+      <ng-container *ngIf="data && data.tablet.estaCcod == 1">
+        <ion-list style="margin: 30px 30px 30px 50px" inset="true">
+          <ion-list-header style="padding: 0;">
+            <ion-label style="margin: 0 0 15px 0;">Elija una opción de configuración</ion-label>
+          </ion-list-header>
+          <ion-radio-group [(ngModel)]="modoConfig">
+            <ion-item lines="none" *ngIf="data && !data.tablet.nuevo">
+              <ion-radio slot="start" [value]="0" mode="md" labelPlacement="end" justify="start" color="primary">
+                Modificar Dispositivo</ion-radio>
+            </ion-item>
+            <ion-item lines="none" *ngIf="data && data.tablet.nuevo">
+              <ion-radio slot="start" [value]="1" mode="md" labelPlacement="end" justify="start" color="primary">
+                Configurar Nuevo Dispositivo</ion-radio>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-radio slot="start" [value]="2" mode="md" labelPlacement="end" justify="start" color="primary">
+                Reemplazar por uno existente</ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+        <section style="margin: 0 0 0 50px;">
+          <ion-button color="secondary" shape="round" (click)="salir()">Salir</ion-button>
+          <ion-button color="primary" shape="round" (click)="modoConfigTap()" style="margin-left: 10px;"
+            [disabled]="modoConfig == undefined">Siguiente</ion-button>
+        </section>
+      </ng-container>
+      <div class="empty-state" *ngIf="data && data.tablet.estaCcod != 1">
+        <div>
+          <ion-icon src="assets/icon/info.svg"></ion-icon>
+          <p>Tablet no disponible en estos momentos.</p>
+          <ion-button color="secondary" shape="round" (click)="salir()">Salir</ion-button>
+        </div>
+      </div>
+    </swiper-slide>
+    <!-- nuevo 2 -->
+    <swiper-slide class="formulario">
+      <form style="width: 90%; margin-top: 30px;" [formGroup]="tabletForm" (ngSubmit)="guardarTablet()">
+        <ion-list>
+          <ion-item>
+            <ion-input formControlName="aptaTuuid" readonly label="UUI" labelPlacement="stacked"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input formControlName="aptaNcorr" readonly label="ID APP" labelPlacement="stacked"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input formControlName="sedeTdesc" readonly label="Sede Asociada" labelPlacement="stacked"></ion-input>
+          </ion-item>
+          <ion-item lines="none" style="--inner-padding-end: 0">
+            <ion-input formControlName="aptaCtablets" placeholder="Ingrese código" label="Código Tablet"
+              labelPlacement="stacked" clearInput [errorText]="codigoError" counter="true" maxlength="10"
+              (ionInput)="onCodigoInput($event)" #codigoEl></ion-input>
+          </ion-item>
+          <ion-item lines="none" style="--inner-padding-end: 0">
+            <ion-input formControlName="aptaNserie" placeholder="Ingrese Nº de serie" label="Nº de serie"
+              labelPlacement="stacked" clearInput [errorText]="serieError" counter="true" maxlength="40"
+              (ionInput)="onSerieInput($event)" #serieEl></ion-input>
+          </ion-item>
+        </ion-list>
+        <div class="" style="margin-top: 15px;">
+          <ion-button color="secondary" shape="round" (click)="mostrarOpciones()">Volver</ion-button>
+          <ion-button type="submit" color="primary" shape="round">Guardar</ion-button>
+        </div>
+      </form>
+    </swiper-slide>
+    <!-- reemplazo 3-->
+    <swiper-slide style="overflow:  auto;">
+      <ion-list *ngIf="tabletsReemplazo.length">
+        <ion-radio-group [(ngModel)]="aptaNcorrReemplazo">
+          <ng-container *ngFor="let item of tabletsReemplazo">
+            <ion-item>
+              <ion-label>
+                <h2>Código Tablet - {{item.aptaCtablets}}</h2>
+                <p>UUID - {{item.aptaTuui}}</p>
+              </ion-label>
+              <ion-icon slot="start" src="assets/icon/tablet.svg"></ion-icon>
+              <ion-button slot="end" color="primary" fill="outline" shape="round" size="small" (click)="reemplazar(item)">
+                <ion-icon slot="start" src="assets/icon/lock.svg"></ion-icon>
+                Reemplazar
+              </ion-button>
+            </ion-item>
+          </ng-container>
+        </ion-radio-group>
+      </ion-list>
+      <div *ngIf="tabletsReemplazo.length == 0">No existen tablets para reemplazar.</div>
+      <div class="" style="margin: 30px 30px 30px 50px;">
+        <ion-button color="secondary" shape="round" (click)="mostrarOpciones(0)">Volver</ion-button>
+      </div>
+    </swiper-slide>
+  </swiper-container>
+
+</ion-content>

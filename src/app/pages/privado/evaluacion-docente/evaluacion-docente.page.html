@@ -1,0 +1,236 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="AMD" defaultHref="/privado"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="mostrarCargando" type="indeterminate"></ion-progress-bar>
+</ion-header>
+
+<ion-content>
+
+  <ion-toolbar>
+    <ion-title>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="8">Resultados Evaluación Docente</ion-col>
+          <ion-col size="4" *ngIf="periodos">
+            <form [formGroup]="periodoForm">
+              <ion-select [interfaceOptions]="alertPeriodo" formControlName="periodo" okText="Cambiar" cancelText="Cerrar">
+                <ion-select-option *ngFor="let item of periodos" [value]="item">{{item.periTdesc}}</ion-select-option>
+              </ion-select>
+            </form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-title>
+  </ion-toolbar>
+
+  <section class="sede" *ngIf="sedes">
+    <ion-list>
+      <ion-item lines="none">
+        <ion-label *ngIf="sedes.length == 1">Sede {{sede.sedeTdesc}}</ion-label>
+        <ion-select *ngIf="sedes.length > 1" [(ngModel)]="sede" (ngModelChange)="cargarResutados()">
+          <ion-select-option *ngFor="let item of sedes" [value]="item">Sede {{item.sedeTdesc}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </section>
+
+  <ng-container *ngIf="mostrarData && data">
+
+    <section class="general">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <h2>Información General</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="contenido">
+        <ion-row>
+          <ion-col>
+            <h2 class="cob-docente">{{ data.global.cobertura }}%</h2>
+            <h1>Cobertura<br />Evaluación Docente</h1>
+          </ion-col>
+          <ion-col>
+            <h2 class="cob-global">{{ data.global.globalDocente }}%</h2>
+            <h1>Global<br />Docente</h1>
+          </ion-col>
+        </ion-row>
+      </div>
+    </section>
+
+    <ion-grid class="general-dimensiones">
+      <ion-row>
+        <ion-col size="6" class="left">
+          <ion-card>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h2>Información General Sede</h2>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="contenido">
+              <ion-row>
+                <ion-col>
+                  <h2 *ngIf="data.sede">{{data.sede.cobertura}}%</h2>
+                  <h1>Cobertura<br />Sede</h1>
+                </ion-col>
+                <ion-col>
+                  <h2 *ngIf="data.sede">{{data.sede.globalDocente}}%</h2>
+                  <h1>Global Docente<br />Sede</h1>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6" class="right">
+          <ion-card>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h2>Dimensiones Detalle Evaluación Docente</h2>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="contenido">
+              <div class="indicadores">
+                <div class="indicador">
+                  <span class="valor rojo">{{ data.global.tda }}%</span>
+                  <span class="texto">TDA</span>
+                </div>
+                <div class="indicador">
+                  <span class="valor verde">{{ data.global.da }}%</span>
+                  <span class="texto">DA</span>
+                </div>
+                <div class="indicador">
+                  <span class="valor amarillo">{{ data.global.nad }}%</span>
+                  <span class="texto">NAD</span>
+                </div>
+                <div class="indicador">
+                  <span class="valor rojo">{{ data.global.ed }}%</span>
+                  <span class="texto">ED</span>
+                </div>
+                <div class="indicador">
+                  <span class="valor verde">{{ data.global.ted }}%</span>
+                  <span class="texto">TED</span>
+                </div>
+              </div>
+            </div>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <section class="asignaturas">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <h2>Asignaturas</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="contenido">
+        <ion-row>
+          <ion-col size="6" *ngFor="let item of data.asignaturas">
+            <div class="asignatura">
+              <div class="titulo">
+                <h3>{{ item.asignatura }}</h3>
+                <p>{{ item.asigCcod }}</p>
+              </div>
+              <div class="indicadores">
+                <div class="indicador">
+                  <span class="valor">{{ item.secciones }}</span>
+                  <span>Cantidad de<br />Secciones</span>
+                </div>
+                <div class="indicador">
+                  <span class="valor">{{ item.cobertura }}%</span>
+                  <span>%<br />Cobertura</span>
+                </div>
+                <div class="indicador">
+                  <span class="valor">{{ item.globalDocente }}%</span>
+                  <span>% Global<br />Docente</span>
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+    </section>
+
+
+    <!-- <section class="dimensiones">
+      <div class="section-content">
+        <ion-list>
+          <ion-item>
+            <ion-label>Dimensiones Detalle Evaluación Docente</ion-label>
+          </ion-item>
+        </ion-list>
+        <div class="indicadores">
+          <div class="indicador">
+            <span class="valor rojo">{{ data.global.tda }}%</span>
+            <span class="texto">TDA</span>
+          </div>
+          <div class="indicador">
+            <span class="valor verde">{{ data.global.da }}%</span>
+            <span class="texto">DA</span>
+          </div>
+          <div class="indicador">
+            <span class="valor amarillo">{{ data.global.nad }}%</span>
+            <span class="texto">NAD</span>
+          </div>
+          <div class="indicador">
+            <span class="valor rojo">{{ data.global.ed }}%</span>
+            <span class="texto">ED</span>
+          </div>
+          <div class="indicador">
+            <span class="valor verde">{{ data.global.ted }}%</span>
+            <span class="texto">TED</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="asignaturas" *ngIf="data.asignaturas.length">
+      <div class="section-content">
+        <ion-list>
+          <ion-item>
+            <ion-label>Asignaturas</ion-label>
+          </ion-item>
+        </ion-list>
+        <div class="asignatura" *ngFor="let item of data.asignaturas">
+          <div class="titulo">
+            <h3>{{ item.asignatura }}</h3>
+            <p>{{ item.asigCcod }}</p>
+          </div>
+          <div class="indicadores">
+            <div class="indicador">
+              <span class="valor">{{ item.secciones }}</span>
+              <span>Cantidad de<br />Secciones</span>
+            </div>
+            <div class="indicador">
+              <span class="valor">{{ item.cobertura }}%</span>
+              <span>%<br />Cobertura</span>
+            </div>
+            <div class="indicador">
+              <span class="valor">{{ item.globalDocente }}%</span>
+              <span>% Global<br />Docente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+  </ng-container>
+
+  <section *ngIf="mostrarData && !data" class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+    </div>
+  </section>
+
+</ion-content>

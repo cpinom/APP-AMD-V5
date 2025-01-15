@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cambiar PIN</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="Perfil"></ion-back-button>
+    </ion-buttons>
+    <ion-progress-bar *ngIf="mostrarCargando" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="mostrarPIN">
+
+    <ion-list inset="true">
+      <ion-item>
+        <ion-label>Usar PIN</ion-label>
+        <ion-toggle [(ngModel)]="usarPIN" slot="end" color="info"></ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <ion-grid *ngIf="!usarPIN">
+      <ion-row>
+        <!-- <ion-col>
+          <ion-button color="medium" shape="round" expand="block" (click)="cancelar()">Cancelar</ion-button>
+        </ion-col> -->
+        <ion-col>
+          <ion-button type="submit" color="info" shape="round" expand="block" (click)="guardarConfiguracion()">Guardar cambios</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ng-container *ngIf="usarPIN">
+      
+      <form [formGroup]="pinForm" (submit)="guardar()">
+        <ion-list inset="true">
+          <ion-item lines="none">
+            <ion-label class="label-titulo">Ingrese el nuevo PIN para iniciar sesión.</ion-label>
+          </ion-item>
+          <ion-item lines="none" class="pin-wrapper">
+            <ion-label position="stacked" class="label-pin">Nuevo PIN</ion-label>
+            <div style="display: flex; align-items: center;">
+              <code-input #pin1 [isCodeHidden]="mostrarPin1" [codeLength]="6" (codeChanged)="onPinChanged($event, 0)" (codeCompleted)="onPinCompleted($event)"></code-input>
+              <ion-button (click)="mostrarPin1 = !mostrarPin1" fill="clear" color="dark">
+                <ion-icon src="assets/icon/visibility.svg" *ngIf="!mostrarPin1"></ion-icon>
+                <ion-icon src="assets/icon/visibility_off.svg" *ngIf="mostrarPin1"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+          <ion-item lines="none" class="pin-wrapper">
+            <ion-label position="stacked" class="label-pin">Repetir nuevo PIN</ion-label>
+            <div style="display: flex; align-items: center;">
+              <code-input #pin2 [isCodeHidden]="mostrarPin2" [codeLength]="6" (codeChanged)="onPinChanged($event, 1)"></code-input>
+              <ion-button (click)="mostrarPin2 = !mostrarPin2" fill="clear" color="dark">
+                <ion-icon src="assets/icon/visibility.svg" *ngIf="!mostrarPin2"></ion-icon>
+                <ion-icon src="assets/icon/visibility_off.svg" *ngIf="mostrarPin2"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+          <ion-item>
+            <ion-label class="label-indicaciones">
+              Su nuevo PIN debe ser: <br/>
+              - Sólo usar caracteres numéricos.<br />
+              - No usar caracteres repetidos consecutivos. Ej. 112234 ó 111111.<br />
+              - No usar un PIN repetido.
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button color="medium" shape="round" expand="block" (click)="cancelar()">Cancelar</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button type="submit" color="info" shape="round" expand="block" [disabled]="!pinForm.valid">Guardar PIN</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+      
+    </ng-container>
+
+  </ng-container>
+
+  <section *ngIf="!mostrarPIN && !mostrarCargando" class="empty-state">
+    <div>
+      <p>Sección no habilitada en modo desarrollo.</p>
+    </div>
+  </section>
+
+</ion-content>

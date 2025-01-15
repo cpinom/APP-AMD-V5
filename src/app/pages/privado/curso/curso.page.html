@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar class="curso">
+    <ion-title>
+      <h2>{{data.asigTdesc}} / {{data.ssecTdesc}}</h2>
+      <span>Sede {{data.sedeTdesc}}</span>
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="AMD" defaultHref="/privado"></ion-back-button>
+    </ion-buttons>
+    <!-- <ion-progress-bar type="indeterminate"></ion-progress-bar> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-tabs>
+    <ion-tab-bar slot="top">
+      <ion-tab-button tab="principal" (click)="principalTap($event)">
+        <ion-label>Resumen<br/>del Curso</ion-label>
+        <ion-icon src="assets/icon/class.svg"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="apuntes-clases">
+        <ion-label>Apuntes<br/>en Clase</ion-label>
+        <ion-icon src="assets/icon/date_range.svg"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="descriptor-asignatura">
+        <ion-label>Descriptor<br/>Asignatura</ion-label>
+        <ion-icon src="assets/icon/list_alt.svg"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="recuperacion-clases">
+        <ion-label>Recuperación<br/>de Clases</ion-label>
+        <ion-icon src="assets/icon/alarm.svg"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="asistencia-clases">
+        <ion-label>Asistencia<br />a Clases</ion-label>
+        <ion-icon src="assets/icon/font_download.svg"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="gestor-notas">
+        <ion-label>Gestor<br/>de Notas</ion-label>
+        <ion-icon src="assets/icon/notas.svg"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="enviar-correo">
+        <ion-label>Enviar<br/>Correo</ion-label>
+        <ion-icon src="assets/icon/mail.svg"></ion-icon>
+      </ion-tab-button>
+      <!-- <ion-tab-button tab="comunicacion-ayudante" [disabled]="!appConnected">
+        <ion-label>Comunicación Ayudante</ion-label>
+        <ion-icon src="assets/icon/forum.svg"></ion-icon>
+      </ion-tab-button> -->
+    </ion-tab-bar>
+  </ion-tabs>
+
+</ion-content>

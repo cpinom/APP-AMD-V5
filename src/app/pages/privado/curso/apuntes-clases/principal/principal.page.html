@@ -1,0 +1,145 @@
+<ion-header class="tab-content">
+  <ion-toolbar>
+    <ion-title>Apuntes en Clases</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="loaderInacap" *ngIf="mostrarCargandoPrincipal">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <section class="horario" [class.hide]="semanas.length == 0">
+    <div class="dia-selector">
+      <div class="boton-volver" (click)="moverSemana(-1)">
+        <ion-icon src="assets/icon/arrow_back_ios.svg"></ion-icon>
+      </div>
+      <div class="nombre-dia">{{semanaTitulo}}</div>
+      <div class="boto-siguiente" (click)="moverSemana(1)">
+        <ion-icon src="assets/icon/arrow_forward_ios.svg"></ion-icon>
+      </div>
+    </div>
+    <swiper-container #swiper [options]="slideOpts" (ionSlideDidChange)="ionSlideDidChange()">
+      <swiper-slide *ngFor="let semana of semanas">
+        <div class="contenedor-dias">
+          <div class="boton-dia" 
+               *ngFor="let dia of semana.dias"
+               (click)="diaTap(dia, semana)"
+               [class.disabled]="dia.disabled"
+               [class.selected]="dia.selected">
+            <span class="nombre">{{dia.fecha | formatMoment : 'dd'}}</span>
+            <span class="dia">{{dia.fecha | formatMoment : 'D'}}</span>
+            <span class="mes">{{dia.fecha | formatMoment : 'MMMM'}}</span>
+            <span class="estado" [class.has]="dia.libro && dia.libro.apuntes == 1"></span>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  </section>
+
+  <section *ngIf="semanas.length && !mostrarApuntes">
+    <div class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/access_time.svg"></ion-icon>
+        <p>Sin libros para la semana seleccionada.</p>
+      </div>            
+    </div>
+  </section>
+
+  <section *ngIf="mostrarApuntes" class="apuntes">
+    <ion-split-pane when="sm" contentId="main">
+      <ion-menu contentId="main">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Horario Subsecciones</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ion-list lines="full">
+            <ion-item *ngFor="let item of horario" (click)="seleccionarHorario(item)" [class.selected]="item.selected">
+              <ion-label>
+                <span>{{item.horaHinicio}} - {{item.horaHtermino}}</span>
+                <p>Subsección - {{item.ssecTdesc}}</p>
+                <p>Sala - {{item.salaTdesc}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-list *ngIf="!horario">
+            <ion-item>
+              <ion-label>
+                <span><ion-skeleton-text animated style="width: 40%"></ion-skeleton-text></span>
+                <p><ion-skeleton-text animated style="width: 70%"></ion-skeleton-text></p>
+                <p><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-menu>
+
+      <div class="ion-page" id="main">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Apuntes</ion-title>
+            <ion-buttons slot="start">
+              <ion-menu-button></ion-menu-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+
+          <div class="loaderInacap" *ngIf="mostrarCargando">
+            <ion-spinner name="lines" color="info"></ion-spinner>
+          </div>
+
+          <div class="empty-state" *ngIf="apuntes && apuntes.length == 0 && !mostrarCargando">
+            <div>
+              <ion-icon src="assets/icon/add_comment.svg"></ion-icon>
+              <p>Sin apuntes registrados</p>
+            </div>            
+          </div>
+
+          <section class="apuntes-listado" *ngIf="apuntes && !mostrarCargando">
+            <ion-grid>
+              <ion-row>
+                <ion-col [size]="apuntes.length > 1 ? 6 : 12" *ngFor="let item of apuntes; let i = index;">
+                  <ion-card [class.right]="1 === i % 2" (click)="editar(item)">
+                    <ion-card-header>
+                      <ion-card-title>{{libro.ssecTdesc}} <ion-icon src="assets/icon/edit.svg"></ion-icon></ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <div>{{item.amcoTobservacion || 'Sin comentarios...'}}</div>
+                      <div class="archivos">
+                        <div class="archivo-box" *ngFor="let doc of item.documentos;">
+                          <div class="inner">
+                            <ion-icon src="assets/icon/picture_as_pdf.svg"></ion-icon>
+                            <ion-label>{{doc.amcdTnombre}}</ion-label>
+                          </div>
+                        </div>
+                      </div>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </section>
+
+          <section class="agregar-apunte">
+            <ion-button shape="round" color="info" (click)="agregar()" [disabled]="mostrarCargando">Agregar Apuntes</ion-button>
+          </section>
+        </ion-content>
+      </div>
+
+    </ion-split-pane>
+  </section>
+
+  <section *ngIf="mostrarSinDatos">
+    <div class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/info.svg"></ion-icon>
+        <p>Sin libros para mostrar en estos momentos.</p>
+      </div>            
+    </div>
+  </section>
+
+</ion-content>

@@ -1,0 +1,42 @@
+ion-content {
+  --background: transparent;
+
+  &::part(scroll) {
+      overflow: hidden;
+  }
+
+  .image-container {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+
+      .image-center {
+          background-color: #999;
+          width: 500px;
+          height: 500px;
+          overflow: hidden;
+          border-radius: 50%;
+
+          img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+          }
+      }
+  }
+}
+
+
+::ng-deep body.dark ion-content {
+  --background: transparent;
+}
+
+@media only screen and (max-width: 500px) {
+  .image-container {
+    .image-center {
+        height: 350px !important;
+        width: 350px !important;
+    }
+  }
+}

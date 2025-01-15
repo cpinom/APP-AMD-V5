@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="mostrarVolver">
+      <ion-button (click)="mostrarBuscador()">
+        <ion-label>Volver</ion-label>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+    <ion-progress-bar *ngIf="procesando" type="indeterminate"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <swiper-container #swiperEl>
+    <!-- Buscar Cuenta-->
+    <swiper-slide>
+      <div class="container">
+        <section class="logo">
+          <img [src]="resolverLogo()" />
+        </section>
+        <h5>Iniciar Sesión</h5>
+        <form class="cuenta" [formGroup]="cuentaForm" (submit)="buscarCuenta()">
+          <ion-list>
+            <ion-item lines="full">
+              <ion-input #user label="Usuario" labelPlacement="stacked" formControlName="usuario" placeholder="Ingrese su RUN o usuario INACAPMail" clearInput></ion-input>              
+            </ion-item>
+            <div class="error" *ngIf="errorMsg">{{errorMsg}}</div>
+          </ion-list>
+          <ion-button type="submit" shape="round" color="danger" expand="block" [disabled]="procesando|| !cuentaForm.valid">Continuar</ion-button>
+        </form>
+        <p class="recuperar">¿Ha olvidado su clave? <a (click)="abrirNavegador('https://www.inacap.cl/tportalvp/recuperar_clave/')">Ingrese aquí</a></p>
+      </div>
+    </swiper-slide>
+    <!-- Buscar Cuenta -->
+    <!-- Login -->
+    <swiper-slide>
+      <div class="container">
+        <h1>¡Hola {{nombreUsuario}}!</h1>
+        <form class="cuenta" [formGroup]="loginForm" (submit)="login()">
+          <ion-list>
+            <ion-item lines="full" *ngIf="!poseePIN">
+              <ion-input #password type="password" label="Contraseña" labelPlacement="stacked" formControlName="clave" placeholder="Ingrese su contraseña" clearInput></ion-input>
+            </ion-item>
+            <ion-item lines="none" *ngIf="poseePIN">
+              <ion-label position="stacked" class="label-pin">Ingrese su PIN</ion-label>
+              <code-input #codeInput [isCodeHidden]="true" [codeLength]="6" (codeChanged)="onPinChanged($event)" (codeCompleted)="onPinCompleted($event)"></code-input>
+            </ion-item>
+            <div class="error" *ngIf="errorMsg">{{errorMsg}}</div>
+            <ion-button fill="clear" expand="block" size="small" (click)="mostrarClave()" *ngIf="poseePIN" style="margin-top: 20px;">
+              <ion-icon slot="start" name="key-outline"></ion-icon>
+              Ingresar con mi contraseña
+            </ion-button>
+          </ion-list>
+          <ion-button type="submit" shape="round" color="danger" expand="block" [disabled]="procesando">Iniciar Sesión</ion-button>
+        </form>
+      </div>
+    </swiper-slide>
+    <!-- Login -->
+  </swiper-container>
+
+</ion-content>

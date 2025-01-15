@@ -1,0 +1,40 @@
+
+ion-list.user {
+    margin: 20px 0;
+    box-shadow: 0px 1px 3px rgb(0 0 0 / 20%) !important;
+
+    app-cached-image {
+        height: 70px;
+        width: 70px;
+        margin: 11px 20px 11px 0;
+    }
+
+    // ion-avatar {
+    //     height: 70px;
+    //     width: 70px;
+    //     margin: 11px 20px 11px 0;
+    // }
+}
+
+ion-grid.botones {
+    padding: 0;
+    
+    ion-row {
+        padding: 0;
+
+        ion-col {
+            padding: 0 15px;
+        }
+    }
+}
+
+section.nota-cerrar {
+    margin: 20px 15px 0;
+
+    ion-note {
+        font-size: var(--FS14);
+        color: #333;
+        text-align: center;
+        display: block;
+    }
+}

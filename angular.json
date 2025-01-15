@@ -19,7 +19,18 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "allowedCommonJsDependencies": [
+              "jquery",
+              "moment",
+              "localforage-cordovasqlitedriver",
+              "dompurify",
+              "jsbarcode",
+              "localforage",
+              "fast-deep-equal"
+            ],
             "assets": [
+              "src/firebase-messaging-sw.js",
+              "src/manifest.json",
               {
                 "glob": "**/*",
                 "input": "src/assets",
@@ -31,21 +42,30 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": []
+            "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/global.scss", 
+              "src/theme/variables.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.js"
+            ]
           },
           "configurations": {
+            "proxy": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.proxy.ts"
+                }
+              ]
+            },
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "8mb"
                 }
               ],
               "fileReplacements": [

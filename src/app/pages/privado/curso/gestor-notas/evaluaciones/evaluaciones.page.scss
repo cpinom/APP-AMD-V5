@@ -1,0 +1,52 @@
+@import "../../curso.common.scss";
+
+section.evaluaciones {
+    margin: 15px;
+
+    ion-grid {
+        padding: 0;
+
+        ion-col {
+            padding: 0;
+
+            ion-card {
+                margin: 0 7.5px 15px 0;
+                border-radius: 0;
+                box-shadow: 0px 2px 4px #00000012;
+
+                &.right {
+                    margin-left: 7.5px;
+                    margin-right: 0;
+                }
+
+                ion-card-content {
+                    padding: 0;
+
+                    ion-label.titulo {
+                        font-weight: bold;
+                    }
+
+                    ion-label.accion {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+
+                        ion-icon {
+                            margin-left: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (max-width: 500px) {
+    ion-header {
+      ion-toolbar {
+        ion-title {
+          font-size: 18px !important;
+        }
+      }
+    }
+}

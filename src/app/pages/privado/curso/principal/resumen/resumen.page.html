@@ -1,0 +1,558 @@
+<ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ng-container *ngIf="estadoClase">
+
+    <section class="botones-acciones" *ngIf="estadoClase.estadoLibro == 1">
+      <ion-button color="success" expand="block" shape="round" (click)="comenzarClase()"
+        [disabled]="deshabilitarIniciar">Comenzar Clase</ion-button>
+    </section>
+
+    <ng-container *ngIf="estadoClase.estadoLibro == 2">
+      <ion-card class="status">
+        <ion-card-header>
+          <ion-toolbar>
+            <ion-title>{{ seccion.asigTdesc }}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button color="medium" (click)="mostrarAprendizajes()">
+                Avance de Aprendizaje Esperado
+                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="tiempo">
+            <div class="info-clase">
+              <span>Inicio de la clase: <b>{{estadoClase.horaInicio}}</b></span>
+              <span>Término de la clase: <b>{{estadoClase.horaTermino}}</b></span>
+            </div>
+            <ion-progress-bar [value]="estadoClase.porcentajeEnClase / 100" color="info"></ion-progress-bar>
+            <div class="info-clase">
+              <span>Tiempo actual clase: <b>{{estadoClase.tiempoEnClase}}</b></span>
+              <span>Sala actual: <b>{{estadoClase.salaActual}}</b></span>
+            </div>
+          </div>
+          <ion-button fill="clear" color="danger" expand="full" (click)="terminarClase()">Terminar Clase</ion-button>
+        </ion-card-content>
+      </ion-card>
+      <ion-grid class="acciones">
+        <ion-row>
+          <ion-col>
+            <ion-button color="info" shape="round" fill="outline" expand="full" (click)="cambiarSala()">
+              Comunicar Cambio de Sala
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button color="info" shape="round" fill="outline" expand="full" (click)="soporteTecnico()" 
+              *ngIf="estadoClase.estadoSoporte == 0 || estadoClase.estadoSoporte == 3">
+              Solicitar Apoyo Soporte TI
+            </ion-button>
+            <ion-button color="info" shape="round" fill="outline" expand="full" (click)="cancelarTicket()" *ngIf="estadoClase.estadoSoporte == 2">
+              Soliciud Enviada
+            </ion-button>
+            <ion-button color="info" shape="round" fill="outline" expand="full" (click)="cancelarTicket()" *ngIf="estadoClase.estadoSoporte == 9">
+              Ayuda en Camino
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button color="info" shape="round" expand="full" (click)="actualizarAsistencia()">
+              Actualizar Asistencia Rápida
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+
+    <ion-grid class="acciones" *ngIf="estadoClase.estadoLibro == 3">
+      <p class="clase-finalizada">
+        <ion-icon src="assets/icon/info.svg"></ion-icon>
+        Clase Finalizada - {{resolverFechaTermino()}}</p>
+      <ion-row>
+        <ion-col>
+          <ion-button color="info" shape="round" fill="outline" expand="full" (click)="mostrarAprendizajes()">
+            Avance de Aprendizaje Esperado
+          </ion-button>
+        </ion-col>
+        <ion-col *ngIf="false">
+          <ion-button color="info" shape="round" expand="full">Solicitar Retroalimentación de Estudiantes</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ng-container>
+
+  <section class="horario">
+    <ion-list>
+      <ion-item>
+        <ion-label>
+          <h2>Horario</h2>
+          <p>{{ semanaTitulo }}</p>
+        </ion-label>
+        <div slot="end" class="botones">
+          <ion-button color="info" (click)="moverSemanaHorario(-1)" [disabled]="cargandoHorario">
+            <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+          </ion-button>
+          <ion-button color="info" (click)="moverSemanaHorario(1)" [disabled]="cargandoHorario">
+            <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+    </ion-list>
+    <div class="contenido">
+      <ul *ngIf="!cargandoHorario">
+        <li *ngFor="let item of horario">
+          <div class="scroll">
+            <div class="title">{{ item.diasTdesc }}</div>
+            <div class="content" *ngIf="cargandoHorario">
+              <ion-skeleton-text animated style="width: 80%; height: 100%; margin: 0 auto 4px;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 80%; height: 100%; margin: 0 auto 4px;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 80%; height: 100%; margin: 0 auto 4px;"></ion-skeleton-text>
+            </div>
+            <ng-container *ngIf="!cargandoHorario">
+              <div class="content" *ngFor="let g of groupBy(item.bloques, 'sala', 'horaInicio')">
+                <p class="start-time" *ngFor="let hora of g.values">
+                  {{ hora.horaInicio }} - {{ hora.horaTermino }}
+                </p>
+                <p class="classroom">Sala {{ g.key }}</p>
+              </div>
+              <div *ngIf="item.bloques.length == 0">Sin Clases</div>
+            </ng-container>
+          </div>
+        </li>
+      </ul>
+      <p style="margin: 0; text-align: center; font-size: 14px;" *ngIf="!cargandoHorario && !horario">Horario no disponible</p>
+    </div>
+  </section>
+
+  <div class="loaderInacap" *ngIf="!mostrarResumen">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ng-container *ngIf="mostrarResumen && resumen">
+
+    <section class="riesgos">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <h2>Situación Estudiantes</h2>
+          </ion-label>
+          <div slot="end">Total Estudiantes: {{ resumen.riesgos.total }}</div>
+        </ion-item>
+      </ion-list>
+      <div class="contenido">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="8">
+              <strong>Riesgos</strong>
+            </ion-col>
+            <ion-col size="4">
+              <strong>Reprobados</strong>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col id="resumen-sr">
+              <strong class="numero verde">{{ resumen.riesgos.resumen['sr'] }}</strong>
+              <span>Sin Riesgos</span>
+            </ion-col>
+            <ion-popover class="popover-resumen" trigger="resumen-sr" *ngIf="resumen.riesgos.sinRiesgo.length">
+              <ng-template>
+                <ion-content>
+                  <ion-list>
+                    <ion-item *ngFor="let item of resumen.riesgos.sinRiesgo">
+                      <app-cached-image slot="start" [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                      <ion-label>{{item.persTnombre}}</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+            <ion-col id="resumen-ra">
+              <strong class="numero amarillo">{{ resumen.riesgos.resumen['r/A'] }}</strong>
+              <span>Asistencia</span>
+            </ion-col>
+            <ion-popover class="popover-resumen" trigger="resumen-ra" *ngIf="resumen.riesgos.riesgoAsistencia.length">
+              <ng-template>
+                <ion-content>
+                  <ion-list>
+                    <ion-item *ngFor="let item of resumen.riesgos.riesgoAsistencia">
+                      <app-cached-image slot="start" [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                      <ion-label>{{item.persTnombre}}</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+            <ion-col id="resumen-rn">
+              <strong class="numero amarillo">{{ resumen.riesgos.resumen['r/N'] }}</strong>
+              <span>Notas</span>
+            </ion-col>
+            <ion-popover class="popover-resumen" trigger="resumen-ra" *ngIf="resumen.riesgos.riesgoNota.length">
+              <ng-template>
+                <ion-content>
+                  <ion-list>
+                    <ion-item *ngFor="let item of resumen.riesgos.riesgoNota">
+                      <app-cached-image slot="start" [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                      <ion-label>{{item.persTnombre}}</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+            <ion-col id="resumen-rna" class="border">
+              <strong class="numero">{{ resumen.riesgos.resumen['rN/A'] }}</strong>
+              <span>Notas/Asist.</span>
+            </ion-col>
+            <ion-popover class="popover-resumen" trigger="resumen-rna" *ngIf="resumen.riesgos.riesgoNotaAsist.length">
+              <ng-template>
+                <ion-content>
+                  <ion-list>
+                    <ion-item *ngFor="let item of resumen.riesgos.riesgoNotaAsist">
+                      <app-cached-image slot="start" [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                      <ion-label>{{item.persTnombre}}</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+            <ion-col id="reprobado-a">
+              <strong class="numero rojo">{{ resumen.riesgos.resumen['ri'] }}</strong>
+              <span>Asistencia</span>
+            </ion-col>
+            <ion-popover class="popover-resumen" trigger="reprobado-a" *ngIf="resumen.riesgos.reprobadoAsistencia.length">
+              <ng-template>
+                <ion-content>
+                  <ion-list>
+                    <ion-item *ngFor="let item of resumen.riesgos.reprobadoAsistencia">
+                      <app-cached-image slot="start" [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                      <ion-label>{{item.persTnombre}}</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+            <ion-col id="reprobado-n">
+              <strong class="numero rojo">{{ resumen.riesgos.resumen['rr'] }}</strong>
+              <span>Notas</span>
+            </ion-col>
+            <ion-popover class="popover-resumen" trigger="reprobado-n" side="right" *ngIf="resumen.riesgos.reprobadoNota.length">
+              <ng-template>
+                <ion-content>
+                  <ion-list>
+                    <ion-item *ngFor="let item of resumen.riesgos.reprobadoNota">
+                      <app-cached-image slot="start" [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                      <ion-label>{{item.persTnombre}}</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-popover>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <ion-list>
+        <ion-item lines="none" detail="true" (click)="mostrarRiesgosAlumnos()">
+          <ion-label class="ion-text-right">Ver detalle</ion-label>
+        </ion-item>
+      </ion-list>
+    </section>
+
+    <section class="avances">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <h2>Avance Clases</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="contenido">
+        <ion-progress-bar [value]="resumen.avances.porcentajeRealizadas / 100" color="info"></ion-progress-bar>
+        <ion-grid class="detalle-horas">
+          <ion-row>
+            <ion-col>{{ resumen.avances.clasesPlanificadas }} Horas Planificadas</ion-col>
+            <ion-col>Horas Realizadas: <strong>{{ resumen.avances.clasesRealizadas }} hora(s)</strong></ion-col>
+            <ion-col>Horas por Recuperar: <strong>{{ resumen.avances.clasesPorRecuperar }} hora(s)</strong></ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </section>
+
+    <ion-grid class="notas-asesor">
+      <ion-row>
+        <ion-col class="left">
+          <ion-card>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h2>Distribución Promedio de Notas</h2>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="contenido linea">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="4" *ngFor="let item of resumen.notas" class="nota-box">
+                    <strong class="{{resolverCssNota(item.promedioCurso)}}">{{item.promedioCurso || '-.-'}}</strong>
+                    <p class="titulo">Evaluación {{item.numeroEvaluacion}}</p>
+                    <p>{{item.fechaEvaluacion}}</p>
+                  </ion-col>
+                  <ion-col class="ion-text-center" *ngIf="resumen.notas.length == 0">
+                    Sin evaluaciones
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <ion-list>
+              <ion-item lines="none" detail="true" (click)="mostrarDistribucionNotas()">
+                <ion-label class="ion-text-right">Ver Detalle</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+        </ion-col>
+        <ion-col class="right">
+          <ion-card>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h2>Solicitud de Apoyo Académico</h2>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="contenido linea">
+              <p>En esta funcionalidad usted podrá solicitar apoyo para uno o varios estudiantes. Esta solicitud será
+                revisada por el Equipo de Apoyo Académico, y derivará la solicitud en caso que sea aprobado.</p>
+            </div>
+            <ion-list>
+              <ion-item lines="none" detail="true" (click)="mostrarAsesorPedagogico()">
+                <ion-label class="ion-text-right">Solicitar Apoyo</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <section class="oportunidades horario">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <h2>Nº de Oportunidades en la Asignatura</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="contenido">
+        <div scrollX="true" class="fixed horario">
+          <ul>
+            <li>
+              <div class="scroll" style="height: 100%">
+                <div class="title">Total Estudiantes</div>
+                <div class="content">
+                  <p class="start-time">{{totalEstudiantes}}</p>
+                </div>
+              </div>
+            </li>
+            <li *ngFor="let item of resumen.oportunidades">
+              <div class="scroll" style="height: 100%">
+                <div class="title">{{ item.label }}</div>
+                <div class="content">
+                  <p class="start-time">{{ item.value }}</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <ion-list>
+        <ion-item lines="none" detail="true" (click)="mostrarOportunidadesAlumnos()">
+          <ion-label class="ion-text-right">Ver detalle</ion-label>
+        </ion-item>
+      </ion-list>
+    </section>
+
+    <ion-grid class="tipo-evaluacion">
+      <ion-row>
+        <ion-col class="left">
+          <ion-card>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h2>Tipo de Estudiante</h2>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="contenido linea chart">
+              <canvas baseChart [type]="'pie'" [datasets]="tiposEstudiantesCharts.dataset" [labels]="tiposEstudiantesCharts.labels" [options]="{responsive: true}"></canvas>
+            </div>
+            <ion-list>
+              <ion-item lines="none" detail="true" (click)="mostrarTiposAlumnos()">
+                <ion-label class="ion-text-right">Ver Detalle</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+        </ion-col>
+        <ion-col class="right">
+          <ion-card>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h2>Avance Evaluación Docente</h2>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="contenido linea">
+              <div class="evaluacion-docente">
+                <h1 *ngIf="resumen.avanceEvaluacion.procentaje">{{resumen.avanceEvaluacion.procentaje}}</h1>
+                <span>{{resumen.avanceEvaluacion.estado}}</span>
+              </div>
+            </div>
+            <ion-list *ngIf="resumen.avanceEvaluacion.fechaTermino">
+              <ion-item lines="none">
+                <ion-label class="ion-text-center">Fecha de Término {{resumen.avanceEvaluacion.fechaTermino}}</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid class="asignaturas-perfil">
+      <ion-row>
+        <ion-col class="left">
+          <ion-card>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h2>Información Asignatura Pre-requisitos</h2>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="contenido linea">
+              <p>Información del Programa al que pertenecen sus estudiantes, y el detalle de las asignaturas pre-requisito a la suya.</p>
+              <ion-grid *ngIf="resumen.prerequisitos">
+                <ion-row>
+                  <ion-col size="6" class="nota-box">
+                    <strong>{{resumen.prerequisitos.nroPlanes}}</strong>
+                    <p>Programas <br/>de Estudio</p>
+                  </ion-col>
+                  <ion-col size="6" class="nota-box">
+                    <strong>{{resumen.prerequisitos.nroAsignaturas}}</strong>
+                    <p>Asignatura <br/>Pre-requisito</p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <ion-list>
+              <ion-item lines="none" detail="true" (click)="mostrarAsignaturasPrereq()">
+                <ion-label class="ion-text-right">Ver Detalle</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+        </ion-col>
+        <ion-col class="right">
+          <ion-card>
+            <ion-list>
+              <ion-item>
+                <ion-label>
+                  <h2>Perfil del Estudiante</h2>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="contenido linea chart">
+              <canvas baseChart [type]="'pie'" [datasets]="perfilesEstudiantesCharts.dataset" [labels]="perfilesEstudiantesCharts.labels" [options]="{responsive: true}"></canvas>
+            </div>
+            <ion-list>
+              <ion-item lines="none" detail="true" (click)="mostrarPefilAlumnos()">
+                <ion-label class="ion-text-right">Ver Detalle</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <section class="oportunidades">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <h2>Actividades Académicas</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="contenido" style="padding: 15px;">
+        <div class="notificaciones" *ngFor="let item of resumen.notificaciones">
+          <div class="fecha">
+            <span class="num">{{ item.fecha[0] }}</span>
+            <span class="mes">{{ item.fecha[1] }}</span>
+          </div>
+          <div class="detail">
+            <h2>{{ item.tipo }}</h2>
+            <p>{{ item.descripcion }}</p>
+          </div>
+        </div>
+        <p class="empty" *ngIf="resumen.notificaciones.length == 0">No hay notificaciones para este curso</p>
+      </div>
+    </section>
+
+  </ng-container>
+
+  <div class="empty-state" *ngIf="mostrarResumen && !resumen">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información de curso no disponible en este momento.</p>
+      <ion-button color="info" shape="round" (click)="cargar()">Recargar</ion-button>
+    </div>
+  </div>
+
+  <ion-modal #terminarMdl class="terminar-clase">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Terminar Clase sin Asistencia</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="terminarMdl.dismiss()">
+              <ion-label>Cerrar</ion-label>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <form [formGroup]="asistenciaForm" (ngSubmit)="terminarClaseSinAsistencia()">
+          <p class="nota">Esta clase, al no contar con asistencias registradas, debe ser justificada
+            antes de terminarse.</p>
+          <ion-card>
+            <ion-card-content>
+              <ion-list>
+                <ion-item>
+                  <ion-select label="Motivo" labelPlacement="stacked" placeholder="Seleccione motivo" formControlName="motivo"
+                    okText="Aceptar" cancelText="Cancelar">
+                    <ion-select-option [value]="item.value" *ngFor="let item of motivos">{{item.text}}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <div class="error" *ngIf="motivoError">{{motivoError}}</div>
+                <ion-item *ngIf="asistenciaForm.get('motivo')?.value == 3">
+                  <ion-textarea label="Justificación" labelPlacement="stacked" placeholder="Ingrese justificación de término."
+                    formControlName="justificacion" rows="6" counter="true" maxlength="2000" minlength="10"
+                    [errorText]="justificacionError"></ion-textarea>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+          <ion-grid class="acciones">
+            <ion-row>
+              <ion-col>
+                <ion-button color="info" shape="round" fill="outline" expand="block" (click)="actualizarAsistencia(terminarMdl)">Pasar Asistencia</ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button type="submit" color="info" shape="round" expand="block">Sí, terminar clase</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

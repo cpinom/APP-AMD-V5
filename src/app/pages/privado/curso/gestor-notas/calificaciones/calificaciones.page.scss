@@ -1,0 +1,102 @@
+@import "../../curso.common.scss";
+@import "src/theme/tabla.scss";
+
+ion-buttons {
+    margin-right: 10px;
+
+    ion-back-button {
+        --ion-toolbar-color: #333;
+    }
+}
+
+ion-content {
+    section.notas {
+        background-color: #fff;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.0705882353);
+        margin-bottom: 20px;
+
+        ion-label {
+            &.titulo {
+                font-size: 18px;
+                font-weight: bold;
+            }
+        }
+
+        .btn-guardar {
+            --padding-start: 35px;
+            --padding-end: 35px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    }
+    section.detalle {
+        margin: 15px;
+    }
+    section.tabla {
+        margin: 15px;
+
+        table {
+            margin-bottom: 10px;
+
+            .box-nota {
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+
+                input {
+                    border-width: 0 0 2px;
+                    border-color: #ccc;
+                    background-color: transparent;
+                    width: 55px;
+                    text-align: center;
+                    font-size: 16px;
+                    outline: none;
+
+                    &:disabled {
+                        color: #aaa;
+                    }
+                }
+
+                .error {
+                    display: flex;
+                    align-items: center;
+                    margin: 0;
+                    text-align: left;
+                    font-size: 12px;
+                    background: rgba(204, 0, 0, 0.2);
+                    padding: 7px;
+                    color: var(--ion-color-danger);
+                    margin-left: 10px;
+                    border-radius: 4px;
+                    visibility: hidden;
+                }
+
+                &.error {
+                    input {
+                        border-color: var(--ion-color-danger);
+                        color: var(--ion-color-danger);
+                    }
+                    .error {
+                        visibility: visible;
+                    }
+                }
+            }
+        }
+    }
+}
+
+::ng-deep body.dark {
+    section.notas {
+        background: var(--ion-color-dark-shade) !important;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    ion-header {
+      ion-toolbar {
+        ion-title {
+          font-size: 18px !important;
+        }
+      }
+    }
+}

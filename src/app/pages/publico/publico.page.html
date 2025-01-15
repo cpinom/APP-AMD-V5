@@ -1,0 +1,26 @@
+<ion-tabs>
+
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="inicio" (click)="checkTap($event, 0)">
+      <ion-icon src="assets/icon/home.svg"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="inacap" (click)="checkTap($event, 1)">
+      <ion-icon src="assets/icon/inacap.svg"></ion-icon>
+      <ion-label>INACAP</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="carreras" (click)="checkTap($event, 2)">
+      <ion-icon src="assets/icon/school.svg"></ion-icon>
+      <ion-label>Programas</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="sedes" (click)="checkTap($event, 3)">
+      <ion-icon src="assets/icon/business.svg"></ion-icon>
+      <ion-label>Sedes</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="servicios" (click)="checkTap($event, 4)">
+      <ion-icon src="assets/icon/widgets.svg"></ion-icon>
+      <ion-label>Más</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>

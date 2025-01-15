@@ -1,0 +1,41 @@
+<div class="auth-contenido">
+
+  <ng-container *ngIf="mostrarCargando">
+    <div class="loaderInacap">
+      <ion-spinner name="lines" color="info"></ion-spinner>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!mostrarCargando && mostrarPin">
+
+    <h3>Ingrese su PIN para validar el Ingreso de Notas</h3>
+
+    <ion-item lines="none">
+      <code-input #codeInput [isCodeHidden]="true" [codeLength]="6" (codeCompleted)="onPinCompleted($event)"
+        (codeChanged)="onPinChanged($event)"></code-input>
+    </ion-item>
+
+    <section>
+      <ion-button color="info" shape="round" expand="block" [disabled]="deshabilitarContinuar"
+        (click)="continuar()">Continuar</ion-button>
+    </section>
+
+  </ng-container>
+
+  <ng-container *ngIf="!mostrarCargando && mostrarClave">
+
+    <h3>Ingrese su contraseña INACAP para validar el Ingreso de Notas.</h3>
+
+    <ion-item lines="none">
+      <ion-input mode="md" fill="solid" type="password" [(ngModel)]="clave"  (ionInput)="onClaveInput($event)" clearInput placeholder="Escriba su contraseña"></ion-input>
+    </ion-item>
+
+    <section>
+      <ion-button color="info" shape="round" expand="block" [disabled]="deshabilitarContinuar"
+        (click)="continuar()">Continuar</ion-button>
+    </section>
+
+  </ng-container>
+  
+
+</div>

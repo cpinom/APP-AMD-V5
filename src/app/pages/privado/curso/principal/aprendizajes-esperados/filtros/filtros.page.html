@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Buscar</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <section class="filtros">
+    <div class="section-content">
+      <ion-list>
+        <ion-item>
+          <ion-label>Tipo Clase</ion-label>
+          <ion-select [(ngModel)]="codClase" placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+            <ion-select-option [value]="0">Todos</ion-select-option>
+            <ion-select-option [value]="1">Clase Realizada</ion-select-option>
+            <ion-select-option [value]="2">Clase con Recuperación</ion-select-option>
+            <ion-select-option [value]="3">Clase Suspendida</ion-select-option>
+            <ion-select-option [value]="4">Clase Realizada sin Aprendizaje Esperado</ion-select-option>
+            <ion-select-option [value]="5">Clases NO realizadas</ion-select-option>
+            <ion-select-option [value]="6">Priorización</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Aprendizaje Esperado</ion-label>
+          <ion-select [(ngModel)]="codVisto" placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+            <ion-select-option [value]="0">Todos</ion-select-option>
+            <ion-select-option [value]="1">Visto</ion-select-option>
+            <ion-select-option [value]="2">No Visto</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Fecha Clase</ion-label>
+          <ion-select [(ngModel)]="lclaFclase" placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+            <ion-select-option value="">Todos</ion-select-option>
+            <ion-select-option [value]="fecha" *ngFor="let fecha of clases">{{fecha}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+
+  <section class="btn-buscar">
+    <ion-button color="info" shape="round" expand="block" (click)="buscar()">Buscar</ion-button>
+  </section>
+
+</ion-content>

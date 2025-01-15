@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Programas de Estudio</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="../../privado">
+        <ion-icon slot="icon-only" src="assets/icon/person.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="primary"></ion-spinner>
+  </div>
+
+  <ng-container *ngIf="mostrarData && carrerasFiltradas">
+
+    <ion-searchbar color="white" placeholder="Buscar" [(ngModel)]="carrerasFiltro" (ionInput)="filtrarCarreras()" (ionClear)="resetCarreras()"></ion-searchbar>
+
+    <section class="carreras" *ngIf="carrerasFiltradas.length">
+      <div class="section-header">Pregado</div>
+      <div class="section-content">
+        <ion-list class="carrerasList">
+          <ion-item *ngFor="let item of carrerasFiltradas" detail="true" routerLink="detalle-carrera/{{item.areaCcod}}/{{item.espeCcod}}">
+            <ion-label [innerHTML]="item.nombre"></ion-label>
+            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'diurna')" src="assets/icon/wb_sunny.svg"></ion-icon>
+            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'vespertina')" src="assets/icon/brightness_2.svg"></ion-icon>
+            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'psi')" src="assets/icon/devices.svg"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </div>
+    </section>
+
+    <section *ngIf="carrerasFiltro && carrerasFiltradas.length == 0" class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/search.svg"></ion-icon>
+        <p>Sin resultados.</p>
+      </div>
+    </section>
+
+  </ng-container>
+
+  <section *ngIf="mostrarData && !carrerasFiltradas" class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
+    </div>
+  </section>
+
+</ion-content>

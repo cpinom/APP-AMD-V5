@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="AMD" defaultHref="/privado"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-toolbar>
+    <ion-title>Microsoft Teams</ion-title>
+  </ion-toolbar>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ng-container *ngIf="mostrarData && eventos">
+    
+    <section *ngIf="eventos.length">
+      <div class="section-header">Mis Eventos</div>
+      <div class="section-content">
+        <ion-list>
+          <ion-item *ngFor="let item of eventos" (click)="detalleTap(item, $event)" class="ion-activatable">
+            <ion-label>
+              <h2>{{item.titulo}}</h2>
+              <p>{{resolverFecha(item.fecha)}}</p>
+            </ion-label>
+            <ion-button fill="outline" color="info" size="small" slot="end" (click)="unirseTap(item, $event)">Unirse</ion-button>
+          </ion-item>
+        </ion-list>
+      </div>
+    </section>
+    
+    <div class="empty-state" *ngIf="eventos.length == 0">
+      <div>
+        <ion-icon src="assets/icon/search.svg"></ion-icon>
+        <p>Sin eventos en este momento.</p>
+      </div>
+    </div>
+
+    <ion-popover class="detalle-evento" #popover [isOpen]="isOpen" (didDismiss)="isOpen = false" size="auto">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Detalle Evento</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="isOpen = false">
+                <ion-label>Cerrar</ion-label>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ng-container *ngIf="evento">
+
+            <ion-card color="white" class="primary-card">
+              <ion-card-header>
+                <ion-card-title>{{evento.titulo}}</ion-card-title>
+                <ion-card-subtitle>
+                  <span>{{resolverFechaEvento(evento.fecha)}}</span><br />
+                  <span>{{resolverHoraEvento(evento.fecha)}}</span>
+                  <div style="margin-top: 10px">
+                    <ion-button style="--border-width: 2px; height: 25px;" fill="outline" color="info" size="small" slot="end" (click)="unirseTap(evento, $event)">
+                      Unirse
+                    </ion-button>
+                    <ion-button fill="clear" color="info" size="small" slot="end" (click)="compartirTap()">
+                      <ion-icon slot="start" name="share-outline"></ion-icon>Compartir invitación
+                    </ion-button>
+                  </div>
+                </ion-card-subtitle>
+              </ion-card-header>
+            </ion-card>
+      
+            <section *ngIf="evento.cuerpo">
+              <div class="section-content">
+                <ion-list class="ion-no-margin">
+                  <ion-item>
+                    <ion-label [innerHTML]="evento.cuerpo">
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </section>
+      
+            <section *ngIf="evento.asistentes.length">
+              <div class="section-header">Participantes ({{evento.asistentes.length}})</div>
+              <div class="section-content">
+                <ion-list>
+                  <ion-item *ngFor="let item of evento.asistentes">
+                    <ion-label>
+                      <h2>{{item.nombre}}</h2>
+                    </ion-label>
+                    <ion-icon slot="start" color="success" *ngIf="item.estado == 'Accepted'"
+                      src="assets/icon/check_circle_outline.svg"></ion-icon>
+                    <ion-icon slot="start" color="danger" *ngIf="item.estado == 'Declined'"
+                      src="assets/icon/highlight_off.svg"></ion-icon>
+                    <ion-icon slot="start" color="medium" *ngIf="item.estado == 'None'"
+                      src="assets/icon/access_time.svg"></ion-icon>
+                    <!-- </ion-label> -->
+                  </ion-item>
+                </ion-list>
+              </div>
+            </section>
+      
+            <section style="margin: 15px;">
+              <ion-button color="primary" shape="round" expand="block" (click)="eliminarTap()">
+                Eliminar Evento
+              </ion-button>
+            </section>
+
+          </ng-container>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+
+  </ng-container>
+
+  <div class="empty-state" *ngIf="mostrarData && !eventos">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+    </div>
+  </div>
+
+</ion-content>

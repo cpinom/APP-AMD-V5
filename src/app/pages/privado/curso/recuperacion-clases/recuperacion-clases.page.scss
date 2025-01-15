@@ -1,0 +1,128 @@
+@import "../curso.common.scss";
+
+ion-card.tabla {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: 0px 2px 4px #00000012;
+
+    &.solicitudes {
+        ion-card-header {
+            padding-top: 0;
+        }
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    ion-card-header {
+        ion-card-title {
+            font-size: 18px;
+        }
+
+        ion-button {
+            margin: 0;
+        }
+    }
+}
+
+section.tabla {
+    box-shadow: 0 0 0 1px #dadce0;
+    border-radius: 8px;
+    overflow: auto;
+
+    table {
+        width: 100%;
+        text-align: center;
+
+        th,
+        td {
+            border-top: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
+            padding: 8px 4px;
+            font-size: 14px;
+            color: #4a4a4a;
+            // vertical-align: top;
+        }
+
+        tr:first-child th {
+            border-top: 0;
+        }
+
+        th:last-child,
+        td:last-child {
+            border-right: 0;
+        }
+
+        tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        tbody tr.selected {
+            background-color: #1565c01a !important;
+        }
+    }
+}
+
+ion-popover.detalle-solicitud {
+    &::part(content) {
+        width: 450px;
+        height: 450px;
+    }
+
+    ion-header {
+        ion-toolbar {
+            --background: #fff;
+            --color: #333;
+
+            ion-buttons[slot="end"] {
+                ion-button {
+                    ion-label {
+                        color: var(--ion-color-info);
+                        font-weight: 500;
+                        font-size: var(--FS16);
+                    }
+                }
+            }
+        }
+    }
+
+    ion-content {
+        --padding-top: 5px;
+
+        ion-item {
+            --min-height: 40px;
+
+            ion-label {
+                margin-top: 5px;
+                margin-bottom: 5px;
+
+                &.valor {
+                    white-space: normal;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
+
+::ng-deep body.dark {
+    ion-radio {
+        --color: #fff !important;
+    }
+    ion-popover.detalle-solicitud {
+        ion-item {
+            --background: #000 !important
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    ion-header {
+      ion-toolbar {
+        ion-title {
+          font-size: 18px !important;
+        }
+      }
+    }
+}

@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Solicitar Apoyo Académico</ion-title>
+    <ion-buttons slot="end">
+      <ion-button role="button" (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="seccion">
+    <ion-card class="solicitud">
+      <ion-card-content>
+        <section class="carrera">
+          <div class="form-row">
+            <label>Carrera</label>
+            <strong>{{ seccion.carrTdesc }}</strong>
+          </div>
+          <div class="form-row">
+            <label>Asignatura</label>
+            <strong>{{ seccion.asigTdesc }}</strong>
+          </div>
+          <div class="form-row">
+            <label>Código Sección</label>
+            <strong>{{ seccion.seccCcod }}</strong>
+          </div>
+        </section>
+        <section class="tabla">
+          <table>
+            <thead>
+              <tr>
+                <th class="ion-text-left">Estudiante</th>
+                <th>Promedio notas</th>
+                <th>Asistencia</th>
+                <th>Tipo Riesgo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of alumnos">
+                <td class="ion-text-left">{{ item.persTapePaterno }}, {{ item.persTnombre }}</td>
+                <td>{{ item.cargNnotaFinal }}</td>
+                <td>{{ item.cargNasistencia }}%</td>
+                <td>{{ item.alnoCriesgoAlumno || 'Sin Riesgo' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <section class="formulario">
+          <form [formGroup]="form">
+            <ion-list>
+              <ion-item>
+                <ion-select label="Motivo" labelPlacement="Motivo" placeholder="Seleccione..."
+                  formControlName="catuCcod" okText="Aceptar" cancelText="Cancelar">
+                  <ion-select-option [value]="item" *ngFor="let item of categorias">
+                    {{item.catuTdesc}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div class="error" *ngIf="errorMotivo">{{errorMotivo}}</div>
+              <ion-item lines="none">
+                <ion-textarea label="Comentarios" labelPlacement="stacked" placeholder="Escriba sus comentarios..."
+                  formControlName="amtuTmotivo" [errorText]="errorComentarios" counter="true" maxlength="2000"
+                  rows="4"></ion-textarea>
+              </ion-item>
+            </ion-list>
+          </form>
+        </section>
+      </ion-card-content>
+    </ion-card>
+    <section class="btn-enviar">
+      <ion-button color="info" shape="round" expand="block" (click)="enviar()">Enviar Solicitud</ion-button>
+    </section>
+  </ng-container>
+
+</ion-content>

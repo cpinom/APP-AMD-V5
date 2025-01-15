@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Información de Versión</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <section>
+    <section class="logo">
+      <ion-avatar>
+        <img src="assets/images/app-amd.png" />
+      </ion-avatar>
+    </section>
+
+    <section class="detalle">
+      <h2>Ambiente Móvil Docente</h2>
+      <p class="bold">Versión {{version}}</p>
+      <p class="bold">Ambiente {{environment}}</p>
+      <p>INACAP</p>
+      <P>Copyright © 2023</P>
+    </section>
+
+    <section class="section-barcode" *ngIf="mostrarBarcode">
+      <img #barcode />
+    </section>
+
+    <section class="btn-configuracion">
+      <ion-button color="secondary" shape="round" (click)="configuracion()">
+        <ion-icon slot="start" src="assets/icon/lock.svg"></ion-icon>
+        Configuración
+      </ion-button>
+    </section>
+  </section>
+
+</ion-content>

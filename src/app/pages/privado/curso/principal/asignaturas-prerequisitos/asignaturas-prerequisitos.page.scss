@@ -1,0 +1,40 @@
+@import "../../curso.common.scss";
+@import "src/theme/tabla.scss";
+
+ion-buttons {
+  margin-right: 10px;
+
+  ion-back-button {
+    --ion-toolbar-color: #333;
+  }
+}
+
+ion-accordion-group {
+  box-shadow: 0px 2px 4px #00000012;
+
+  ion-item[slot="header"] {
+    --ion-item-background: #666;
+    --color: white;
+    --padding-start: 15px;
+
+    ::ng-deep {
+      ion-icon {
+        color: var(--color);
+      }
+    }
+  }
+
+  ion-accordion div[slot="content"] {
+    background-color: transparent;
+
+    section.tabla {
+      margin: 15px;
+
+      .alumnos-asgnatura {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+  }
+}

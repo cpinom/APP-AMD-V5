@@ -1,0 +1,86 @@
+ion-content {
+  p {
+    margin: 10px 20px;
+  }
+  div.error {
+    color: var(--ion-color-danger);
+    font-size: 12px;
+    margin-inline: 16px;
+    margin-top: 5px;
+  }
+  ion-card {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.0705882353);
+
+    ion-card-content {
+      padding-inline: 0;
+
+      section {
+        padding-inline: 15px;
+      }
+    }
+
+    .btn-adjuntar {
+      --border-width: 2px;
+    }
+    p.nota-archivos {
+      font-size: 14px;
+      color: #999;
+      margin: 5px 0 0;
+    }
+
+    .archivos {
+      margin-top: 15px;
+      padding-inline: 15px;
+      --color: #666;
+
+      .archivo-box {
+        display: inline-block;
+        background: #eee;
+        height: 70px;
+        width: 100px;
+        overflow: visible;
+        padding: 4px;
+        margin: 0 10px 10px;
+        position: relative;
+
+        .close {
+          position: absolute;
+          right: -5px;
+          top: -5px;
+          background: black;
+          height: 15px;
+          width: 15px;
+          overflow: hidden;
+          border-radius: 50%;
+          color: white;
+
+          ion-icon {
+            font-size: 15px;
+          }
+        }
+
+        .inner {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 100%;
+
+          ion-icon {
+            margin: 0 auto 6px auto;
+          }
+
+          ion-label {
+            white-space: nowrap;
+            font-size: 11px;
+            line-height: 11px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+  }
+}

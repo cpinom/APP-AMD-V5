@@ -1,0 +1,129 @@
+<ion-header class="tab-content">
+  <ion-toolbar>
+    <ion-title>Situación Estudiantes</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button text="Volver Atrás"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ion-card class="riesgos" *ngIf="alumnos">
+    <ion-card-header *ngIf="alumnos.length > 0">
+      <div class="botones-filtros">
+        <div>
+          <ion-button [color]="resolverColor(1)" (click)="aplicarFiltro(1)" shape="round" expand="block">{{resolverContador(1)}}</ion-button>
+        </div>
+        <div>
+          <ion-button [color]="resolverColor(2)" (click)="aplicarFiltro(2)" shape="round" expand="block">{{resolverContador(2)}}</ion-button>
+        </div>
+        <div>
+          <ion-button [color]="resolverColor(3)" (click)="aplicarFiltro(3)" shape="round" expand="block">{{resolverContador(3)}}</ion-button>
+        </div>
+        <div>
+          <ion-button [color]="resolverColor(4)" (click)="aplicarFiltro(4)" shape="round" expand="block">{{resolverContador(4)}}</ion-button>
+        </div>
+      </div>
+      <div class="botones-filtros">
+        <div>
+          <ion-button [color]="resolverColor(5)" (click)="aplicarFiltro(5)" shape="round" expand="block">{{resolverContador(5)}}</ion-button>
+        </div>
+        <div>
+          <ion-button [color]="resolverColor(6)" (click)="aplicarFiltro(6)" shape="round" expand="block">{{resolverContador(6)}}</ion-button>
+        </div>
+        <div>
+          <ion-button [color]="resolverColor(7)" (click)="aplicarFiltro(7)" shape="round" expand="block">{{resolverContador(7)}}</ion-button>
+        </div>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+      <section class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2" class="ion-text-left">Nombre Estudiante</th>
+              <th colspan="2">Promedio Semestre</th>
+              <th rowspan="2">Cursos Semestre</th>
+              <th colspan="3">Riesgos / Reprobados<br /><span class="normal">(Cantidad cursos por semestre)</span></th>
+            </tr>
+            <tr>
+              <th><span class="normal">Nota</span></th>
+              <th><span class="normal">Asist.</span></th>
+              <th><span class="normal">Riesgo Curso</span></th>
+              <th><span class="normal">Riesgo otros cursos</span></th>
+              <th><span class="normal">Reprobados</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of alumnosFiltrados">
+              <td>
+                <div class="avatar">
+                  <app-cached-image [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                  <span>{{item.persTnombre}}</span>
+                </div>
+              </td>
+              <td>{{item.cargNnotaFinal}}</td>
+              <td>{{item.cargNasistencia}}%</td>
+              <td>
+                <span class="negrita">{{item.totalCursos}}</span>
+              </td>
+              <td>
+                <div class="indicadores">
+                  <div class="indicador">
+                    <span class="riesgo-titulo">{{item.alnoCriesgoAlumno}}</span>
+                    <span class="circulo {{resolverCss(item.alnoCriesgoAlumno)}}">1</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="indicadores">
+                  <div class="indicador" *ngIf="item.otros.sinRiesgo > 0">
+                    <span class="riesgo-titulo">Sin Riesgo</span>
+                    <span class="circulo verde">{{ item.otros.sinRiesgo }}</span>
+                  </div>
+                  <div class="indicador" *ngIf="item.otros.riesgoNota > 0">
+                    <span class="riesgo-titulo">Notas</span>
+                    <span class="circulo naranjo">{{ item.otros.riesgoNota }}</span>
+                  </div>
+                  <div class="indicador" *ngIf="item.otros.riesgoAsistencia > 0">
+                    <span class="riesgo-titulo">Asist.</span>
+                    <span class="circulo naranjo">{{ item.otros.riesgoAsistencia }}</span>
+                  </div>
+                  <div class="indicador" *ngIf="item.otros.riesgoNotaAsist > 0">
+                    <span class="riesgo-titulo">Nota / Asist.</span>
+                    <span class="circulo naranjo">{{ item.otros.riesgoNotaAsist }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="indicadores">
+                  <div class="indicador" *ngIf="item.otros.reprobadoNota > 0">
+                    <span class="riesgo-titulo">Nota</span>
+                    <span class="circulo rojo">{{ item.otros.reprobadoNota }}</span>
+                  </div>
+                  <div class="indicador" *ngIf="item.otros.reprobadoAsistencia > 0">
+                    <span class="riesgo-titulo">Asist.</span>
+                    <span class="circulo rojo">{{ item.otros.reprobadoAsistencia }}</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="alumnosFiltrados && alumnosFiltrados.length == 0">
+              <td colspan="7" class="ion-text-center">Sin registros para mostrar...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

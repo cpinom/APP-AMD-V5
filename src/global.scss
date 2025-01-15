@@ -25,6 +25,8 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+@import "assets/fonts/fonts.scss";
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -35,3 +37,122 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+:root {
+  /*Colores */
+  --ion-color-primary: #1d78bf;
+  --ion-color-primary-rgb: 29, 120, 191;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #1a6aa8;
+  --ion-color-primary-tint: #3486c5;
+
+  --ion-color-white: #ffffff;
+  --ion-color-white-rgb: 255, 255, 255;
+  --ion-color-white-contrast: #333333;
+  --ion-color-white-contrast-rgb: 51, 51, 51;
+  --ion-toolbar-background: var(--ion-color-dark);
+  --ion-toolbar-color: #fff;
+
+  // Variable app
+  --color: #040b15;
+  --ion-text-color: #040b15;
+  --ion-font-family: "Roboto", "sans-serif" !important;
+  --ion-background-color: #fafafa;
+  --ion-overlay-background-color: #fff;
+
+  --ion-item-background: #ffffff;
+  --ion-border-color: #d5d6dd;
+  --inner-border-width: 0px 0px 0.5px 0px;
+
+  body {
+    font-family: "Roboto", sans-serif;
+
+    .ion-color-white {
+      --ion-color-base: var(--ion-color-white);
+      --ion-color-base-rgb: var(--ion-color-white-rgb);
+      --ion-color-contrast: var(--ion-color-white-contrast);
+      --ion-color-contrast-rgb: var(--ion-color-white-contrast-rgb);
+      --ion-color-shade: var(--ion-color-white-shade);
+      --ion-color-tint: var(--ion-color-white-tint);
+    }
+
+    .loaderInacap {
+      width: 100%;
+      display: block;
+      padding: 15px 0;
+      text-align: center;
+    }
+
+    .empty-state {
+      padding: 15px;
+
+      div {
+        text-align: center;
+        max-width: 290px;
+        margin: 0 auto;
+        ion-icon {
+          width: 90px;
+          height: 90px;
+          font-size: 90px;
+          color: #cfcfcf;
+        }
+        p {
+          color: #666666;
+          margin-top: 5px;
+        }
+      }
+    }
+
+    section {
+      .section-header {
+        font-size: var(--FS14);
+        color: var(--color);
+        padding-top: 0px;
+        padding-left: 25px;
+        padding-bottom: 3px;
+      }
+      .section-content {
+        margin-bottom: 15px;
+        background-color: var(--ion-item-background);
+        margin-inline: 15px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 4px 8px 0px rgba(194, 201, 252, 0.15);
+
+        ion-list {
+          padding: 0;
+          margin-top: 0;
+          margin-bottom: 0;
+          background-color: transparent;
+          border-radius: 8px;
+
+          ion-item {
+            ion-label {
+              font-size: var(--FS14);
+            }
+          }
+
+          > ion-item:last-child {
+            --inner-border-width: 0 !important;
+            --border-width: 0 !important;
+          }
+        }
+      }
+
+      &.margin {
+        margin-inline: 15px;
+      }
+    }
+
+    ion-list {
+      &.list-inset {
+        box-shadow: 0px 4px 8px 0px rgba(194, 201, 252, 0.15);
+      }
+      &.list-md {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+  }
+}

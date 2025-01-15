@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Notificaciones Push</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="mostrarCargando" type="indeterminate"></ion-progress-bar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="mostrarData && notificaciones">
+    <div class="btn-todos" *ngIf="!mostrarEmpty">
+      <ion-button (click)="eliminarTodo()" color="info" fill="clear" size="small">Eliminar Todo</ion-button>
+    </div>
+    <ion-list *ngIf="notificaciones[0].length">
+      <ion-list-header>
+        <ion-label>Nuevas</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let item of notificaciones[0]" class="ion-activatable">
+        <ion-label>
+          <h2>{{item.nopeTitulo}}</h2>
+          <p>{{item.nopeTdescripcion}}</p>
+          <p>{{item.nopeFregistro}}</p>
+        </ion-label>
+        <ion-icon slot="end" src="assets/icon/delete.svg" (click)="eliminarNotificacion(item)"></ion-icon>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="notificaciones[1].length">
+      <ion-list-header>
+        <ion-label>Esta semana</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let item of notificaciones[1]" class="ion-activatable">
+        <ion-label>
+          <h2>{{item.nopeTitulo}}</h2>
+          <p>{{item.nopeTdescripcion}}</p>
+          <p>{{item.nopeFregistro}}</p>
+        </ion-label>
+        <ion-icon slot="end" src="assets/icon/delete.svg" (click)="eliminarNotificacion(item)"></ion-icon>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="notificaciones[2].length">
+      <ion-list-header>
+        <ion-label>Esta mes</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let item of notificaciones[2]" class="ion-activatable">
+        <ion-label>
+          <h2>{{item.nopeTitulo}}</h2>
+          <p>{{item.nopeTdescripcion}}</p>
+          <p>{{item.nopeFregistro}}</p>
+        </ion-label>
+        <ion-icon slot="end" src="assets/icon/delete.svg" (click)="eliminarNotificacion(item)"></ion-icon>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="notificaciones[3].length">
+      <ion-list-header>
+        <ion-label>Antiguas</ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let item of notificaciones[3]" class="ion-activatable">
+        <ion-label>
+          <h2>{{item.nopeTitulo}}</h2>
+          <p>{{item.nopeTdescripcion}}</p>
+          <p>{{item.nopeFregistro}}</p>
+        </ion-label>
+        <ion-icon slot="end" src="assets/icon/delete.svg" (click)="eliminarNotificacion(item)"></ion-icon>
+      </ion-item>
+    </ion-list>
+    <section class="empty-state" *ngIf="mostrarEmpty">
+      <div>
+        <ion-icon src="assets/icon/notifications_none.svg"></ion-icon>
+        <p>Sin notificaciones destacadas en este momento.</p>
+      </div>
+    </section>
+  </ng-container>
+
+  <section *ngIf="mostrarData && !notificaciones" class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+    </div>
+  </section>
+
+</ion-content>

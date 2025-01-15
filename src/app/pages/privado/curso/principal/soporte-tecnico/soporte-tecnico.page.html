@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Solicitud Soporte TI</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <p>Seleccione una solicitud de apoyo y le informaremos al Administrador de Red de la Sede.</p>
+
+  <form [formGroup]="formTicket" (ngSubmit)="enviar()">
+
+    <ion-card>
+      <ion-card-content style="padding-top: 0;">
+        <ion-item style="--padding-end: 16px">
+          <ion-select label="Tipo" labelPlacement="stacked" formControlName="tipo" placeholder="Seleccione un tipo..." okText="Aceptar" cancelText="Cancelar">
+            <ion-select-option *ngFor="let item of tipos" [value]="item.apttCcod">{{item.apttTdesc}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="error" *ngIf="tipoError">{{tipoError}}</div>
+        <ion-item lines="none">
+          <ion-textarea labelPlacement="stacked" label="Comentario"  formControlName="comentario" placeholder="Escriba un comentario..." rows="5" maxlength="2000" counter="true" [errorText]="comentarioError"></ion-textarea>
+        </ion-item>
+        <section>
+          <ion-button class="btn-adjuntar" fill="outline" color="medium" shape="round" (click)="adjuntar(adjuntarInput)">
+            <ion-icon slot="start" src="assets/icon/photo_camera.svg"></ion-icon>
+            Adjuntar Archivo / Tomar Foto
+          </ion-button>
+          <p class="nota-archivos">* Se pueden agregar hasta dos archivos, sin superar los 3MB.</p>
+        </section>
+        <div class="archivos" *ngIf="documentos?.length">
+          <div class="archivo-box" *ngFor="let doc of documentos" (click)="descargarDocumento(doc, $event)">
+            <div class="close" (click)="eliminarDocumento(doc, $event)">
+              <ion-icon src="assets/icon/close.svg"></ion-icon>
+            </div>
+            <div class="inner">
+              <ion-icon src="assets/icon/picture_as_pdf.svg"></ion-icon>
+              <ion-label>{{ doc.aptaTnombre }}</ion-label>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-row style="margin: 15px;">
+      <ion-col>
+        <ion-button color="secondary" expand="block" shape="round" (click)="cerrar()">Cancelar</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="info" expand="block" shape="round" type="submit">Solicitar Apoyo</ion-button>
+      </ion-col>
+    </ion-row>
+
+  </form>
+
+  <input type="file" #adjuntarInput style="display: none;" (change)="adjuntarWeb($event)" accept="image/*" />
+
+
+</ion-content>

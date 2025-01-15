@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{folder.displayName}}</ion-title>
+    <ion-buttons slot="start" *ngIf="modoEdicion && tieneSeleccion">
+      <ion-button color="danger" (click)="eliminarTap()">Eliminar</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="messages && messages.length">
+      <ion-button color="info" (click)="editarTap()" *ngIf="!modoEdicion">Editar</ion-button>
+      <ion-button color="info" (click)="cancelarEditarTap()" *ngIf="modoEdicion">
+        <strong>Cancelar</strong>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="mostrarCargando" type="indeterminate"></ion-progress-bar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="mostrarData && messages">
+    
+    <ion-list *ngIf="messages.length" class="mensajes">
+      <ng-container *ngFor="let item of messages">
+        <ion-item (click)="messageTap(item)" 
+                  [class.unread]="!item.isRead"
+                  [class.selected]="item.isSelected"
+                  class="ion-activatable"
+                  [disabled]="item.isSelected && procesandoEliminar">
+          <ion-checkbox slot="start"
+                        color="info" 
+                        *ngIf="modoEdicion" 
+                        [(ngModel)]="item.isSelected"
+                        [disabled]="item.isSelected && procesandoEliminar"></ion-checkbox>
+          <ion-label>
+            <div class="sender-name" *ngIf="item.sender">{{item.sender.name}}</div>
+            <div class="sender-name" *ngIf="item.isDraft">[Borrador]</div>
+            <div class="subject">
+              <span class="title">{{item.subject}}</span>
+              <span class="date">{{item.sentDateTime}}</span>
+            </div>
+            <p class="body-preview" *ngIf="item.bodyPreview">{{item.bodyPreview}}</p>
+            <p class="body-preview" *ngIf="!item.bodyPreview">No hay vista previa disponible.</p>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando mensajes..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <div class="empty-state" *ngIf="messages.length == 0">
+      <div>
+        <ion-icon src="assets/icon/edit_document.svg"></ion-icon>
+        <p>No hay nada en {{folder.displayName}}.</p>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngIf="mostrarData && !messages">
+    <div class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/info.svg"></ion-icon>
+        <p>Mensajes no disponibles.</p>
+        <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+      </div>
+    </div>
+  </ng-container>
+
+</ion-content>

@@ -1,0 +1,124 @@
+@import "../../curso.common.scss";
+
+
+ion-buttons {
+    margin-right: 10px;
+
+    ion-back-button {
+        --ion-toolbar-color: #333;
+    }
+}
+
+ion-accordion-group {
+    box-shadow: 0px 2px 4px #00000012;
+
+    ion-item[slot="header"] {
+        --ion-item-background: #666;
+        --color: white;
+        --padding-start: 15px;
+
+        ::ng-deep {
+            ion-icon {
+                color: var(--color);
+            }
+        }
+    }
+}
+
+ion-card.tabla {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: 0px 2px 4px #00000012;
+}
+
+section.tabla {
+    box-shadow: 0 0 0 1px #dadce0;
+    border-radius: 8px;
+    margin: 15px;
+    overflow: auto;
+    // position: relative;
+
+    table {
+        width: 100%;
+        text-align: center;
+
+        // &.clone {
+        //     width: auto;
+        //     position: absolute;
+        //     top: 0;
+        //     left: 0;
+        //     background-color: white;
+        // }
+
+        th,
+        td {
+            border-top: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
+            padding: 8px;
+            font-size: 14px;
+            color: #4a4a4a;
+            // vertical-align: top;
+            text-align: left;
+
+            ion-icon {
+                font-size: 20px;
+
+                &.ausente {
+                    color: var(--ion-color-danger);
+                }
+                &.presente {
+                    color: var(--ion-color-success);
+                }
+                &.no-informada {
+                    opacity: 0.4;
+                }
+            }
+
+            .avatar {
+                display: flex;
+                align-items: center;
+
+                ion-avatar {
+                    height: 30px;
+                    width: 30px;
+                    margin-right: 5px;
+                }
+            }
+
+            &.d-none {
+                display: none;
+            }
+
+            div.accion {
+                display: block;
+                margin-bottom: 5px;
+
+                label {
+                    display: flex;
+                    align-items: center;
+
+                    ion-radio {
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+
+        tr:first-child th {
+            border-top: 0;
+        }
+
+        th:last-child,
+        td:last-child {
+            border-right: 0;
+        }
+
+        tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        tbody tr.selected {
+            background-color: #1565c01a !important;
+        }
+    }
+}

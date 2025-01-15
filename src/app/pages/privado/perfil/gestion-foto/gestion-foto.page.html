@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Foto Perfil</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="Perfil"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="user" class="wrapper">
+    <div class="foto-previa" *ngIf="base64">
+      <img [src]="base64" />
+      <div style="margin-top: 20px;">
+        <ion-button color="secondary" shape="round" (click)="base64 = null">Cancelar</ion-button>
+        <ion-button color="info" shape="round" (click)="guardar()">Guardar</ion-button>
+      </div>
+    </div>
+    <ng-container *ngIf="!base64">
+      <div class="foto">
+        <img [src]="urlFoto" />
+        <ion-icon src="assets/icon/edit.svg" (click)="upload(fotoInput)"></ion-icon>
+      </div>
+      <h2>{{ user.persTnombreCompleto }}</h2>
+      <p>Asegúrese de tomar la fotografía con un fondo blanco, rostro descubierto, mirando al
+        frente, mantener los ojos abiertos y sin lentes de sol.</p>
+    </ng-container>
+
+  </div>
+
+  <input type="file" #fotoInput style="display: none;" (change)="uploadWeb($event)" accept="image/*" />
+
+</ion-content>

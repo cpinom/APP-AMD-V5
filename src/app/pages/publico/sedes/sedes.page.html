@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Sedes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="../../privado">
+        <ion-icon slot="icon-only" src="assets/icon/person.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="tabs" *ngIf="mostrarData && sedesFiltradas">
+    <ion-segment (ionChange)="tabsChanged($event)" [value]="activeTab" scrollable>
+      <ion-segment-button [value]="0">Todas</ion-segment-button>
+      <ion-segment-button [value]="1">Cercanas</ion-segment-button>
+    </ion-segment>
+  </div>
+</ion-header>
+
+<ion-content>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="primary"></ion-spinner>
+  </div>
+
+  <ng-container *ngIf="mostrarData && sedesFiltradas">
+
+    <ion-searchbar color="white" placeholder="Buscar sede..." [(ngModel)]="sedesFiltro" (ionInput)="filtrarSedes()"
+    (ionClear)="resetSedes()"></ion-searchbar>
+
+    <section *ngIf="sedesFiltradas.length">
+      <div class="section-header">Sedes</div>
+      <div class="section-content">
+        <ion-list>
+          <ion-item *ngFor="let item of sedesFiltradas" detail="true" (click)="mostrarSede(item, sedeMdl)">
+            <ion-thumbnail slot="start">
+              <img default [src]="getFotoSede(item.sedeCcod)" alt="Sede INACAP" (error)="updateUrl($event)" appImage />
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ item.sedeTdesc }}</h2>
+              <p *ngIf="activeTab == 1">{{ item.km }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </section>
+
+    <section *ngIf="activeTab == 1 && sedesFiltradas.length == 0" class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/location_off.svg"></ion-icon>
+        <p>No disponible en este momento</p>
+      </div>
+    </section>
+
+    <section *ngIf="activeTab == 0 && sedesFiltradas.length == 0" class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/search.svg"></ion-icon>
+        <p>Sin resultados</p>
+      </div>
+    </section>
+
+  </ng-container>
+
+  <section *ngIf="mostrarData && !sedesFiltradas" class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
+    </div>
+  </section>
+
+
+  <ion-modal #sedeMdl>
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>INACAP {{sedeData?.sedeTdesc}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="sedeMdl.dismiss()">
+              <ion-label>Cerrar</ion-label>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <capacitor-google-map #map></capacitor-google-map>
+        <section style="margin-top: 15px;">
+          <div class="section-content">
+            <ion-list>
+              <ion-item (click)="centrar()" class="ion-activatable">
+                <ion-icon slot="start" color="medium" src="assets/icon/room.svg"></ion-icon>
+                <ion-label>
+                  <span>{{sedeData.sedeTdireccion}}, {{sedeData.ciudTcomuna}}</span>
+                </ion-label>
+              </ion-item>
+              <ion-item detail="false" *ngIf="sedeData.sedeTfono" href="{{'tel:' +  sedeData.sedeTfono}}" class="ion-activatable">
+                <ion-icon slot="start" color="medium" src="assets/icon/phone.svg"></ion-icon>
+                <ion-label>
+                  <span>{{sedeData.sedeTfono}}</span>
+                </ion-label>
+              </ion-item>
+              <ion-item detail="false" *ngIf="sedeData.sedeTemail" href="{{ 'mailto:' +  sedeData.sedeTemail}}" class="ion-activatable">
+                <ion-icon slot="start" color="medium" src="assets/icon/email.svg"></ion-icon>
+                <ion-label>
+                  <span>{{sedeData.sedeTemail}}</span>
+                </ion-label>
+              </ion-item>
+              <ion-item detail="false" (click)="abrirNavegador(sedeData.sedeTlinkportal)" class="ion-activatable">
+                <ion-icon slot="start" color="medium" src="assets/icon/laptop.svg"></ion-icon>
+                <ion-label>
+                  <span>INACAP <span [innerHTML]="sedeData.sedeTdesc"></span></span>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </div>
+        </section>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

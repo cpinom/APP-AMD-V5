@@ -1,0 +1,25 @@
+.btn-todos {
+  display: flex;
+  align-items: center;
+  // justify-content: end;
+  margin: 8px;
+}
+
+ion-list {
+  ion-list-header {
+    min-height: auto;
+    --background: var(--ion-color-light);
+
+    ion-label {
+      margin: 10px 0;
+      font-size: 16px;
+      text-transform: uppercase;
+      font-weight: normal;
+    }
+  }
+  ion-item {
+    ion-icon {
+      color: var(--ion-color-medium);
+    }
+  }
+}

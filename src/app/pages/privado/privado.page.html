@@ -1,0 +1,302 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title (click)="publicoTap()">
+      <span>Ambiente Móvil Docente </span>AMD
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="true"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="notificacionesTap()">
+        <div [matBadge]="'-'" matBadgePosition="after" matBadgeColor="accent" [matBadgeHidden]="!mostrarNotificaciones">
+          <ion-icon style="margin: 0;" src="assets/icon/notifications.svg"></ion-icon>
+        </div>
+      </ion-button>
+      <ion-button (click)="perfilTap()">
+        <ion-icon style="font-size: 34px;" src="assets/icon/account_circle.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+    <!-- <ion-progress-bar *ngIf="mostrarCargando || mostrarCargando2" type="indeterminate"></ion-progress-bar> -->
+  </ion-toolbar>
+  <ion-toolbar class="periodos" *ngIf="periodos && periodos.length > 1">
+    <form [formGroup]="periodoForm">
+      <ion-item>
+        <ion-select [interfaceOptions]="alertPeriodo" formControlName="periodo" okText="Actualizar" cancelText="Cerrar">
+          <ion-select-option *ngFor="let item of periodos" [value]="item.periCcod">
+            {{item.periTdesc}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </form>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="main">
+
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card color="white" class="destacado" *ngIf="mostrarPin && !mostrarError">
+    <ion-card-content>
+      <ion-list>
+        <ion-item detail="true" lines="none" (click)="pinTap()">
+          <ion-icon slot="start" src="assets/icon/info.svg"></ion-icon>
+          <ion-label>
+            <h2>Usted todavía no cuenta con un PIN para iniciar sesión en la app INACAP AMD.<br />Ingrese aquí para configurarlo.</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ng-container *ngIf="mostrarError">
+    <div class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/class.svg"></ion-icon>
+        <p>Información de Cursos no disponible.</p>
+        <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+      </div>
+    </div>
+  </ng-container>
+
+  <section #ramos class="cursos" *ngIf="!mostrarError">
+    <ng-container *ngIf="mostrarCargando">
+      <ion-card>
+        <ion-skeleton-text animated style="width: 100%; height: 100%; margin: 0"></ion-skeleton-text>
+      </ion-card>
+      <ion-card>
+        <ion-skeleton-text animated style="width: 100%; height: 100%; margin: 0"></ion-skeleton-text>
+      </ion-card>
+      <ion-card>
+        <ion-skeleton-text animated style="width: 100%; height: 100%; margin: 0"></ion-skeleton-text>
+      </ion-card>
+    </ng-container>
+    <ng-container *ngIf="!mostrarCargando && mostrarData">
+      <ion-card *ngFor="let curso of cursos" (click)="mostrarCurso($event, curso)">
+        <ion-card-header>
+          <ion-card-title>
+            <b>{{curso.asigTdesc}}</b>
+            <span>{{curso.ssecTdesc}}</span>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="notificaciones" *ngIf="curso.notificaciones.length">
+            <div class="fecha">
+              <span class="num">{{curso.notificaciones[0].fecha[0]}}</span>
+              <span class="mes">{{curso.notificaciones[0].fecha[1]}}</span>
+            </div>
+            <div class="detalle">
+              <h2>{{curso.notificaciones[0].tipo}}</h2>
+              <p>{{curso.notificaciones[0].descripcion}}</p>
+            </div>
+          </div>
+          <p *ngIf="curso.notificaciones.length == 0">No hay notificaciones para este curso</p>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  </section>
+
+  <section class="clases" *ngIf="!mostrarError">
+    <div class="section-content">
+      <div class="tabs">
+        <ion-segment [(ngModel)]="tabModel" mode="md" [swipeGesture]="false">
+          <ion-segment-button [value]="0">
+            <ion-icon src="assets/icon/class.svg"></ion-icon>
+            <ion-label>Cursos del Día</ion-label>
+          </ion-segment-button>
+          <ion-segment-button [value]="1">
+            <ion-icon src="assets/icon/date_range.svg"></ion-icon>
+            <ion-label>Últimos Apuntes</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+      <ng-container *ngIf="tabModel == 0">
+        <ion-list class="clases">
+          <ion-item *ngIf="mostrarCargando || mostrarCargando2">
+            <div slot="start" class="horario" style="width: 61px;">
+              <span><ion-skeleton-text animated style="width: 100%"></ion-skeleton-text></span>
+              <span><ion-skeleton-text animated style="width: 100%"></ion-skeleton-text></span>
+            </div>
+            <ion-label>
+              <h2><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></h2>
+              <p><ion-skeleton-text animated style="width: 40%"></ion-skeleton-text></p>
+              <p><ion-skeleton-text animated style="width: 20%"></ion-skeleton-text></p>
+            </ion-label>
+          </ion-item>
+          <ng-container *ngIf="(!mostrarCargando && !mostrarCargando2) && mostrarData">
+            <ion-item *ngFor="let clase of clases" (click)="mostrarCurso($event, clase)"
+              [class.button-action]="clase.estadoLibro != 0"
+              [class.clase-en-curso]="clase.estadoLibro == 2"
+              [class.clase-finalizada]="clase.estadoLibro == 3">
+              <div slot="start" class="horario">
+                <span>{{clase.horaHinicio}}</span>
+                <span>{{clase.horaHtermino}}</span>
+              </div>
+              <ion-label>
+                <p class="estado" *ngIf="clase.estadoLibro == 2"><i></i> Clase en Progreso</p>
+                <p class="estado" *ngIf="clase.estadoLibro == 3"><i></i> Clase finalizada</p>
+                <h2>{{clase.asigTdesc}}</h2>
+                <p>{{clase.salaTdesc}}</p>
+                <p>Sede - {{clase.sedeTdesc}}</p>
+              </ion-label>
+              <ion-icon slot="end" *ngIf="clase.estadoLibro == 0 || clase.estadoLibro == 3" name="chevron-forward-outline"></ion-icon>
+              <ion-button slot="end" color="success" shape="round" *ngIf="clase.estadoLibro == 1" (click)="mostrarCurso($event, clase, 'INICIAR')">
+                Comenzar Clase <!--<span class="md">Clase</span>-->
+                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+              </ion-button>
+              <ion-button slot="end" color="danger" shape="round" *ngIf="clase.estadoLibro == 2" (click)="mostrarCurso($event, clase, 'TERMINAR')">
+                Terminar Clase <!--<span class="md">Clase</span>-->
+                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+        <div class="empty-state" *ngIf="(!mostrarCargando && !mostrarCargando2) && mostrarData && clases.length == 0">
+          <div>
+            <ion-icon src="assets/icon/class.svg"></ion-icon>
+            <p>Sin clases planificadas para hoy.</p>
+            <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="tabModel == 1">
+        <ion-list class="apuntes" *ngIf="apuntes && apuntes.length > 0">
+          <ion-item *ngFor="let item of apuntes" (click)="mostrarApunte($event, item)" detail="true">
+            <ion-label>
+              <h2>{{item.asigTdesc}} - {{item.seccTdesc}}</h2>
+              <p>{{item.amcoTobservacion}}</p>
+              <p>Fecha apunte: {{item.amcoFregistro}}</p>
+              <p>Fecha clase: {{item.lclaFclase}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <div  *ngIf="apuntes && apuntes.length == 0" class="empty-state">
+          <div>
+            <ion-icon src="assets/icon/access_time.svg"></ion-icon>
+            <p>Sin apuntes guardados.</p>
+          </div>            
+        </div>
+      </ng-container>
+    </div>
+  </section>
+
+  <ion-grid class="botones">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button color="white" expand="block" (click)="moodleTap()">
+          <div>
+            <ion-icon slot="start" src="assets/icon/cast.svg"></ion-icon>
+            <span>Ambiente de Aprendizaje</span>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button color="white" expand="block" routerLink="inacapmail">
+          <div [matBadge]="'-'" matBadgePosition="after" matBadgeColor="accent"
+            [matBadgeHidden]="!(inacapMail && inacapMail.unReadTotal > 0)">
+            <ion-icon slot="start" src="assets/icon/mail_outline.svg"></ion-icon>
+            <span>INACAPMail</span>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button color="white" expand="block" (click)="comunicacionesTap()">
+          <div>
+            <ion-icon slot="start" src="assets/icon/send.svg"></ion-icon>
+            <span>Enviar mensaje<span>a secciones</span></span>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button color="white" expand="block" routerLink="microsoft-teams">
+          <div>
+            <ion-icon slot="start" name="logo-microsoft"></ion-icon>
+            <span>Microsoft Teams</span>
+          </div>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <section class="eval-docente" *ngIf="mostrarResultadosEvaluacion">
+    <ion-button expand="block" shape="round" color="info" routerLink="evaluacion-docente">
+      Resultados Evaluación Docente
+    </ion-button>
+  </section>
+
+  <section class="btn-cerrar">
+    <ion-button expand="full" color="white" (click)="logout()">Cerrar Sesión</ion-button>
+  </section>
+
+  <p class="version">Versión - {{appVersion}}</p>
+
+</ion-content>
+
+<ion-menu menuId="intranet" class="menu-principal" side="start" contentId="main">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title></ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-menu-toggle>
+        <ion-item lines="full" (click)="publicoTap(true)">
+          <ion-icon slot="start" src="assets/icon/home.svg"></ion-icon>
+          <ion-label>Inicio</ion-label>
+        </ion-item>
+        <p class="acceso-directo">ACCESOS DIRECTOS</p>
+        <ion-item routerLink="inacapmail" detail="false">
+          <ion-icon slot="start" src="assets/icon/outlook.svg"></ion-icon>
+          <ion-label>INACAPMail</ion-label>
+          <ion-badge slot="end" *ngIf="inacapMail && inacapMail.unReadTotal > 0" color="warning">
+            {{inacapMail.unReadTotal}}
+          </ion-badge>
+        </ion-item>
+        <ion-item (click)="moodleTap()">
+          <ion-icon slot="start" src="assets/icon/cast.svg"></ion-icon>
+          <ion-label>Ambiente de Aprendizaje AAI</ion-label>
+        </ion-item>
+        <ion-item routerLink="microsoft-teams" detail="false">
+          <ion-icon slot="start" name="logo-microsoft"></ion-icon>
+          <ion-label>Microsoft Teams</ion-label>
+        </ion-item>
+        <ion-item routerLink="contactos-sedes" detail="false">
+          <ion-icon slot="start" src="assets/icon/business.svg"></ion-icon>
+          <ion-label>Contactos en Sede</ion-label>
+        </ion-item>
+        <ion-item routerLink="buzon-opiniones" detail="false">
+          <ion-icon slot="start" src="assets/icon/add_comment.svg"></ion-icon>
+          <ion-label>Buzón de Opiniones</ion-label>
+        </ion-item>
+        <!-- <ion-item routerLink="buscador-docentes" detail="false">
+            <ion-icon slot="start" src="assets/icon/person_search.svg"></ion-icon>
+            <ion-label>Buscador de Docentes</ion-label>
+          </ion-item> -->
+        <ion-item (click)="logout()">
+          <ion-icon slot="start" src="assets/icon/exit_to_app.svg"></ion-icon>
+          <ion-label>Cerrar Sesión</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
+  </ion-content>
+  <ion-footer>
+    <ion-list>
+      <p class="acceso-directo">MÁS INFORMACIÓN</p>
+      <ion-item lines="none" *ngIf="mostrarManual" (click)="manualTap()">
+        <ion-icon slot="start" src="assets/icon/file_download.svg"></ion-icon>
+        <ion-label>Manual de uso AMD</ion-label>
+      </ion-item>
+      <ion-item lines="none" (click)="versionTap()">
+        <ion-icon slot="start" src="assets/icon/info.svg"></ion-icon>
+        <ion-label>Versión</ion-label>
+      </ion-item>
+      <ion-item lines="none" (click)="politicasTap()">
+        <ion-icon slot="start" src="assets/icon/assignment_turned.svg"></ion-icon>
+        <ion-label>Términos y Condiciones</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-footer>
+</ion-menu>

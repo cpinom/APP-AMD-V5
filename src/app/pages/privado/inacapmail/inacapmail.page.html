@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>INACAPMail</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="AMD" defaultHref="/privado"></ion-back-button>
+      <ion-menu-button autoHide="true"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="correoTap()">
+        <ion-icon slot="start" src="assets/icon/add.svg"></ion-icon>
+        Correo
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  
+
+  <ion-split-pane contentId="main" when="sm">
+    <ion-menu contentId="main">
+      <div class="loaderInacap" *ngIf="mostrarCargando">
+        <ion-spinner name="lines" color="info"></ion-spinner>
+      </div>
+      <ion-list *ngIf="folders">
+        <ion-menu-toggle [autoHide]="false">
+          <ion-item (click)="folderTap(item)" *ngFor="let item of folders" [class.selected]="item.selected">
+            <ion-label>{{item.displayName}}</ion-label>
+            <ion-badge slot="end" *ngIf="item.unreadItemCount > 0" color="white">
+              {{item.unreadItemCount}}
+            </ion-badge>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-menu>
+    <ion-nav #nav id="main"></ion-nav>
+  </ion-split-pane>
+
+</ion-content>

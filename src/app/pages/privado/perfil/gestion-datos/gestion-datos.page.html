@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Configuración de Datos</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="Perfil"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <section *ngIf="perfil" style="margin-top: 20px;">
+    <div class="section-content">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <p class="label">Correo Secundario</p>
+            <p class="detail">{{ perfil.persTemail || 'Sin correo secundario' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <p class="label">Teléfono</p>
+            <p class="detail">{{ perfil.persTcelular || 'Sin teléfono' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+
+  <section *ngIf="permitirEditar">
+    <div class="section-header">Editar datos</div>
+    <div class="section-content">
+      <ion-list>
+        <ion-item detail="true" (click)="editarCorreo()">
+          <ion-icon slot="start" src="assets/icon/mail.svg" color="medium"></ion-icon>
+          <ion-label>Actualizar Correo Electrónico</ion-label>
+        </ion-item>
+        <ion-item detail="true" (click)="editarTelefono()">
+          <ion-icon slot="start" src="assets/icon/phone.svg" color="medium"></ion-icon>
+          <ion-label>Actualizar Teléfono</ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+
+</ion-content>

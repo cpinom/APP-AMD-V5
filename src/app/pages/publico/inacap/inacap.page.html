@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>INACAP</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="../../privado">
+        <ion-icon slot="icon-only" src="assets/icon/person.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card *ngIf="mostrarCargando" color="white">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-skeleton-text animated style="width: 60%; height: 25px;"></ion-skeleton-text>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        <ion-skeleton-text animated style="width: 90%;"></ion-skeleton-text>
+      </p>
+      <p>
+        <ion-skeleton-text animated style="width: 80%;"></ion-skeleton-text>
+      </p>
+      <p>
+        <ion-skeleton-text animated style="width: 40%;"></ion-skeleton-text>
+      </p>
+      <p>
+        <ion-skeleton-text animated style="width: 90%;"></ion-skeleton-text>
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <ng-container *ngIf="mostrarData && data">
+    <ion-card color="white">
+      <ion-card-header>
+        <ion-card-title>{{data.apinTtitulo}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p *ngIf="!mostrarMas">{{data.apinTdesc | slice: 0:300}}...</p>
+        <p *ngIf="mostrarMas">{{data.apinTdesc}}</p>
+        <span class="vermas" *ngIf="!mostrarMas" (click)="mostrarMas = true">Ver más</span>
+        <span class="vermas" *ngIf="mostrarMas" (click)="mostrarMas = false">Ver menos</span>
+      </ion-card-content>
+    </ion-card>
+
+    <section>
+      <div class="section-header">Instituciones</div>
+      <div class="section-content">
+        <ion-list>
+          <ion-item (click)="abrirInstituciones(0)" detail="true" class="ion-activatable">
+            <ion-label>Centro de Formación Técnica</ion-label>
+          </ion-item>
+          <ion-item (click)="abrirInstituciones(1)" detail="true" class="ion-activatable">
+            <ion-label>Instituto Profesional</ion-label>
+          </ion-item>
+          <ion-item (click)="abrirInstituciones(4)" detail="true" class="ion-activatable">
+            <ion-label>Educación Continua</ion-label>
+          </ion-item>
+          <ion-item (click)="abrirInstituciones(2)" detail="true" class="ion-activatable">
+            <ion-label>Universidad</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-header">Material Complementario</div>
+      <div class="section-content">
+        <ion-list>
+          <ion-item (click)="abrirMaterial()" detail="true" class="ion-activatable">
+            <ion-label>Reglamentos y Protocolos</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </section>
+  </ng-container>
+
+  <section class="empty-state" *ngIf="mostrarData && !data">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
+    </div>
+  </section>
+  
+</ion-content>

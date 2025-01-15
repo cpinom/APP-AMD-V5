@@ -1,0 +1,23 @@
+section:first-child {
+    margin-top: 15px;
+}
+
+.btn-buscar {
+    margin: 20px 15px;
+}
+
+ion-item {
+    ion-input {
+        text-align: right;
+    }
+}
+
+ion-item.picker-item {
+    --background-activated: transparent;
+    --background-focused: transparent;
+
+    ion-datetime {
+        margin: 0 auto;
+        --background: white
+    }
+}

@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-nav-link router-direction="back">
+        <ion-icon slot="start" src="assets/icon/arrow_back_ios.svg"></ion-icon>
+        Volver
+      </ion-nav-link>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="responder()" [disabled]="mostrarCargando">
+        <ion-icon name="arrow-redo-outline" color="medium"></ion-icon>
+      </ion-button>
+      <ion-button (click)="eliminar()" [disabled]="mostrarCargando || deshabilitaEliminar">
+        <ion-icon name="trash-outline" color="medium"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="mostrarCargando" type="indeterminate"></ion-progress-bar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="mostrarData && data">
+    <ion-list>
+      <ion-item>
+        <ion-avatar>
+          <div>{{data._inicial}}</div>
+        </ion-avatar>
+        <ion-label>
+          <h2 *ngIf="data.from">{{data.from.emailAddress.name}}</h2>
+          <p>{{data._fecha}}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="data.subject">
+        <ion-label style="font-weight: 600">{{data.subject}}</ion-label>
+      </ion-item>
+      <section *ngIf="data.hasAttachments" class="attachment-wrap">
+        <div *ngFor="let item of data.attachments" class="attachment" [class.thumbnail]="!!item.thumbnail" (click)="descargarAdjunto(item)">
+          <ng-container *ngIf="item.thumbnail">
+            <img [src]="item.thumbnail" />
+            <div class="text">
+              <h2>{{item.name}}</h2>
+              <p>{{bytesToSize(item.size)}}</p>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!item.thumbnail">
+            <ion-icon src="assets/icon/{{resolverIcono(item.contentType)}}.svg"></ion-icon>
+            <div class="text">
+              <h2>{{item.name}}</h2>
+              <p>{{bytesToSize(item.size)}}</p>
+            </div>
+          </ng-container>
+        </div>
+      </section>
+    </ion-list>
+    <section>
+      <div class="section-content" delegate>
+        <div class="mail-body" [innerHTML]="data.body.content | safeHtml"></div>
+      </div>
+    </section>
+  </ng-container>
+
+  <ng-container *ngIf="mostrarData && !data">
+    <div class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/info.svg"></ion-icon>
+        <p>Mensaje no disponible.</p>
+        <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+      </div>
+    </div>
+  </ng-container>
+
+</ion-content>

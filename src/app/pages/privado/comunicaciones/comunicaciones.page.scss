@@ -1,0 +1,162 @@
+@import "src/theme/tabla.scss";
+
+ion-content {
+  ion-toolbar {
+    --background: #fff;
+    box-shadow: 0px 2px 6px #00000033;
+    --color: #333;
+    --min-height: 56px;
+
+    ion-title {
+      font-size: 24px;
+      padding-inline: 15px;
+      text-align: left;
+      font-weight: 600;
+    }
+  }
+
+  ion-list {
+    margin-top: 17px;
+    box-shadow: 0px 2px 4px #00000012;
+
+    span.error {
+      font-size: var(--FS12);
+      color: var(--ion-color-danger);
+      line-height: 18px;
+      display: block;
+    }
+
+    ion-label strong {
+      font-size: 18px;
+    }
+
+    section.marca-correos {
+      display: flex;
+      flex-direction: column;
+      margin: 20px 16px 0;
+
+      ion-checkbox {
+        margin-bottom: 5px;
+      }
+    }
+
+    section.marca-todos {
+      margin: 15px 30px;
+    }
+
+    .acciones {
+      .btn-adjuntar {
+        --border-width: 2px;
+      }
+      .btn-guardar {
+        --padding-start: 36px;
+        --padding-end: 36px;
+      }
+    }
+
+    section.tabla {
+      margin: 16px;
+
+      table {
+        th,
+        td {
+          text-align: left;
+        }
+        th:first-child,
+        td:first-child {
+          width: 50px;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .archivos {
+    padding: 10px 15px;
+    --color: #666;
+    display: flex;
+    flex-wrap: wrap;
+
+    .archivo-box {
+      display: inline-block;
+      background: #fff;
+      height: 100px;
+      width: 100px;
+      overflow: visible;
+      margin: 10px;
+      position: relative;
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2) !important;
+
+      > div {
+        height: 100%;
+        width: 100%;
+      }
+
+      ion-skeleton-text {
+        margin: 0;
+      }
+
+      .close {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        background: black;
+        height: 15px;
+        width: 15px;
+        overflow: hidden;
+        border-radius: 50%;
+        color: white;
+
+        ion-icon {
+          font-size: 15px;
+        }
+      }
+
+      .inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        overflow: hidden;
+
+        img {
+          height: 100%;
+          object-fit: cover;
+        }
+
+        ion-icon {
+          margin: 0 auto 6px auto;
+        }
+
+        ion-label {
+          white-space: normal;
+          font-size: 11px;
+          line-height: 11px;
+          text-align: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-inline: 5px;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep body.dark {
+  ion-content {
+    ion-toolbar {
+      --background: var(--ion-color-dark-shade) !important;
+      --color: white !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  ion-content {
+    ion-toolbar {
+      ion-title {
+        font-size: 18px;
+      }
+    }
+  }
+}

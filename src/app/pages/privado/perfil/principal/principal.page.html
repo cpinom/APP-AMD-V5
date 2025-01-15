@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list class="user" *ngIf="user">
+    <ion-item lines="none">
+      <app-cached-image [src]="resolverFoto()" *ngIf="mostrarFoto"></app-cached-image>
+      <ion-label>
+        <h2>{{ user.persTnombreCompleto }}</h2>
+        <p>{{ user.persTemailInacap }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <section>
+    <div class="section-header">Ajustes de Cuenta</div>
+    <div class="section-content">
+      <ion-list>
+        <ion-item (click)="navigate(1)" detail="true">
+          <ion-label>Gestionar PIN</ion-label>
+        </ion-item>
+        <ion-item (click)="navigate(2)" detail="true">
+          <ion-label>Cambiar Foto Perfil</ion-label>
+        </ion-item>
+        <ion-item (click)="navigate(3)" detail="true">
+          <ion-label>Configuración de Datos</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Modo Oscuro</ion-label>
+          <ion-toggle [(ngModel)]="modoOscuro" (ngModelChange)="aplicarModo($event)" aria-label="Modo Oscuro" slot="end" color="success"></ion-toggle>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+
+  <ion-grid class="botones">
+    <ion-row>
+      <ion-col>
+        <ion-button class="cerrar-sesion" color="white" expand="block" (click)="logout()">Cerrar Sesión</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <section class="nota-cerrar">
+    <ion-note>Te recordamos cerrar las sesiones del navegador, en el caso de haber ingresado a Ambiente de Aprendizaje y/o Bibliografías.</ion-note>
+  </section>
+  
+</ion-content>

@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar routerLink="../../privado">
+    <ion-title>
+      <ion-icon src="assets/icon/account_circle.svg"></ion-icon>
+      <ion-label>Ingresar a AMD</ion-label>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="mostrarData && noticias">
+    <section class="noticias" *ngIf="noticias.length">
+      <div class="section-header">Noticias</div>
+      <div class="section-content">
+        <ion-list>
+          <ion-item *ngFor="let item of noticias" class="ion-activatable" (click)="mostrarLink(item.url)">
+            <ion-thumbnail slot="start">
+              <img [src]="item.imagen" />
+            </ion-thumbnail>
+            <ion-label>
+              <h3>{{item.titulo}}</h3>
+              <p>{{item.contenido}}</p>
+              <div class="fecha">{{item.fecha}}</div>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </section>
+  </ng-container>
+
+  <ng-container *ngIf="mostrarCargando">
+    <section class="noticias">
+      <div class="section-header">
+        <ion-skeleton-text animated style="width: 70px; height: 13px;"></ion-skeleton-text>
+      </div>
+      <div class="section-content">
+        <ion-list>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text animated style="width: 80px; height: 80px;"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3><ion-skeleton-text animated style="width: 70%; height: 20px;"></ion-skeleton-text></h3>
+              <p><ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text></p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text animated style="width: 80px; height: 80px;"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3><ion-skeleton-text animated style="width: 70%; height: 20px;"></ion-skeleton-text></h3>
+              <p><ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text></p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text animated style="width: 80px; height: 80px;"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3><ion-skeleton-text animated style="width: 70%; height: 20px;"></ion-skeleton-text></h3>
+              <p><ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text></p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </section>
+  </ng-container>
+
+  <section class="empty-state" *ngIf="mostrarData && !noticias" style="margin-bottom: 15px;">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="primary" shape="round" (click)="recargar()">Recargar Noticias</ion-button>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">Accesos Directos</div>
+    <div class="section-content">
+      <ion-list>
+        <ion-item detail="true" *ngIf="contacto && contacto.urlLaborum" class="ion-activatable"
+          (click)="mostrarLink(contacto.urlLaborum)">
+          <ion-icon slot="start" src="assets/icon/work.svg" color="medium"></ion-icon>
+          <ion-label>Trabaja con Nosotros</ion-label>
+        </ion-item>
+        <ion-item detail="true" routerLink="../sedes" class="ion-activatable">
+          <ion-icon slot="start" src="assets/icon/place.svg" color="medium"></ion-icon>
+          <ion-label>Información de Sedes</ion-label>
+        </ion-item>
+        <ion-item detail="true" (click)="infoTap()" class="ion-activatable">
+          <ion-icon slot="start" src="assets/icon/info.svg" color="medium"></ion-icon>
+          <ion-label>Información de Versión</ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+
+</ion-content>

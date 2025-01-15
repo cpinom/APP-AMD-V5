@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="adjuntarArchivos(adjuntosInput)" [disabled]="deshabilitarAdjuntar()">
+        <ion-icon src="assets/icon/attachment.svg"></ion-icon>
+      </ion-button>
+      <input type="file" #adjuntosInput style="display: none;" (change)="adjuntar($event)"
+        accept="application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,image/*" />
+      <ion-button (click)="enviar()" [disabled]="deshabilitarEnviar()">
+        <ion-icon src="assets/icon/send.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{isReply ? 'Responder' : 'Nuevo'}} Mensaje</ion-title>
+  </ion-toolbar>
+  <ion-progress-bar *ngIf="procesando" type="indeterminate"></ion-progress-bar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup]="mensajeForm" (ngSubmit)="enviar()">
+    <ion-list lines="full">
+      <ion-item style="--padding-start: 0; --inner-padding-end: 0">
+        <mat-form-field appearance="fill">
+          <mat-label>Para</mat-label>
+          <mat-chip-grid #chipList aria-label="Destinatarios">
+            <mat-chip-row *ngFor="let correo of correos" (removed)="remove(correo)">
+              {{correo}}
+              <button matChipRemove *ngIf="!emailInitial">
+                <ion-icon name="close"></ion-icon>
+              </button>
+            </mat-chip-row>
+            <input placeholder="Destinatario..." #correoInput [formControl]="correoCtrl" [matAutocomplete]="auto"
+              [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="add($event)" [disabled]="emailInitial" inputmode="email" autocapitalize="off"
+              autocomplete="off" [class.d-none]="emailInitial">
+          </mat-chip-grid>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let item of correosFiltrados | async" [value]="item">
+              <ion-label>
+                <h2>{{item.nombre}}</h2>
+                <p>{{item.correo}}</p>
+              </ion-label>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </ion-item>
+      <ion-item *ngIf="mostrarAsunto">
+        <ion-input #asunto type="text" formControlName="asunto" placeholder="Asunto" clearInput></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-textarea #cuerpo formControlName="cuerpo" rows="10" placeholder="Redactar un correo"></ion-textarea>
+      </ion-item>
+    </ion-list>
+  </form>
+
+  <div class="archivos" *ngIf="adjuntos.length">
+    <div class="archivo-box" *ngFor="let doc of adjuntos" (click)="descargarAdjunto(doc, $event)">
+      <div *ngIf="doc.name">
+        <div class="close" (click)="eliminarAdjunto(doc, $event)">
+          <ion-icon src="assets/icon/close.svg"></ion-icon>
+        </div>
+        <div class="inner">
+          <img [src]="resolverMiniatura(doc)" *ngIf="mostrarMiniatura(doc.type)" />
+          <ng-container *ngIf="!mostrarMiniatura(doc.type)">
+            <ion-icon src="assets/icon/picture_as_pdf.svg" color="medium"></ion-icon>
+            <ion-label>{{doc.name}}</ion-label>
+          </ng-container>
+        </div>
+      </div>
+      <ion-skeleton-text *ngIf="!doc.name" animated style="width: 100%; border-radius: 0"></ion-skeleton-text>
+    </div>
+  </div>
+
+  <section #contenido *ngIf="isReply" style="margin: 10px 0;">
+    <div class="section-content" style="padding: 15px;">
+      <div>De: <b>{{message.from.emailAddress.name}}</b> <{{message.from.emailAddress.address}}></div>
+      <div>Asunto: <b>{{message.subject}}</b></div>
+      <div>Enviado: <b>{{formatearFecha(message.sentDateTime)}}</b></div>
+      <div [innerHTML]="message.body.content | safeHtml"></div>
+    </div>
+  </section>
+
+</ion-content>

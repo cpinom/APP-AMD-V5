@@ -1,0 +1,62 @@
+<ion-header class="tab-content">
+  <ion-toolbar>
+    <ion-title>Tipo de Estudiante</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button text="Volver Atrás"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ion-card class="tipos" *ngIf="alumnos">
+    <ion-card-header *ngIf="alumnos.length > 0">
+
+      <div class="botones-filtros">
+        <div>
+          <ion-button [color]="resolverColor(1)" (click)="aplicarFiltro(1)" shape="round" expand="block">{{resolverContador(1)}}</ion-button>
+        </div>
+        <div>
+          <ion-button [color]="resolverColor(2)" (click)="aplicarFiltro(2)" shape="round" expand="block">{{resolverContador(2)}}</ion-button>
+        </div>
+        <div>
+          <ion-button [color]="resolverColor(3)" (click)="aplicarFiltro(3)" shape="round" expand="block">{{resolverContador(3)}}</ion-button>
+        </div>
+      </div>
+
+    </ion-card-header>
+    <ion-card-content>
+      <section class="tabla">
+        <table matSort (matSortChange)="ordenarAlumnos($event)">
+          <thead>
+            <th mat-sort-header="persTapePaterno">Nombre Estudiante</th>
+            <th mat-sort-header="alumTrabajador" class="ion-text-center">Tipo Estudiante</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of alumnosFiltrados">
+              <td>
+                <div class="avatar">
+                  <app-cached-image [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                  <span>{{item.persTapePaterno}} {{item.persTapeMaterno}}, {{item.persTnombre}}</span>
+                </div>
+              </td>
+              <td class="ion-text-center">{{ item.alumTrabajador }}</td>
+            </tr>
+            <tr *ngIf="alumnosFiltrados && alumnosFiltrados.length == 0">
+              <td colspan="2" class="ion-text-center">Sin registros para mostrar...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

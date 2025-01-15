@@ -1,0 +1,69 @@
+ion-content {
+    --background: #fff;
+
+    swiper-container {
+        height: 100%;
+
+        .container {
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+            section.logo {
+                img {
+                    height: 40px;
+                }
+            }
+
+            h5 {
+                font-size: 16px;
+                font-weight: normal;
+            }
+
+            form {
+                width: 60%;
+
+                &.cuenta {
+                    ion-list {
+                        margin-bottom: 15px;
+                    }
+                }
+
+                .label-pin {
+                    margin-bottom: 10px;
+                }
+
+                code-input {
+                    ::ng-deep span:first-child {
+                        padding-left: 0;
+                    }
+                }
+
+                div.error {
+                    font-size: 14px;
+                    color: var(--ion-color-danger);
+                    margin: 10px 16px 0;
+                }
+            }
+        }
+    }
+
+    p.recuperar {
+        font-size: 14px;
+        color: var(--ion-color-medium);
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    ion-content .container {
+        height: 60% !important;
+        width: 90%;
+
+        form {
+            width: 85% !important;
+        }
+    }
+}

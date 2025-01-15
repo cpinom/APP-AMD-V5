@@ -1,0 +1,44 @@
+ion-item {
+    --border-width: 0 0 0 0 !important;
+
+    &.pin-wrapper {
+        padding-bottom: 10px;
+
+        ion-label {
+            margin-bottom: 10px;
+        }
+        code-input {
+            ::ng-deep {
+                span:first-child {
+                    padding-left: 0;
+                }
+                input {
+                    height: 62px;
+                    width: 45px;
+                }
+            }
+        }
+    }
+    ion-label.label-titulo {
+        font-size: 15px;
+    }
+    ion-label.label-indicaciones {
+        font-size: 14px;
+        color: #999;
+    }
+}
+
+::ng-deep body.dark {
+    form {
+        ion-item {
+            code-input {
+                --item-border: 1px solid var(--ion-color-dark-tint) !important;
+                --item-border-bottom: 1px solid var(--ion-color-dark-tint) !important;
+                color: white;
+            }
+            ion-button {
+                --ion-color-base: #fff !important;
+            }
+        }
+    }
+}

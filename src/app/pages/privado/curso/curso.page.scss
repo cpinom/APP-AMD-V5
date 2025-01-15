@@ -1,0 +1,47 @@
+ion-content {
+    --overflow: hidden !important
+}
+ion-tab-bar {
+    height: 70px;
+    --background: #fff;
+    --ion-safe-area-top: 0px !important;
+
+    ion-tab-button {
+        ion-icon {
+            font-size: 24px;
+        }
+        ion-label {
+            width: 95%;
+            white-space: normal;
+            font-size: 10px;
+        }
+    }
+}
+
+ion-toolbar.curso {
+    --min-height: 68px;
+
+    ion-title {
+        h2 {
+            margin: 0;
+            font-size: var(--FS18);
+        }
+        span {
+            font-size: var(--FS12);
+            font-weight: 400;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    ion-tab-bar {
+        justify-content: start;
+        overflow: scroll;
+
+        ion-tab-button {
+            flex: 0 0 75px;
+            --padding-start: 0;
+            --padding-end: 0;
+        }
+    }
+}

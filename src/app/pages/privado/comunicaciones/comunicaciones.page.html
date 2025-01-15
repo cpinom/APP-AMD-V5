@@ -1,0 +1,124 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Comunicaciones</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="AMD" defaultHref="/privado"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-toolbar>
+    <ion-title>Enviar correo a secciones seleccionadas</ion-title>
+  </ion-toolbar>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ng-container *ngIf="mostrarData && messageId">
+    
+    <form [formGroup]="form" (ngSubmit)="enviar($event)">
+      <ion-list>
+        <ion-item lines="none">
+          <ion-label>De: <strong>{{correo}}</strong></ion-label>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-input formControlName="asunto" label="Asunto (*)" labelPlacement="stacked"
+            placeholder="El asunto no debería tener más de 50 caracteres" clearInput="true" counter="true"
+            maxlength="50" [errorText]="asuntoError"></ion-input>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-textarea formControlName="mensaje" label="Mensaje" labelPlacement="stacked"
+            placeholder="El mensaje no debe tener más de 1.000 caracteres" counter="true" maxlength="1000"
+            rows="4" [errorText]="mensajeError"></ion-textarea>
+        </ion-item>
+        <section class="marca-correos">
+          <ion-checkbox mode="md" color="info" labelPlacement="end" justify="start" formControlName="marcaCC">
+            Enviar copia a mi correo
+          </ion-checkbox>
+          <ion-checkbox mode="md" color="info" labelPlacement="end" justify="start" formControlName="marcaDC">
+            Enviar copia a Director de Carrera
+          </ion-checkbox>
+        </section>
+        <ion-grid class="acciones">
+          <ion-row>
+            <ion-col>
+              <ion-button class="btn-adjuntar" fill="outline" color="medium" shape="round" (click)="adjuntar(adjuntarInput)">
+                <ion-icon slot="start" src="assets/icon/photo_camera.svg"></ion-icon>
+                Adjuntar Archivo / Tomar Foto
+              </ion-button>
+            </ion-col>
+            <ion-col class="ion-text-right">
+              <ion-button type="submit" class="btn-guardar" type="submit" color="info" shape="round">Enviar Correo</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <div class="archivos" *ngIf="documentos.length">
+          <div class="archivo-box" *ngFor="let doc of documentos" (click)="verDocumento(doc)">
+            <div class="close" (click)="eliminarDocumento(doc, $event)">
+              <ion-icon src="assets/icon/close.svg"></ion-icon>
+            </div>
+            <div class="inner">
+              <img [src]="resolverMiniatura(doc)" *ngIf="mostrarMiniatura(doc.type)" />
+              <ng-container *ngIf="!mostrarMiniatura(doc.type)">
+                <ion-icon src="assets/icon/picture_as_pdf.svg" color="medium"></ion-icon>
+                <ion-label>{{doc.name}}</ion-label>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ion-list>
+    </form>
+
+    <ion-list *ngIf="cursos && cursos.length">
+      <ion-item>
+        <ion-label>
+          <strong>Destinatarios</strong>
+          <span class="error" *ngIf="submitted && this.form.get('secciones')?.hasError('required')">Debe seleccionar al menos una sección.</span>
+        </ion-label>
+      </ion-item>
+      <section class="marca-todos">
+        <ion-toggle labelPlacement="start" color="info" [(ngModel)]="marcaTodos" (ngModelChange)="marcarTodos($event)">
+          Enviar correo a todos
+        </ion-toggle>
+      </section>
+      <section class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>SECCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of cursos" (click)="resolverMarca(item, $event)" [class.selected]="item.selected">
+              <td>
+                <ion-checkbox slot="start" color="info" [(ngModel)]="item.selected"></ion-checkbox>
+              </td>
+              <td>
+                <strong>{{item.asigTdesc}} - {{item.asigCcod}}</strong> <br />
+                <span>{{item.seccTdesc}}/{{item.ssecTdesc}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </ion-list>
+
+  </ng-container>
+
+  <div class="empty-state" *ngIf="mostrarData && !messageId">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+    </div>
+  </div>
+
+  <input type="file" #adjuntarInput style="display: none;" (change)="adjuntarWeb($event)"
+    accept="application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,image/*" />
+
+
+</ion-content>

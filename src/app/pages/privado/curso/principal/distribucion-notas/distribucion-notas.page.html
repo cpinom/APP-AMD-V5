@@ -1,0 +1,58 @@
+<ion-header class="tab-content">
+  <ion-toolbar>
+    <ion-title>Distribución Promedio de Notas</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button text="Volver Atrás"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="loaderInacap" *ngIf="mostrarCargando">
+    <ion-spinner name="lines" color="info"></ion-spinner>
+  </div>
+
+  <ion-card class="alumnos" *ngIf="mostrarData && alumnos">
+    <ion-card-content>
+      <section class="tabla">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre Estudiante</th>
+              <th *ngFor="let item of ponderaciones">
+                <div>EVAL{{ item.evaluacion}}</div>
+                <span style="font-weight: normal;">{{ item.ponderacion }}%</span>
+              </th>
+              <th>Nota Present.</th>
+              <th>Examen</th>
+              <th>Nota Final</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of alumnos">
+              <td>
+                <div class="avatar">
+                  <app-cached-image [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+                  <span>{{item.persTnombre}}</span>
+                </div>
+              </td>
+              <td *ngFor="let nota of item.notas" [class]="resolverCssNota(nota.calaNnota)">{{nota.calaNnota}}</td>
+              <td [class]="resolverCssNota(item.notaPresentacion)">{{item.notaPresentacion}}</td>
+              <td [class]="resolverCssNota(item.notaExamen)">{{item.notaExamen}}</td>
+              <td [class]="resolverCssNota(item.notaFinal)">{{item.notaFinal}}</td>
+            </tr>
+            <tr *ngIf="alumnos.length == 0">
+              <td colspan="4">Sin registros...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
