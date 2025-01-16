@@ -15,7 +15,7 @@
     <ion-list inset="true">
       <ion-item>
         <ion-label>Usar PIN</ion-label>
-        <ion-toggle [(ngModel)]="usarPIN" slot="end" color="info"></ion-toggle>
+        <ion-toggle [(ngModel)]="usarPIN" slot="end" color="primary"></ion-toggle>
       </ion-item>
     </ion-list>
 
@@ -25,7 +25,7 @@
           <ion-button color="medium" shape="round" expand="block" (click)="cancelar()">Cancelar</ion-button>
         </ion-col> -->
         <ion-col>
-          <ion-button type="submit" color="info" shape="round" expand="block" (click)="guardarConfiguracion()">Guardar cambios</ion-button>
+          <ion-button type="submit" color="primary" shape="round" expand="block" (click)="guardarConfiguracion()">Guardar cambios</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -72,7 +72,7 @@
               <ion-button color="medium" shape="round" expand="block" (click)="cancelar()">Cancelar</ion-button>
             </ion-col>
             <ion-col>
-              <ion-button type="submit" color="info" shape="round" expand="block" [disabled]="!pinForm.valid">Guardar PIN</ion-button>
+              <ion-button type="submit" color="primary" shape="round" expand="block" [disabled]="!pinForm.valid">Guardar PIN</ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>

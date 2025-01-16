@@ -14,7 +14,7 @@
   </ion-toolbar>
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <ng-container *ngIf="mostrarData && messageId">
@@ -35,10 +35,10 @@
             rows="4" [errorText]="mensajeError"></ion-textarea>
         </ion-item>
         <section class="marca-correos">
-          <ion-checkbox mode="md" color="info" labelPlacement="end" justify="start" formControlName="marcaCC">
+          <ion-checkbox mode="md" color="primary" labelPlacement="end" justify="start" formControlName="marcaCC">
             Enviar copia a mi correo
           </ion-checkbox>
-          <ion-checkbox mode="md" color="info" labelPlacement="end" justify="start" formControlName="marcaDC">
+          <ion-checkbox mode="md" color="primary" labelPlacement="end" justify="start" formControlName="marcaDC">
             Enviar copia a Director de Carrera
           </ion-checkbox>
         </section>
@@ -51,7 +51,7 @@
               </ion-button>
             </ion-col>
             <ion-col class="ion-text-right">
-              <ion-button type="submit" class="btn-guardar" type="submit" color="info" shape="round">Enviar Correo</ion-button>
+              <ion-button type="submit" class="btn-guardar" type="submit" color="primary" shape="round">Enviar Correo</ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -80,7 +80,7 @@
         </ion-label>
       </ion-item>
       <section class="marca-todos">
-        <ion-toggle labelPlacement="start" color="info" [(ngModel)]="marcaTodos" (ngModelChange)="marcarTodos($event)">
+        <ion-toggle labelPlacement="start" color="primary" [(ngModel)]="marcaTodos" (ngModelChange)="marcarTodos($event)">
           Enviar correo a todos
         </ion-toggle>
       </section>
@@ -95,7 +95,7 @@
           <tbody>
             <tr *ngFor="let item of cursos" (click)="resolverMarca(item, $event)" [class.selected]="item.selected">
               <td>
-                <ion-checkbox slot="start" color="info" [(ngModel)]="item.selected"></ion-checkbox>
+                <ion-checkbox slot="start" color="primary" [(ngModel)]="item.selected"></ion-checkbox>
               </td>
               <td>
                 <strong>{{item.asigTdesc}} - {{item.asigCcod}}</strong> <br />
@@ -113,7 +113,7 @@
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Información no disponible en este momento.</p>
-      <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+      <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
     </div>
   </div>
 

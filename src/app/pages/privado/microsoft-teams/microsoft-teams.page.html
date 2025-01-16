@@ -13,7 +13,7 @@
   </ion-toolbar>
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
@@ -31,7 +31,7 @@
               <h2>{{item.titulo}}</h2>
               <p>{{resolverFecha(item.fecha)}}</p>
             </ion-label>
-            <ion-button fill="outline" color="info" size="small" slot="end" (click)="unirseTap(item, $event)">Unirse</ion-button>
+            <ion-button fill="outline" color="primary" size="small" slot="end" (click)="unirseTap(item, $event)">Unirse</ion-button>
           </ion-item>
         </ion-list>
       </div>
@@ -66,10 +66,10 @@
                   <span>{{resolverFechaEvento(evento.fecha)}}</span><br />
                   <span>{{resolverHoraEvento(evento.fecha)}}</span>
                   <div style="margin-top: 10px">
-                    <ion-button style="--border-width: 2px; height: 25px;" fill="outline" color="info" size="small" slot="end" (click)="unirseTap(evento, $event)">
+                    <ion-button style="--border-width: 2px; height: 25px;" fill="outline" color="primary" size="small" slot="end" (click)="unirseTap(evento, $event)">
                       Unirse
                     </ion-button>
-                    <ion-button fill="clear" color="info" size="small" slot="end" (click)="compartirTap()">
+                    <ion-button fill="clear" color="primary" size="small" slot="end" (click)="compartirTap()">
                       <ion-icon slot="start" name="share-outline"></ion-icon>Compartir invitación
                     </ion-button>
                   </div>
@@ -125,7 +125,7 @@
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Información no disponible en este momento.</p>
-      <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+      <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
     </div>
   </div>
 

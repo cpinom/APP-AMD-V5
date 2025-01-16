@@ -83,7 +83,7 @@
       </ng-container>
       <ng-container *ngIf="tabModel == 1">
         <div class="loaderInacap" *ngIf="mostrarCargando">
-          <ion-spinner name="lines" color="info"></ion-spinner>
+          <ion-spinner name="lines" color="primary"></ion-spinner>
         </div>
         <ion-list *ngIf="mostrarData && opiniones.length">
           <ion-item *ngFor="let item of opiniones" class="ion-activatable" detail="true" (click)="detalleOpinion(item.resoNcorr)">
@@ -104,7 +104,7 @@
   </section>
 
   <section style="margin: 15px 30px;" *ngIf="tabModel == 0">
-    <ion-button color="info" shape="round" expand="block" (click)="enviar()">Enviar Opinión</ion-button>
+    <ion-button color="primary" shape="round" expand="block" (click)="enviar()">Enviar Opinión</ion-button>
   </section>
 
   <input type="file" #adjuntarInput style="display: none;" (change)="adjuntarWeb($event)"

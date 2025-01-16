@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text="AMD" defaultHref="/privado"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-toolbar>
+    <ion-title>OneDrive</ion-title>
+  </ion-toolbar>
+
+  @if (mostrarCargando) {
+  <div class="loaderInacap">
+    <ion-spinner name="lines" color="primary"></ion-spinner>
+  </div>
+  }
+
+  @if (mostrarData) {
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="fabTap(adjuntosInput)">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list inset="true">
+    @for (item of items; track $index) {
+    <ion-item [detail]="false" (click)="itemTap(item)" class="ion-activatable">
+      @if (item.folder) {
+      <ion-icon src="assets/icon/folder.svg" slot="start" color="medium" *ngIf="item.folder"></ion-icon>
+      }
+      @else if (isImage(item.name)) {
+      <ion-thumbnail slot="start">
+        <ion-spinner name="lines" color="primary"></ion-spinner>
+        <img [src]="resolverMiniatura(item.id)" appImage [hideViewer]="true" />
+      </ion-thumbnail>
+      }
+      @else {
+      <ion-icon [src]="resolverIcono(item.name)" slot="start" color="medium"></ion-icon>
+      }
+      <ion-label>
+        <div>
+          <h2>{{item.name}}</h2>
+          <p>{{item.size|formatBytes}}</p>
+        </div>
+        <p>{{resolverFecha(item.createDate)}}</p>
+      </ion-label>
+      <ion-icon slot="end" src="assets/icon/more_horiz.svg" color="medium"
+        (click)="optionsTap(item, $event)"></ion-icon>
+    </ion-item>
+    }
+  </ion-list>
+  }
+
+  @if (mostrarData && !items) {
+  <section *ngIf="mostrarData && !items" class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>Información no disponible en este momento.</p>
+      <ion-button color="primary" shape="round" (click)="recargar(true)">Recargar</ion-button>
+    </div>
+  </section>
+  }
+
+  <input type="file" #adjuntosInput style="display: none;" (change)="adjuntar($event)"
+    accept="application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,image/*" />
+
+
+</ion-content>

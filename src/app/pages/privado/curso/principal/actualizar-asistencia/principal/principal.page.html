@@ -12,7 +12,7 @@
 <ion-content>
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <ng-container *ngIf="alumnosFiltrados">
@@ -99,10 +99,10 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button color="info" fill="outline" shape="round" expand="block" (click)="reportarExcepcion()" [disabled]="!permitirReportar">Reportar Excepción</ion-button>
+          <ion-button color="primary" fill="outline" shape="round" expand="block" (click)="reportarExcepcion()" [disabled]="!permitirReportar">Reportar Excepción</ion-button>
         </ion-col>
         <!-- <ion-col>
-          <ion-button color="info" shape="round" expand="block">Actualizar Asistencia</ion-button>
+          <ion-button color="primary" shape="round" expand="block">Actualizar Asistencia</ion-button>
         </ion-col> -->
       </ion-row>
     </ion-grid>

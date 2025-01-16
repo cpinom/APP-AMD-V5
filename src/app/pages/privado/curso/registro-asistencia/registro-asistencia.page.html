@@ -15,18 +15,18 @@
   <ion-toolbar class="asistencia">
     <ion-title>Asistencia</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="info" shape="round" fill="solid" (click)="reportar()" [disabled]="!permitirReportar">Reportar Excepción</ion-button>
+      <ion-button color="primary" shape="round" fill="solid" (click)="reportar()" [disabled]="!permitirReportar">Reportar Excepción</ion-button>
     </ion-buttons>
   </ion-toolbar>
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <ion-card class="alumnos" *ngIf="alumnos && alumnos.length">
     <ion-card-header>
       <ion-card-title>
-        <ion-button color="info" shape="round" fill="outline" (click)="marcarPresentes()">Marcar Todos Presentes</ion-button>
+        <ion-button color="primary" shape="round" fill="outline" (click)="marcarPresentes()">Marcar Todos Presentes</ion-button>
         <div class="indicadores">
           <div>
             <strong>{{ alumnos.length }}</strong> Total
@@ -104,7 +104,7 @@
   </div>
 
   <section class="btn-volver" *ngIf="!mostrarCargando">
-    <ion-button color="info" shape="round" expand="block" routerLink="/privado/curso">Volver al Curso</ion-button>
+    <ion-button color="primary" shape="round" expand="block" routerLink="/privado/curso">Volver al Curso</ion-button>
   </section>
 
 </ion-content>

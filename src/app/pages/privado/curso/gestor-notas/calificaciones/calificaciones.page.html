@@ -10,7 +10,7 @@
 <ion-content class="contenido">
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <section *ngIf="mostrarData && notas" class="notas">
@@ -22,7 +22,7 @@
         </ion-item>
         <ion-item>
           <ion-label>{{evaluacion.orden}} - {{evaluacion.tevaTdesc}} {{evaluacion.caliNponderacion}}%</ion-label>
-          <ion-button type="submit" class="btn-guardar" slot="end" shape="round" color="info" [disabled]="deshabilitarGuardar" *ngIf="mostrarGuardar">Guardar</ion-button>
+          <ion-button type="submit" class="btn-guardar" slot="end" shape="round" color="primary" [disabled]="deshabilitarGuardar" *ngIf="mostrarGuardar">Guardar</ion-button>
         </ion-item>
       </ion-list>
     
@@ -52,7 +52,7 @@
                   <app-cached-image [src]="resolverFoto(notas[i].persNcorr)"></app-cached-image>
                   <span>{{notas[i].persTapePaterno}} {{notas[i].persTapeMaterno}}, {{notas[i].persTnombre}}</span>
                   <ng-container *ngIf="notas[i].caliNjustificacion == 1">
-                    <ion-icon src="assets/icon/info.svg" id="est-oportunidad-{{ i }}" color="info" (click)="$event.stopPropagation()"></ion-icon>
+                    <ion-icon src="assets/icon/info.svg" id="est-oportunidad-{{ i }}" color="primary" (click)="$event.stopPropagation()"></ion-icon>
                     <ion-popover trigger="est-oportunidad-{{ i }}" side="right" alignment="end">
                       <ng-template>
                         <ion-content class="ion-padding" style="font-size: 14px;">Justificación de Inasistencia</ion-content>

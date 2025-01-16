@@ -36,7 +36,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+// @import "@ionic/angular/css/palettes/dark.system.css";
 
 :root {
   /*Colores */
@@ -152,6 +152,71 @@
       &.list-md {
         padding-top: 0;
         padding-bottom: 0;
+      }
+    }
+
+    ion-modal {
+      ion-toolbar {
+        --ion-toolbar-background: #fff;
+        --ion-toolbar-color: #000;
+
+        ion-buttons[slot="end"] {
+          ion-button {
+            ion-label {
+              color: var(--ion-color-info);
+              font-weight: 500;
+              font-size: var(--FS16);
+            }
+          }
+        }
+      }
+
+      &.mdl-auto {
+        --height: auto;
+      }
+
+      &.transparent-modal {
+        --background: transparent;
+        backdrop-filter: blur(10px);
+
+        &::part(content) {
+          box-shadow: none !important;
+          border-radius: 0px !important;
+        }
+      }
+    }
+
+    &.dark {
+      --color: #ffffff;
+      --ion-text-color: #ffffff;
+      --ion-background-color: #161619;
+
+      --ion-color-step-400: #828599;
+
+      // tabbar
+      --ion-tab-bar-background: #2b2c33;
+      --ion-tab-bar-border-color: #040b15;
+      --ion-tab-bar-color: #828499;
+      --ion-tab-bar-color-selected: #ffffff;
+      //toolbar
+      --ion-toolbar-border-color: #2b2c33;
+
+      --ion-item-background: #2b2c33;
+      --ion-border-color: #41424d;
+
+      // Listado de colores
+      --ion-color-1-background: #3b2b32;
+      --ion-color-2-background: #3b332b;
+      --ion-color-3-background: #3b2e2b;
+      --ion-color-4-background: #3b382b;
+      --ion-color-5-background: #383b2b;
+      --ion-color-6-background: #2b353b;
+      --ion-color-7-background: #2b2d3b;
+
+      ion-list {
+        &.list-inset {
+          box-shadow: 0px 4px 8px rgba(74, 78, 110, 0.15);
+        }
       }
     }
   }

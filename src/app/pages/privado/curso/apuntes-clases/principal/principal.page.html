@@ -7,7 +7,7 @@
 <ion-content>
 
   <div class="loaderInacap" *ngIf="mostrarCargandoPrincipal">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <section class="horario" [class.hide]="semanas.length == 0">
@@ -89,7 +89,7 @@
         <ion-content>
 
           <div class="loaderInacap" *ngIf="mostrarCargando">
-            <ion-spinner name="lines" color="info"></ion-spinner>
+            <ion-spinner name="lines" color="primary"></ion-spinner>
           </div>
 
           <div class="empty-state" *ngIf="apuntes && apuntes.length == 0 && !mostrarCargando">
@@ -125,7 +125,7 @@
           </section>
 
           <section class="agregar-apunte">
-            <ion-button shape="round" color="info" (click)="agregar()" [disabled]="mostrarCargando">Agregar Apuntes</ion-button>
+            <ion-button shape="round" color="primary" (click)="agregar()" [disabled]="mostrarCargando">Agregar Apuntes</ion-button>
           </section>
         </ion-content>
       </div>

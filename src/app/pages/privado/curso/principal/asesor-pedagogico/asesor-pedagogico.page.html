@@ -14,14 +14,14 @@
   </ion-refresher>
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <ion-card class="alumnos" *ngIf="mostrarData && alumnosFiltrados">
     <ion-card-header>
       <section class="acciones">
         <ion-searchbar placeholder="Buscar" [(ngModel)]="alumnosFiltro" (ionInput)="filtrarAlumnos()" (ionClear)="resetAlumnos()"></ion-searchbar>
-        <ion-button color="info" shape="round" (click)="solicitar()" [disabled]="!habilitaSolicitud">
+        <ion-button color="primary" shape="round" (click)="solicitar()" [disabled]="!habilitaSolicitud">
           Solicitar Apoyo
         </ion-button>
       </section>
@@ -46,7 +46,7 @@
           <tbody>
             <tr *ngFor="let item of alumnosFiltrados; let i = index;" (click)="!item.amtuNcorr && item.selected = !item.selected" [class.selected]="item.selected" [class]="resolverCssAlumno(item.alnoCriesgoAlumno)">
               <td>
-                <ion-checkbox *ngIf="!item.amtuNcorr" slot="start" color="info" [(ngModel)]="item.selected" mode="md"></ion-checkbox>
+                <ion-checkbox *ngIf="!item.amtuNcorr" slot="start" color="primary" [(ngModel)]="item.selected" mode="md"></ion-checkbox>
               </td>
               <td>
                 <div class="avatar">

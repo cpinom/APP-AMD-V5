@@ -14,7 +14,7 @@
       <img [src]="base64" />
       <div style="margin-top: 20px;">
         <ion-button color="secondary" shape="round" (click)="base64 = null">Cancelar</ion-button>
-        <ion-button color="info" shape="round" (click)="guardar()">Guardar</ion-button>
+        <ion-button color="primary" shape="round" (click)="guardar()">Guardar</ion-button>
       </div>
     </div>
     <ng-container *ngIf="!base64">

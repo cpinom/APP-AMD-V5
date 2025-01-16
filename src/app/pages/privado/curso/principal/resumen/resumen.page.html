@@ -30,7 +30,7 @@
               <span>Inicio de la clase: <b>{{estadoClase.horaInicio}}</b></span>
               <span>Término de la clase: <b>{{estadoClase.horaTermino}}</b></span>
             </div>
-            <ion-progress-bar [value]="estadoClase.porcentajeEnClase / 100" color="info"></ion-progress-bar>
+            <ion-progress-bar [value]="estadoClase.porcentajeEnClase / 100" color="primary"></ion-progress-bar>
             <div class="info-clase">
               <span>Tiempo actual clase: <b>{{estadoClase.tiempoEnClase}}</b></span>
               <span>Sala actual: <b>{{estadoClase.salaActual}}</b></span>
@@ -42,24 +42,24 @@
       <ion-grid class="acciones">
         <ion-row>
           <ion-col>
-            <ion-button color="info" shape="round" fill="outline" expand="full" (click)="cambiarSala()">
+            <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cambiarSala()">
               Comunicar Cambio de Sala
             </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button color="info" shape="round" fill="outline" expand="full" (click)="soporteTecnico()" 
+            <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="soporteTecnico()" 
               *ngIf="estadoClase.estadoSoporte == 0 || estadoClase.estadoSoporte == 3">
               Solicitar Apoyo Soporte TI
             </ion-button>
-            <ion-button color="info" shape="round" fill="outline" expand="full" (click)="cancelarTicket()" *ngIf="estadoClase.estadoSoporte == 2">
+            <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cancelarTicket()" *ngIf="estadoClase.estadoSoporte == 2">
               Soliciud Enviada
             </ion-button>
-            <ion-button color="info" shape="round" fill="outline" expand="full" (click)="cancelarTicket()" *ngIf="estadoClase.estadoSoporte == 9">
+            <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cancelarTicket()" *ngIf="estadoClase.estadoSoporte == 9">
               Ayuda en Camino
             </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button color="info" shape="round" expand="full" (click)="actualizarAsistencia()">
+            <ion-button color="primary" shape="round" expand="full" (click)="actualizarAsistencia()">
               Actualizar Asistencia Rápida
             </ion-button>
           </ion-col>
@@ -73,12 +73,12 @@
         Clase Finalizada - {{resolverFechaTermino()}}</p>
       <ion-row>
         <ion-col>
-          <ion-button color="info" shape="round" fill="outline" expand="full" (click)="mostrarAprendizajes()">
+          <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="mostrarAprendizajes()">
             Avance de Aprendizaje Esperado
           </ion-button>
         </ion-col>
         <ion-col *ngIf="false">
-          <ion-button color="info" shape="round" expand="full">Solicitar Retroalimentación de Estudiantes</ion-button>
+          <ion-button color="primary" shape="round" expand="full">Solicitar Retroalimentación de Estudiantes</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -93,10 +93,10 @@
           <p>{{ semanaTitulo }}</p>
         </ion-label>
         <div slot="end" class="botones">
-          <ion-button color="info" (click)="moverSemanaHorario(-1)" [disabled]="cargandoHorario">
+          <ion-button color="primary" (click)="moverSemanaHorario(-1)" [disabled]="cargandoHorario">
             <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
           </ion-button>
-          <ion-button color="info" (click)="moverSemanaHorario(1)" [disabled]="cargandoHorario">
+          <ion-button color="primary" (click)="moverSemanaHorario(1)" [disabled]="cargandoHorario">
             <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
           </ion-button>
         </div>
@@ -129,7 +129,7 @@
   </section>
 
   <div class="loaderInacap" *ngIf="!mostrarResumen">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <ng-container *ngIf="mostrarResumen && resumen">
@@ -269,7 +269,7 @@
         </ion-item>
       </ion-list>
       <div class="contenido">
-        <ion-progress-bar [value]="resumen.avances.porcentajeRealizadas / 100" color="info"></ion-progress-bar>
+        <ion-progress-bar [value]="resumen.avances.porcentajeRealizadas / 100" color="primary"></ion-progress-bar>
         <ion-grid class="detalle-horas">
           <ion-row>
             <ion-col>{{ resumen.avances.clasesPlanificadas }} Horas Planificadas</ion-col>
@@ -502,7 +502,7 @@
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Información de curso no disponible en este momento.</p>
-      <ion-button color="info" shape="round" (click)="cargar()">Recargar</ion-button>
+      <ion-button color="primary" shape="round" (click)="cargar()">Recargar</ion-button>
     </div>
   </div>
 
@@ -543,10 +543,10 @@
           <ion-grid class="acciones">
             <ion-row>
               <ion-col>
-                <ion-button color="info" shape="round" fill="outline" expand="block" (click)="actualizarAsistencia(terminarMdl)">Pasar Asistencia</ion-button>
+                <ion-button color="primary" shape="round" fill="outline" expand="block" (click)="actualizarAsistencia(terminarMdl)">Pasar Asistencia</ion-button>
               </ion-col>
               <ion-col>
-                <ion-button type="submit" color="info" shape="round" expand="block">Sí, terminar clase</ion-button>
+                <ion-button type="submit" color="primary" shape="round" expand="block">Sí, terminar clase</ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>

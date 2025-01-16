@@ -90,7 +90,7 @@
       <div class="section-content">
         <ion-list>
           <ion-item *ngFor="let equipo of data.implementos">
-            <ion-checkbox color="info" mode="md" (ionChange)="getEquipamiento($event, equipo)">
+            <ion-checkbox color="primary" mode="md" (ionChange)="getEquipamiento($event, equipo)">
               {{ equipo }}
             </ion-checkbox>
           </ion-item>
@@ -98,7 +98,7 @@
       </div>
     </section>
     <section class="btn-buscar">
-      <ion-button type="submit" shape="round" expand="block" color="info">Buscar Horarios disponibles</ion-button>
+      <ion-button type="submit" shape="round" expand="block" color="primary">Buscar Horarios disponibles</ion-button>
     </section>
   </form>
 

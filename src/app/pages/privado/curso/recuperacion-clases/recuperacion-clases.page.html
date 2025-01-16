@@ -11,7 +11,7 @@
   </ion-refresher>
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <ng-container *ngIf="mostrarData && recuperaciones">
@@ -21,7 +21,7 @@
         <ion-row>
           <ion-col></ion-col>
           <ion-col class="text-right">
-            <ion-button color="info" shape="round" (click)="solicitar()" [disabled]="!recuperacion">
+            <ion-button color="primary" shape="round" (click)="solicitar()" [disabled]="!recuperacion">
               Solicitar Recuperación
             </ion-button>
           </ion-col>
@@ -43,7 +43,7 @@
               <tbody>
                 <tr *ngFor="let item of recuperaciones" (click)="recuperacion = item" [class.selected]="recuperacion && recuperacion.lclaNcorr == item.lclaNcorr">
                   <td>
-                    <ion-radio mode="md" color="info" [value]="item"></ion-radio>
+                    <ion-radio mode="md" color="primary" [value]="item"></ion-radio>
                   </td>
                   <td>{{item.lclaFclase}}</td>
                   <td>{{item.lclaNcorr}}</td>

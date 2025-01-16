@@ -14,7 +14,7 @@
   </ion-refresher>
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
-    <ion-spinner name="lines" color="info"></ion-spinner>
+    <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
 
   <ng-container *ngIf="mostrarData && avances">
@@ -77,12 +77,12 @@
                           <ion-radio-group [(ngModel)]="obj.visto" (ngModelChange)="guardar(obj, item.libro)">
                             <div class="accion">
                               <label>
-                                <ion-radio mode="md" [value]="1" color="info"></ion-radio>Visto
+                                <ion-radio mode="md" [value]="1" color="primary"></ion-radio>Visto
                               </label>
                             </div>
                             <div class="accion">
                               <label>
-                                <ion-radio mode="md" [value]="2" color="info"></ion-radio>No Visto
+                                <ion-radio mode="md" [value]="2" color="primary"></ion-radio>No Visto
                               </label>
                             </div>
                           </ion-radio-group>
@@ -106,7 +106,7 @@
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Información no disponible en este momento.</p>
-      <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+      <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
     </div>
   </section>
 

@@ -21,11 +21,14 @@ export class ComunicacionesService extends PrivateService {
   getPrincipal(forceRefresh = false) {
     return this.get(`${this.baseUrl}/comunicaciones/v4/principal`, forceRefresh, undefined, false);
   }
-  agregarArchivoWeb(data: FormData, params: any) {
-    return this.uploadWeb(`${this.baseUrl}/comunicaciones/v4/agregar-archivo`, data, params);
-  }
-  agregarArchivo(filepath: string, filename: string, params: any) {
-    return this.upload(`${this.baseUrl}/comunicaciones/v4/agregar-archivo`, filepath, filename, params);
+  // agregarArchivoWeb(data: FormData, params: any) {
+  //   return this.uploadWeb(`${this.baseUrl}/comunicaciones/v4/agregar-archivo`, data, params);
+  // }
+  // agregarArchivo(filepath: string, filename: string, params: any) {
+  //   return this.upload(`${this.baseUrl}/comunicaciones/v4/agregar-archivo`, filepath, filename, params);
+  // }
+  agregarArchivoV5(messageId: string, params: any) {
+    return this.post(`${this.baseUrl}/comunicaciones/v5/agregar-archivo?messageId=${messageId}`, params);
   }
   eliminarArchivo(params: any) {
     return this.post(`${this.baseUrl}/comunicaciones/v4/eliminar-archivo`, params);

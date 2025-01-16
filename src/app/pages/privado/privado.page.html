@@ -9,15 +9,14 @@
     <ion-buttons slot="end">
       <ion-button (click)="notificacionesTap()">
         <div [matBadge]="'-'" matBadgePosition="after" matBadgeColor="accent" [matBadgeHidden]="!mostrarNotificaciones">
-          <ion-icon style="margin: 0;" src="assets/icon/notifications.svg"></ion-icon>
+          <ion-icon style="margin: 0; font-size: 34px;" src="assets/icon/notifications.svg"></ion-icon>
         </div>
       </ion-button>
       <ion-button (click)="perfilTap()">
         <ion-icon style="font-size: 34px;" src="assets/icon/account_circle.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-progress-bar type="indeterminate"></ion-progress-bar>
-    <!-- <ion-progress-bar *ngIf="mostrarCargando || mostrarCargando2" type="indeterminate"></ion-progress-bar> -->
+    <ion-progress-bar *ngIf="mostrarCargando || mostrarCargando2" type="indeterminate"></ion-progress-bar>
   </ion-toolbar>
   <ion-toolbar class="periodos" *ngIf="periodos && periodos.length > 1">
     <form [formGroup]="periodoForm">
@@ -56,7 +55,7 @@
       <div>
         <ion-icon src="assets/icon/class.svg"></ion-icon>
         <p>Información de Cursos no disponible.</p>
-        <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+        <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
       </div>
     </div>
   </ng-container>
@@ -157,7 +156,7 @@
           <div>
             <ion-icon src="assets/icon/class.svg"></ion-icon>
             <p>Sin clases planificadas para hoy.</p>
-            <ion-button color="info" shape="round" (click)="recargar()">Recargar</ion-button>
+            <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
           </div>
         </div>
       </ng-container>
@@ -217,14 +216,16 @@
           </div>
         </ion-button>
       </ion-col>
+      <ion-col size="6">
+        <ion-button color="white" expand="block" routerLink="onedrive">
+          <div>
+            <ion-icon slot="start" name="logo-microsoft"></ion-icon>
+            <span>One Drive</span>
+          </div>
+        </ion-button>
+      </ion-col>
     </ion-row>
   </ion-grid>
-
-  <section class="eval-docente" *ngIf="mostrarResultadosEvaluacion">
-    <ion-button expand="block" shape="round" color="info" routerLink="evaluacion-docente">
-      Resultados Evaluación Docente
-    </ion-button>
-  </section>
 
   <section class="btn-cerrar">
     <ion-button expand="full" color="white" (click)="logout()">Cerrar Sesión</ion-button>

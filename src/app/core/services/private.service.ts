@@ -89,6 +89,58 @@ export class PrivateService {
     }
 
   }
+  public patch = async (url: string, params?: any) => {
+    const auth = await this.auth.getAuth();
+
+    if (auth == null) {
+      throw Error('ACCESS_TOKEN_MISSING');
+    }
+
+    const options: HttpOptions = {
+      url: url,
+      method: 'patch',
+      responseType: 'json',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth.access_token}`
+      },
+      data: params || {}
+    };
+
+    const response = await CapacitorHttp.patch(options);
+
+    if (response.status == 200) {
+      return response.data;
+    }
+
+    return Promise.reject(response);
+  }
+  public delete = async (url: string, params?: any) => {
+    const auth = await this.auth.getAuth();
+
+    if (auth == null) {
+      throw Error('ACCESS_TOKEN_MISSING');
+    }
+
+    const options: HttpOptions = {
+      url: url,
+      method: 'delete',
+      responseType: 'json',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth.access_token}`
+      },
+      data: params || {}
+    };
+
+    const response = await CapacitorHttp.delete(options);
+
+    if (response.status == 200) {
+      return response.data;
+    }
+
+    return Promise.reject(response);
+  }
   private callGet = async (url: string, skipToken: boolean, cacheResult: boolean) => {
 
     let headers: any = { 'Content-Type': 'application/json' };

@@ -29,11 +29,6 @@ const routes: Routes = [
     loadChildren: () => import('./microsoft-teams/microsoft-teams.module').then(m => m.MicrosoftTeamsPageModule)
   },
   {
-    path: 'evaluacion-docente',
-    canActivate: [AuthAccess],
-    loadChildren: () => import('./evaluacion-docente/evaluacion-docente.module').then(m => m.EvaluacionDocentePageModule)
-  },
-  {
     path: 'contactos-sedes',
     canActivate: [AuthAccess],
     loadChildren: () => import('./contactos-sedes/contactos-sedes.module').then(m => m.ContactosSedesPageModule)
@@ -42,6 +37,11 @@ const routes: Routes = [
     path: 'buzon-opiniones',
     canActivate: [AuthAccess],
     loadChildren: () => import('./buzon-opiniones/buzon-opiniones.module').then(m => m.BuzonOpinionesPageModule)
+  },
+  {
+    path: 'onedrive',
+    canActivate: [AuthAccess],
+    loadChildren: () => import('./onedrive/onedrive.module').then( m => m.OnedrivePageModule)
   }
 ];
 
