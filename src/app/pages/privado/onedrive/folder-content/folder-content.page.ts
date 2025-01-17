@@ -38,7 +38,11 @@ export class FolderContentPage implements OnInit {
     private dialog: DialogService,
     private utils: UtilsService,
     private global: AppGlobal,
-    private nav: NavController) { }
+    private nav: NavController) {
+
+      moment.locale('es');
+      
+    }
 
   async ngOnInit() {
     const driveIdStoraged = await this.api.getStorage('driveId');
@@ -478,10 +482,24 @@ export class FolderContentPage implements OnInit {
   resolverIcono(path: string) {
     return this.utils.resolverIcono(path);
   }
-  resolverFecha(date: string) {
-    const formattedDate = moment(date, 'YYYY-MM-DD HH:mm:ss');
+  resolverFecha(fecha: string) {
+    const fechaMoment = moment(fecha, "DD/MM/YYYY HH:mm", true);
 
-    return formattedDate.format('DD/MM/YYYY HH:mm');
+    // Comparar con la fecha actual
+    const hoy = moment();
+
+    if (fechaMoment.isSame(hoy, 'day')) {
+      return `Hoy a las ${fechaMoment.format("HH:mm")}`;
+    }
+    else if (fechaMoment.isSame(hoy.clone().subtract(1, 'day'), 'day')) {
+      return `Ayer a las ${fechaMoment.format("HH:mm")}`;
+    } 
+    else if (fechaMoment.isSame(hoy, 'week')) {
+      return `${fechaMoment.format("[El] dddd [a las] HH:mm")}`; // Día de la semana y hora
+    }
+
+    // Por defecto, retornar la fecha original formateada
+    return fecha;
   }
   isImage(path: string) {
     return this.utils.isImage(path)

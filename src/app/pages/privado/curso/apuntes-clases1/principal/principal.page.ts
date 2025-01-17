@@ -122,6 +122,7 @@ export class PrincipalPage implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   async procesarSemanas() {
+    debugger
     if (this.calendario?.length == 0) {
       this.mostrarSinDatos = true;
       return;
@@ -181,11 +182,13 @@ export class PrincipalPage implements OnInit, OnDestroy, AfterViewInit {
     };
   }
   async diaTap(dia: any, semana: any) {
+    debugger
     if (!dia.disabled) {
       await this.seleccionarLibro(dia);
     }
   }
   async seleccionarLibro(diaTap: any) {
+    debugger
     this.horario = undefined;
 
     this.semanas.forEach(semana => {

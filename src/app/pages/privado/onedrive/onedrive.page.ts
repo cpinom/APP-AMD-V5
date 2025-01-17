@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { FileOpener } from '@capacitor-community/file-opener';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { ActionSheetController, AlertButton, AlertController, NavController, Platform } from '@ionic/angular';
@@ -30,13 +29,16 @@ export class OnedrivePage implements OnInit {
     private utils: UtilsService,
     private global: AppGlobal,
     private nav: NavController,
-    private router: Router,
     private dialog: DialogService,
     private pt: Platform,
     private alert: AlertController,
     private action: ActionSheetController,
     private media: MediaService,
-    private snackbar: SnackbarService) { }
+    private snackbar: SnackbarService) { 
+
+      moment.locale('es');
+
+    }
 
   async ngOnInit() {
     await this.cargar();
@@ -463,10 +465,24 @@ export class OnedrivePage implements OnInit {
   resolverIcono(path: string) {
     return this.utils.resolverIcono(path);
   }
-  resolverFecha(date: string) {
-    const formattedDate = moment(date, 'YYYY-MM-DD HH:mm:ss');
-
-    return formattedDate.format('DD/MM/YYYY HH:mm');
+  resolverFecha(fecha: string) {
+    const fechaMoment = moment(fecha, "DD/MM/YYYY HH:mm", true);
+    
+        // Comparar con la fecha actual
+        const hoy = moment();
+    
+        if (fechaMoment.isSame(hoy, 'day')) {
+          return `Hoy a las ${fechaMoment.format("HH:mm")}`;
+        }
+        else if (fechaMoment.isSame(hoy.clone().subtract(1, 'day'), 'day')) {
+          return `Ayer a las ${fechaMoment.format("HH:mm")}`;
+        } 
+        else if (fechaMoment.isSame(hoy, 'week')) {
+          return `${fechaMoment.format("[El] dddd [a las] HH:mm")}`; // Día de la semana y hora
+        }
+    
+        // Por defecto, retornar la fecha original formateada
+        return fecha;
   }
   isImage(path: string): boolean {
     return this.utils.isImage(path);

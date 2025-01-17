@@ -1,0 +1,97 @@
+@import "../curso.common.scss";
+
+ion-content {
+  ion-col {
+    padding: 0;
+
+    &.apuntes {
+      ion-card {
+        margin-left: 0;
+
+        ion-item.archivo {
+          --padding-top: 10px;
+          --padding-bottom: 10px;
+
+          ion-thumbnail {
+            --size: 60px;
+            background: #f2f2f3;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            ion-icon {
+              font-size: 24px;
+              color: #828499;
+            }
+          }
+
+          ion-label {
+            text-decoration: underline;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    &.clases {
+      ion-item.selected::part(native) {
+        border-left: 6px solid var(--ion-color-primary);
+        --padding-start: 10px;
+      }
+    }
+
+    ion-card {
+      margin: 15px;
+      border-radius: 0;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.0705882353);
+
+      ion-card-header {
+        border-bottom: 1px solid #ccc;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      ion-card-content {
+        padding: 0;
+
+        ion-list {
+          > ion-item:last-child {
+            --inner-border-width: 0 !important;
+            --border-width: 0 !important;
+          }
+        }
+
+        section {
+          padding: 15px;
+          text-align: center;
+        }
+
+        .comentario {
+          margin: 15px;
+        }
+
+        .archivos {
+          display: flex;
+          padding: 15px;
+
+          ion-thumbnail {
+            --size: 60px;
+            background: #f2f2f3;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 5px;
+
+            ion-icon {
+              font-size: 24px;
+              color: #828499;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "/api": {
-      "target": "http://localhost:52309/",
+      "target": "hhttp://localhost:52309/",
       "secure": false,
       "changeOrigin": true,
       "timeout": 3600000

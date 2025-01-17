@@ -53,6 +53,10 @@ const routes: Routes = [
     path: 'registro-asistencia',
     canActivate: [AuthAccess],
     loadChildren: () => import('./registro-asistencia/registro-asistencia.module').then(m => m.RegistroAsistenciaPageModule)
+  },
+  {
+    path: 'apuntes-clases',
+    loadChildren: () => import('./apuntes-clases/apuntes-clases.module').then( m => m.ApuntesClasesPageModule)
   }
 ];
 
