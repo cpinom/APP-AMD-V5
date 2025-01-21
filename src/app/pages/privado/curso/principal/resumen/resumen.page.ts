@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-import { ActionSheetController, AlertController, IonModal, IonNav, LoadingController, ModalController, NavController, Platform } from '@ionic/angular';
+import { ActionSheetController, AlertController, IonModal, IonNav, ModalController, NavController, Platform } from '@ionic/angular';
 import * as moment from 'moment';
 import { CursoService } from 'src/app/core/services/curso/curso.service';
 import { ActualizarAsistenciaPage } from '../actualizar-asistencia/actualizar-asistencia.page';
@@ -14,7 +14,6 @@ import { AppGlobal } from '../../../../../app.global';
 import { ErrorService } from 'src/app/core/services/error.service';
 import { DistribucionNotasPage } from '../distribucion-notas/distribucion-notas.page';
 import { Camera } from '@capacitor/camera';
-// import { BarcodeScanner, BarcodeScanResult } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Subscription, interval } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -24,6 +23,9 @@ import { TiposAlumnosPage } from '../tipos-alumnos/tipos-alumnos.page';
 import { PerfilAlumnosPage } from '../perfil-alumnos/perfil-alumnos.page';
 import { AsignaturasPrerequisitosPage } from '../asignaturas-prerequisitos/asignaturas-prerequisitos.page';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
+import { BarcodeScanningModalComponent } from 'src/app/core/components/barcode-scanning-modal/barcode-scanning-modal.component';
+import { DialogService } from 'src/app/core/services/dialog.service';
+import { Barcode, BarcodeFormat, LensFacing } from '@capacitor-mlkit/barcode-scanning';
 
 enum FORMA_COMENZAR {
   VALIDA_SALA = 1,
@@ -72,10 +74,9 @@ export class ResumenPage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private global: AppGlobal,
     private error: ErrorService,
-    // private barcodeScanner: BarcodeScanner,
     private snackbar: SnackbarService,
     private pt: Platform,
-    private loading: LoadingController,
+    private dialog: DialogService,
     private fb: FormBuilder,
     private action: ActionSheetController) {
 
@@ -204,9 +205,7 @@ export class ResumenPage implements OnInit, OnDestroy {
     }
   }
   async confirmarSala(codigoValido: boolean, salaCcodEjecucion?: number) {
-    let loading = await this.loading.create({ message: 'Iniciando...' });
-
-    await loading.present();
+    const loading = await this.dialog.showLoading({ message: 'Iniciando...' });
 
     // let permission = await Geolocation.checkPermissions();
     // let coordinates: any = undefined;
@@ -270,7 +269,8 @@ export class ResumenPage implements OnInit, OnDestroy {
   }
   async resolverFormaComenzar() {
     return new Promise(async (resolve) => {
-      const alert = await this.alertCtrl.create({
+
+      await this.dialog.showAlert({
         keyboardClose: false,
         backdropDismiss: false,
         header: 'Comenzar Clase',
@@ -298,13 +298,10 @@ export class ResumenPage implements OnInit, OnDestroy {
         ]
       });
 
-      await alert.present();
     });
   }
   async validarSala(validar: boolean) {
     this.deshabilitarIniciar = true;
-
-    let loading = await this.loading.create({ message: 'Validando...' });
 
     if (validar === true) {
       let salaCcod = 0;
@@ -315,34 +312,52 @@ export class ResumenPage implements OnInit, OnDestroy {
         if (permission.camera == 'denied' || permission.camera == 'prompt') {
           permission = await Camera.requestPermissions();
         }
-        // if (permission.camera == 'granted') {
-        //   const scanResult: BarcodeScanResult = await this.barcodeScanner.scan();
+        if (permission.camera == 'granted') {
+          const barcode = await this.escanearQR();
 
-        //   if (!scanResult.cancelled) {
-        //     if (scanResult.format != 'QR_CODE') {
-        //       this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
-        //       return;
-        //     }
+          if (barcode) {
+            if (barcode.format == BarcodeFormat.QrCode) {
+              salaCcod = Number(barcode.rawValue);
+            }
+            else {
+              this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
+            }
+          }
+          else {
+            return;
+          }
 
-        //     salaCcod = Number(scanResult.text);
-        //   }
-        // }
-        // else {
-        //   this.snackbar.showToast('Se deben verificar los permisos de la la Cámara.');
-        // }
+          //   const scanResult: BarcodeScanResult = await this.barcodeScanner.scan();
+
+          //   if (!scanResult.cancelled) {
+          //     if (scanResult.format != 'QR_CODE') {
+          //       this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
+          //       return;
+          //     }
+
+          //     salaCcod = Number(scanResult.text);
+          //   }
+          // }
+          // else {
+          //   this.snackbar.showToast('Se deben verificar los permisos de la la Cámara.');
+        }
       }
       else {
-        salaCcod = 3063; // cambio de sala local
+        const barcode = await this.escanearQR();
+        debugger
+
+        if (!barcode) {
+          salaCcod = 3063; // cambio de sala local
+        }
       }
 
       if (salaCcod > 0) {
+        const loading = await this.dialog.showLoading({ message: 'Validando...' });
         const params = {
           salaCcod: salaCcod,
           salaTdesc: this.seccion.salaTdesc,
           sedeCcod: this.seccion.sedeCcod
         };
-
-        loading.present();
 
         try {
           const response = await this.api.validarSala(params);
@@ -357,7 +372,7 @@ export class ResumenPage implements OnInit, OnDestroy {
 
             loading.dismiss();
 
-            let confirmar = await this.confirmarCodigo(message);
+            const confirmar = await this.confirmarCodigo(message);
 
             if (confirmar === true) {
               await this.confirmarSala(true, salaCcod);
@@ -389,9 +404,33 @@ export class ResumenPage implements OnInit, OnDestroy {
 
     this.deshabilitarIniciar = false;
   }
+  async escanearQR() {
+    return new Promise<Barcode | undefined>(async resolve => {
+      const element = await this.dialog.showModal({
+        component: BarcodeScanningModalComponent,
+        cssClass: 'barcode-scanning-modal',
+        showBackdrop: false,
+        componentProps: {
+          formats: [BarcodeFormat.QrCode],
+          lensFacing: LensFacing.Back,
+        },
+      });
+
+      element.onDidDismiss().then((result) => {
+        const barcode: Barcode | undefined = result.data?.barcode;
+        if (barcode) {
+          resolve(barcode)
+        }
+        else {
+          resolve(undefined)
+        }
+      })
+    });
+  }
   async confirmarCodigo(mensaje: string) {
     return new Promise(async (resolve) => {
-      let alert = await this.alertCtrl.create({
+
+      await this.dialog.showAlert({
         keyboardClose: false,
         backdropDismiss: false,
         header: '¿Confirmar el código?',
@@ -415,7 +454,6 @@ export class ResumenPage implements OnInit, OnDestroy {
         ]
       });
 
-      await alert.present();
     });
   }
   async terminarClase() {
@@ -424,7 +462,7 @@ export class ResumenPage implements OnInit, OnDestroy {
       return;
     }
 
-    let alert = await this.alertCtrl.create({
+    await this.dialog.showAlert({
       keyboardClose: false,
       backdropDismiss: false,
       header: 'Terminar Clase',
@@ -441,7 +479,6 @@ export class ResumenPage implements OnInit, OnDestroy {
       ]
     });
 
-    await alert.present();
   }
   async terminarClaseSinAsistencia() {
     if (this.asistenciaForm.valid) {
@@ -461,9 +498,9 @@ export class ResumenPage implements OnInit, OnDestroy {
     }
   }
   async confirmaTerminarClase(lcmoTcomentario = '') {
-    let loading = await this.loading.create({ message: 'Terminando...' });
+    const loading = await this.dialog.showLoading({ message: 'Terminando...' });
 
-    await loading.present();
+    // await loading.present();
 
     // let permission = await Geolocation.checkPermissions();
     // let coordinates: any = undefined;
@@ -496,7 +533,7 @@ export class ResumenPage implements OnInit, OnDestroy {
     };
 
     if (this.terminarMdl) {
-      this.terminarMdl.dismiss();
+      await this.terminarMdl.dismiss();
     }
 
     try {
@@ -504,7 +541,7 @@ export class ResumenPage implements OnInit, OnDestroy {
       const { data } = response;
 
       if (data.success) {
-        this.presentSuccess('Clase finalizada correctamente.');
+        await this.presentSuccess('Clase finalizada correctamente.');
         this.estadoClase = data.estadoClase;
         this.iniciarTareas();
         this.api.marcarVista(VISTAS_DOCENTE.CURSO_TERMINA_CLASE);
@@ -530,13 +567,13 @@ export class ResumenPage implements OnInit, OnDestroy {
     await this.nav2.push(AprendizajesEsperadosPage)
   }
   async cambiarSala() {
-    const loading = await this.loading.create({ message: 'Espere...' });
-
-    await loading.present();
+    const loading = await this.dialog.showLoading({ message: 'Espere...' });
 
     try {
-      const params = { salaCcod: this.seccion.salaCcod, sedeCcod: this.seccion.sedeCcod, lclaNcorr: this.seccion.lclaNcorr };
-      const response = await this.api.getSalasSede(params);
+      const lclaNcorr = this.seccion.lclaNcorr;//{ salaCcod: this.seccion.salaCcod, sedeCcod: this.seccion.sedeCcod, lclaNcorr: this.seccion.lclaNcorr };
+      const sedeCcod = this.seccion.sedeCcod;
+      const salaCcod = this.seccion.salaCcod;
+      const response = await this.api.getSalasSedeV5(lclaNcorr, sedeCcod, salaCcod);
       const { data } = response;
 
       if (data.success) {
@@ -573,9 +610,7 @@ export class ResumenPage implements OnInit, OnDestroy {
     }
   }
   async soporteTecnico() {
-    const loading = await this.loading.create({ message: 'Espere...' });
-
-    await loading.present();
+    const loading = await this.dialog.showLoading({ message: 'Espere...' });
 
     try {
       const params = { lclaNcorr: this.seccion.lclaNcorr, sedeCcod: this.seccion.sedeCcod };
@@ -642,10 +677,8 @@ export class ResumenPage implements OnInit, OnDestroy {
     await actionSheet.present();
   }
   async procesarCancelarTicket() {
-    const loading = await this.loading.create({ message: 'Cancelando solicitud...' });
+    const loading = await this.dialog.showLoading({ message: 'Cancelando solicitud...' });
     const params = { lclaNcorr: this.seccion.lclaNcorr };
-
-    await loading.present();
 
     try {
       const response = await this.api.cancelarTicket(params);

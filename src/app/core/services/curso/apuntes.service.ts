@@ -32,14 +32,17 @@ export class ApuntesService extends PrivateService {
   async cargarArchivo(filepath: string, filename: string, params?: any) {
     return this.upload(`${this.baseUrl}/apuntes/v4/cargar-archivo`, filepath, filename, params);
   }
-  cargarArchivoV5(amcoNcorr: any, lclaNcorr: any, params: any) {
-    return this.post(`${this.baseUrl}/apuntes/v5/cargar-archivo?amcoNcorr=${amcoNcorr}&lclaNcorr=${lclaNcorr}`, params);
+  cargarArchivoV5(amcoNcorr: any, lclaNcorr: any, ssecNcorr: any, params: any) {
+    return this.post(`${this.baseUrl}/apuntes/v5/cargar-archivo?amcoNcorr=${amcoNcorr}&lclaNcorr=${lclaNcorr}&ssecNcorr=${ssecNcorr}`, params);
   }
   getArchivoApunte(params: any) {
     return this.post(`${this.baseUrl}/apuntes/v4/descargar-archivo`, params);
   }
   eliminarArchivoApunte(params: any) {
     return this.post(`${this.baseUrl}/apuntes/v4/eliminar-archivo`, params);
+  }
+  eliminarArchivoApunteV5(ssecNcorr: any, lclaNcorr: any, amcoNcorr: any, amcdNcorr: any, amcdTidOnedrive: any) {
+    return this.delete(`${this.baseUrl}/apuntes/v5/eliminar-archivo?ssecNcorr=${ssecNcorr}&lclaNcorr=${lclaNcorr}&amcoNcorr=${amcoNcorr}&amcdNcorr=${amcdNcorr}&amcdTidOnedrive=${amcdTidOnedrive}`);
   }
   getApuntesClase(params: any) {
     return this.post(`${this.baseUrl}/apuntes/v4/apuntes-clase`, params);

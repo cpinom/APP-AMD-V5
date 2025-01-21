@@ -11,6 +11,11 @@
         [disabled]="deshabilitarIniciar">Comenzar Clase</ion-button>
     </section>
 
+    <section class="botones-acciones">
+      <ion-button color="success" expand="block" shape="round" (click)="comenzarClase()"
+        [disabled]="deshabilitarIniciar">Comenzar Clase</ion-button>
+    </section>
+
     <ng-container *ngIf="estadoClase.estadoLibro == 2">
       <ion-card class="status">
         <ion-card-header>

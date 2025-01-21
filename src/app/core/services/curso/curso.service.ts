@@ -18,7 +18,7 @@ export class CursoService extends PrivateService {
     auth: AuthService,
     caching: CachingService,
     toast: ToastController,
-    ) {
+  ) {
     super(global, auth, caching, toast);
   }
   getMailSummary() {
@@ -136,6 +136,9 @@ export class CursoService extends PrivateService {
   }
   getSalasSede(params: any): Promise<any> {
     return this.post(`${this.baseUrl}/curso/v4/salas-sede`, params);
+  }
+  getSalasSedeV5(lclaNcorr: any, sedeCcod: any, salaCcod: any): Promise<any> {
+    return this.get(`${this.baseUrl}/curso/v5/salas-sede?lclaNcorr=${lclaNcorr}&sedeCcod=${sedeCcod}&salaCcod=${salaCcod}`);
   }
   cambiarSalaClase(params: any): Promise<any> {
     return this.post(`${this.baseUrl}/curso/v4/cambiar-sala-clase`, params);

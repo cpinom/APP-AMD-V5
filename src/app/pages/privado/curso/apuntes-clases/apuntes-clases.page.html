@@ -53,8 +53,8 @@
           @if (item.documentos.length) {
           <div class="archivos">
             @for (doc of item.documentos; track $index) {
-            <ion-thumbnail>
-              <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
+            <ion-thumbnail (click)="archivoTap(item, doc)">
+              <!-- <ion-icon src="assets/icon/add_circle.svg"></ion-icon> -->
             </ion-thumbnail>
             }
           </div>
@@ -76,12 +76,26 @@
                 <ion-textarea labelPlacement="stacked" label="Comentarios" placeholder="Escriba un comentario..."
                   formControlName="amcoTobservacion"></ion-textarea>
               </ion-item>
+              @if (documentos.length == 0) {
               <ion-item class="archivo" (click)="adjuntarArchivo(adjuntosInput)">
                 <ion-thumbnail slot="start">
                   <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
                 </ion-thumbnail>
                 <ion-label>Adjuntar Archivo o Imagen</ion-label>
               </ion-item>
+              }
+              @else {
+              <ion-item class="archivo">
+                @for (item of documentos; track $index) {
+                <ion-thumbnail>
+                  <!-- <ion-icon src="assets/icon/add_circle.svg"></ion-icon> -->
+                </ion-thumbnail>
+                }
+                <ion-thumbnail>
+                  <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
+                </ion-thumbnail>
+              </ion-item>
+              }
             </ion-list>
             <section>
               <ion-button type="submit" shape="round" color="primary">Guardar Apunte</ion-button>
@@ -105,22 +119,21 @@
                 <ion-textarea labelPlacement="stacked" label="Comentarios" placeholder="Escriba un comentario..."
                   formControlName="amcoTobservacion"></ion-textarea>
               </ion-item>
-              @if (apunte.documentos.length==0) {
+              @if (apunte.documentos.length == 0) {
               <ion-item class="archivo" (click)="adjuntarArchivo(adjuntosInput)">
                 <ion-thumbnail slot="start">
-                  <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
+                  <!-- <ion-icon src="assets/icon/add_circle.svg"></ion-icon> -->
                 </ion-thumbnail>
                 <ion-label>Adjuntar Archivo o Imagen</ion-label>
               </ion-item>
               }
               @else {
-              <ion-item>
+              <ion-item class="archivo">
+                @for (item of apunte.documentos; track $index) {
                 <ion-thumbnail>
-                  <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
+                  <!-- <ion-icon src="assets/icon/add_circle.svg"></ion-icon> -->
                 </ion-thumbnail>
-                <ion-thumbnail>
-                  <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
-                </ion-thumbnail>
+                }
                 <ion-thumbnail>
                   <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
                 </ion-thumbnail>

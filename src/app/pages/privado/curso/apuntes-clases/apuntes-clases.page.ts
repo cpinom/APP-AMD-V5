@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { FileOpener } from '@capacitor-community/file-opener';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 import { ActionSheetController, Platform } from '@ionic/angular';
 import { ApuntesService } from 'src/app/core/services/curso/apuntes.service';
@@ -59,11 +61,7 @@ export class ApuntesClasesPage implements OnInit {
       const { data } = response;
 
       if (data.success) {
-        this.calendario = data.calendario;
-
-        if (this.calendario?.length) {
-          this.cargarApuntes(this.calendario[0]);
-        }
+        await this.procesarCalendario(data.calendario);
       }
       else {
         throw Error();
@@ -118,6 +116,30 @@ export class ApuntesClasesPage implements OnInit {
       await loading.dismiss();
     }
 
+  }
+  async procesarCalendario(data: any) {
+    debugger
+    try {
+      this.calendario = data;
+
+      if (this.libro) {
+        // const current = this.calendario?.find(item => item.lclaNcorr == this.libro.lclaNcorr);
+        // current && (current.selected = true);
+      }
+      else {
+        if (this.calendario && this.calendario.length > 0) {
+          await this.cargarApuntes(this.calendario[0]);
+          // this.libro = this.calendario[0];
+          // this.libro.selected = true;
+        }
+
+      }
+
+      return Promise.resolve();
+    }
+    catch {
+      return Promise.reject();
+    }
   }
   recargar(e?: any) { }
   async adjuntarArchivo(inputEl: any) {
@@ -181,6 +203,7 @@ export class ApuntesClasesPage implements OnInit {
     const loading = await this.dialog.showLoading({ message: 'Cargando archivo...' });
     const amcoNcorr = this.amcoNcorr?.value;
     const lclaNcorr = this.libro.lclaNcorr;
+    const ssecNcorr = this.data.ssecNcorr;
 
     try {
       for (let i = 0; i < fragments.length; i++) {
@@ -197,7 +220,7 @@ export class ApuntesClasesPage implements OnInit {
           loading.message = '(100%) finalizando....';
         }
 
-        const response = await this.api.cargarArchivoV5(amcoNcorr, lclaNcorr, params);
+        const response = await this.api.cargarArchivoV5(amcoNcorr, lclaNcorr, ssecNcorr, params);
         const result = response.data;
 
         if (result.success) {
@@ -206,9 +229,10 @@ export class ApuntesClasesPage implements OnInit {
             loading.message = `(${progreso}%) procesando....`;
           }
           else if (result.code == 200) {
-            this.amcoNcorr?.setValue(result.data.amcoNcorr);
-            this.amcoTobservacion?.setValue(result.data.amcoTobservacion);
-            this.documentos = result.data.documentos;
+            await this.procesarCalendario(result.data.calendario);
+            this.amcoNcorr?.setValue(result.data.apunte.amcoNcorr);
+            this.amcoTobservacion?.setValue(result.data.apunte.amcoTobservacion);
+            this.documentos = result.data.apunte.documentos;
             this.snackbar.showToast('Archivo cargado correctamente.', 3000, 'success');
           }
         }
@@ -227,17 +251,36 @@ export class ApuntesClasesPage implements OnInit {
   }
   async guardarApunte() {
     if (this.form.valid) {
-      const params = Object.assign(this.form.value, { lclaNcorr: this.libro.lclaNcorr, ssecNcorr: this.data.ssecNcorr });
-      const response = await this.api.guardarComentarioClaseV5(params);
-      const result = response.data;
+      const loading = await this.dialog.showLoading({ message: 'Guardando apunte...' });
 
-      if (result.success) {
-        this.calendario = result.data.calendario;
-        this.apuntes.push(result.data.apunte);
-        this.agregarApunte = false;
-        this.snackbar.showToast('Apunte guardado correctamente', 3000, 'success');
-        this.amcoNcorr?.setValue(0);
-        this.amcoTobservacion?.setValue('');
+      try {
+        const params = Object.assign(this.form.value, { lclaNcorr: this.libro.lclaNcorr, ssecNcorr: this.data.ssecNcorr });
+        const response = await this.api.guardarComentarioClaseV5(params);
+        const result = response.data;
+
+        if (result.success) {
+          await loading.dismiss();
+          await this.procesarCalendario(result.data.calendario);
+          this.apuntes.push(result.data.apunte);
+          this.agregarApunte = false;
+          this.snackbar.showToast('Apunte guardado correctamente', 3000, 'success');
+          this.amcoNcorr?.setValue(0);
+          this.amcoTobservacion?.setValue('');
+        }
+        else {
+          throw Error(result);
+        }
+      }
+      catch (error: any) {
+        if (error && error.status == 401) {
+          this.error.handle(error);
+          return;
+        }
+
+        await this.presentError('Guardar Apunte', 'No se pudo guardar el apunte. Vuelve a intentarlo.');
+      }
+      finally {
+        await loading.dismiss();
       }
     }
   }
@@ -280,13 +323,14 @@ export class ApuntesClasesPage implements OnInit {
     try {
       const response = await this.api.eliminarApunteClaseV5(ssecNcorr, lclaNcorr, amcoNcorr);
 
-      debugger
       if (response.success) {
         const { data } = response;
-        this.calendario = data.calendario;
+        await this.procesarCalendario(data.calendario);
+        // this.calendario = data.calendario;
         this.apuntes = data.apuntes;
         this.agregarApunte = this.apuntes.length == 0;
         this.modificarApunte = false;
+        this.snackbar.showToast('Cambios guardados correctamente', 3000, 'success');
       }
       else {
         throw Error();
@@ -297,14 +341,117 @@ export class ApuntesClasesPage implements OnInit {
         this.error.handle(error);
         return;
       }
+
+      await this.presentError('Eliminar Apunte', 'No se pudo eliminar el apunte. Vuelve a intentarlo.');
     }
     finally {
       await loading.dismiss();
     }
 
-    this.snackbar.showToast('Cambios guardados correctamente', 3000, 'success');
-
     return true;
+  }
+  async archivoTap(apunte: any, item: any) {
+    const actionSheet = await this.action.create({
+      header: '¿Qué deseas hacer?',
+      buttons: [
+        {
+          text: 'Descargar',
+          handler: this.descargarDocumento.bind(this, apunte, item)
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: this.eliminarDocumento.bind(this, apunte, item)
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await actionSheet.present();
+  }
+  async descargarDocumento(apunte: any, item: any) {
+    const loading = await this.dialog.showLoading({ message: 'Descargando...' });
+
+    try {
+      const params = { amcdNcorr: item.amcdNcorr };
+      const response = await this.api.getArchivoApunte(params);
+      const { data } = response;
+
+      if (data.success) {
+        if (this.pt.is('mobileweb')) {
+          const linkSource = `data:${data.data.amcdTtipo};base64,${data.data.amcdBdocumento}`;
+          const downloadLink = document.createElement('a');
+          downloadLink.href = linkSource;
+          downloadLink.download = data.data.amcdTnombre;
+          downloadLink.click();
+        }
+        else {
+          const file = await Filesystem.writeFile({
+            path: data.data.amcdTnombre,
+            data: data.data.amcdBdocumento,
+            directory: Directory.Cache
+          });
+
+          FileOpener.open({
+            filePath: file.uri,
+            contentType: data.data.amcdTtipo
+          });
+        }
+      }
+      else {
+        throw Error();
+      }
+    }
+    catch (error: any) {
+      if (error && error.status == 401) {
+        this.error.handle(error);
+        return;
+      }
+
+      await this.presentError('Descargar Archivo', 'No se pudo descargar el archivo. Vuelve a intentarlo.');
+    }
+    finally {
+      await loading.dismiss();
+    }
+  }
+  async eliminarDocumento(apunte: any, item: any) {
+    const loading = await this.dialog.showLoading({ message: 'Eliminando...' });
+
+    try {
+      const ssecNcorr = this.data.ssecNcorr;
+      const lclaNcorr = this.libro.lclaNcorr;
+      const amcoNcorr = apunte.amcoNcorr;
+      const amcdNcorr = item.amcdNcorr;
+      const amcdTidOnedrive = item.amcdTidOnedrive;
+
+      const response = await this.api.eliminarArchivoApunteV5(ssecNcorr, lclaNcorr, amcoNcorr, amcdNcorr, amcdTidOnedrive);
+
+      if (response.success) {
+        const { data } = response;
+        await this.procesarCalendario(data.calendario);
+
+        const apunte = this.apuntes.find((item: any) => item.amcoNcorr == data.apunte.amcoNcorr);
+        apunte.amcoTobservacion = data.apunte.amcoTobservacion;
+        apunte.documentos = data.apunte.documentos;
+        this.snackbar.showToast('Archivo eliminado.', 3000, 'success');
+      }
+      else {
+        throw Error();
+      }
+    }
+    catch (error: any) {
+      if (error && error.status == 401) {
+        this.error.handle(error);
+        return;
+      }
+      this.snackbar.showToast('No pudimos eliminar el archivo.', 3000, 'danger');
+    }
+    finally {
+      loading.dismiss();
+    }
   }
   async presentError(title: string, message: string) {
     const alert = await this.dialog.showAlert({

@@ -26,6 +26,10 @@ ion-content {
             }
           }
 
+          ion-thumbnail + ion-thumbnail  {
+            margin-left: 5px;
+          }
+
           ion-label {
             text-decoration: underline;
             margin: 0;

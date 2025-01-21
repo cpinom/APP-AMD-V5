@@ -250,6 +250,7 @@ export class EditarApuntePage implements OnInit {
         amcdNcorr: record.amcdNcorr,
         amcdTidOnedrive: record.amcdTidOnedrive
       };
+      //eliminarArchivoApunteV5
       const response = await this.api.eliminarArchivoApunte(params);
       const { data } = response;
 

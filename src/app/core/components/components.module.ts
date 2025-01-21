@@ -5,6 +5,7 @@ import { CachedImageComponent } from "./cached-image/cached-image.component";
 import { ImageModalComponent } from "./image-modal/image-modal.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
+import { BarcodeScanningModalComponent } from "./barcode-scanning-modal/barcode-scanning-modal.component";
 
 @NgModule({
   imports: [
@@ -16,11 +17,13 @@ import { RouterModule } from "@angular/router";
   ],
   declarations: [
     CachedImageComponent,
-    ImageModalComponent
+    ImageModalComponent,
+    BarcodeScanningModalComponent
   ],
   exports: [
     CachedImageComponent,
-    ImageModalComponent
+    ImageModalComponent,
+    BarcodeScanningModalComponent
   ]
 })
 export class ComponentsModule { }
