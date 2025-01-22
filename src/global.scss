@@ -190,7 +190,7 @@
       }
     }
 
-    .barcode-scanning-active {
+    &.barcode-scanning-active {
       background: transparent;
       visibility: hidden;
       --background: transparent;
@@ -199,13 +199,6 @@
 
     .barcode-scanning-modal {
       visibility: visible;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .barcode-scanning-modal {
-        --background: transparent;
-        --ion-background-color: transparent;
-      }
     }
 
     &.dark {
@@ -241,5 +234,12 @@
         }
       }
     }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body.barcode-scanning-modal {
+    --background: transparent;
+    --ion-background-color: transparent;
   }
 }

@@ -24,6 +24,7 @@ import { CursoService } from './core/services/curso/curso.service';
 import { AppLauncher } from '@capacitor/app-launcher';
 import { PublicoService } from './core/services/publico.service';
 import { PushNotifications } from '@capacitor/push-notifications';
+import { AppShortcuts, ClickEvent } from '@capawesome/capacitor-app-shortcuts';
 // import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
 
 declare const $: any;
@@ -81,6 +82,27 @@ export class AppComponent {
       if (this.platform.is('ios')) {
         await Keyboard.setAccessoryBarVisible({ isVisible: true });
       }
+
+      await AppShortcuts.set({
+        shortcuts: [
+          {
+            id: 'inacapmail',
+            title: 'INACAPMail',
+            // description: 'Send us your feedback',
+            icon: 16
+          },
+          {
+            id: 'rate',
+            title: 'Rate',
+            description: 'Rate our app',
+          }
+        ],
+      });
+
+      AppShortcuts.addListener('click', (event: ClickEvent) => {
+        console.log('Shortcut clicked:', event.shortcutId);
+        alert(JSON.stringify(event));
+      });
     }
     else {
       await this.notificacionsWeb();

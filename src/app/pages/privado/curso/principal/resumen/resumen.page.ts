@@ -26,6 +26,7 @@ import { VISTAS_DOCENTE } from 'src/app/app.contants';
 import { BarcodeScanningModalComponent } from 'src/app/core/components/barcode-scanning-modal/barcode-scanning-modal.component';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { Barcode, BarcodeFormat, LensFacing } from '@capacitor-mlkit/barcode-scanning';
+import { IOSSettings, NativeSettings } from 'capacitor-native-settings';
 
 enum FORMA_COMENZAR {
   VALIDA_SALA = 1,
@@ -310,36 +311,37 @@ export class ResumenPage implements OnInit, OnDestroy {
         let permission = await Camera.checkPermissions();
 
         if (permission.camera == 'denied' || permission.camera == 'prompt') {
-          permission = await Camera.requestPermissions();
+          alert('se solicita permiso');
+          permission = await Camera.requestPermissions({ permissions: ['camera'] });
+          alert('se solicita permiso 2:' + permission.camera);
+
+          await NativeSettings.openIOS({
+            option: IOSSettings.App,
+          });
+
         }
         if (permission.camera == 'granted') {
           const barcode = await this.escanearQR();
 
           if (barcode) {
             if (barcode.format == BarcodeFormat.QrCode) {
-              salaCcod = Number(barcode.rawValue);
+              const regex = /^\d{1,4}$/;
+              const validString = regex.test(barcode.rawValue);
+
+              if (validString) {
+                salaCcod = Number(barcode.rawValue);
+              }
+              else {
+                this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.');
+              }
             }
             else {
               this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
             }
           }
-          else {
-            return;
-          }
-
-          //   const scanResult: BarcodeScanResult = await this.barcodeScanner.scan();
-
-          //   if (!scanResult.cancelled) {
-          //     if (scanResult.format != 'QR_CODE') {
-          //       this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
-          //       return;
-          //     }
-
-          //     salaCcod = Number(scanResult.text);
-          //   }
-          // }
-          // else {
-          //   this.snackbar.showToast('Se deben verificar los permisos de la la Cámara.');
+        }
+        else {
+          alert('camara permisos: ' + permission.camera);
         }
       }
       else {
