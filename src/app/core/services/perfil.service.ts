@@ -51,12 +51,6 @@ export class PerfilService extends PrivateService {
   eliminarNotificaciones(params: any) {
     return this.post(`${this.baseUrl}/perfil/v4/eliminar-notificaciones`, params);
   }
-  cargarFotoPerfilWeb(data: FormData, params?: any) {
-    return this.uploadWeb(`${this.baseUrl}/perfil/v4/cargar-foto`, data, params);
-  }
-  cargarFotoPerfil(filepath: string, filename: string, params: any) {
-    return this.upload(`${this.baseUrl}/perfil/v4/cargar-foto`, filepath, filename, params);
-  }
   confirmarCorreo(params: any) {
     return this.post(`${this.baseUrl}/perfil/v4/confirmar-correo`, params);
   }

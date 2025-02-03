@@ -5,6 +5,7 @@ import { EvaluacionesService } from 'src/app/core/services/curso/evaluaciones.se
 import { ErrorService } from 'src/app/core/services/error.service';
 import { CalificacionesPage } from '../calificaciones/calificaciones.page';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-evaluaciones',
@@ -82,7 +83,15 @@ export class EvaluacionesPage implements OnInit {
     if (evaluacion.evaluacionCierre) {
       return 'medium';
     }
-    return 'info';
+    return 'primary';
+  }
+  resolverFecha(fecha: string) {
+    const fechaDate = moment(fecha, 'DD/MM/YYYY');
+    let diaSemana = fechaDate.format("ddd").replace(".", "");
+    diaSemana = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+    let mes = fechaDate.format('MMMM');
+    mes = mes.charAt(0).toUpperCase() + mes.slice(1);
+    return `${diaSemana} ${fechaDate.format('DD')} de ${mes}`;
   }
 
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { IonNav, ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { GestionDatosPage } from '../gestion-datos/gestion-datos.page';
-import { GestionFotoPage } from '../gestion-foto/gestion-foto.page';
 import { GestionPinPage } from '../gestion-pin/gestion-pin.page';
 import { AppGlobal } from '../../../../app.global';
 import { PerfilService } from 'src/app/core/services/perfil.service';
@@ -72,9 +71,6 @@ export class PrincipalPage implements OnInit {
     switch (page) {
       case Pages.GestionPinPage:
         await this.nav.push(GestionPinPage);
-        break;
-      case Pages.GestionFotoPage:
-        await this.nav.push(GestionFotoPage);
         break;
       case Pages.GestionDatosPage:
         await this.nav.push(GestionDatosPage);

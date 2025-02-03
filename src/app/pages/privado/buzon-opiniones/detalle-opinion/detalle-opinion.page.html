@@ -10,138 +10,150 @@
 </ion-header>
 <ion-content>
 
-  <ng-container *ngIf="data">
-    <ion-card color="white" class="primary-card">
-      <ion-card-header>
-        <ion-card-title *ngIf="data.esreTdesc">
-          <ion-icon *ngIf="esreTdesc && esreTdesc.color && esreTdesc.color.length > 0" [ngClass]="esreTdesc.color" src="assets/icon/{{esreTdesc.icon}}.svg"></ion-icon>
-          <span>{{data.esreTdesc}}</span>
-        </ion-card-title>
-      </ion-card-header>
-    </ion-card>
+  @if (data) {
+  <ion-card color="white" class="primary-card">
+    <ion-card-header>
+      @if (data.esreTdesc) {
+      <ion-card-title>
+        @if (esreTdesc && esreTdesc.color && esreTdesc.color.length > 0) {
+        <ion-icon [ngClass]="esreTdesc.color" src="assets/icon/{{esreTdesc.icon}}.svg"></ion-icon>
+        }
+        <span>{{data.esreTdesc}}</span>
+      </ion-card-title>
+      }
+    </ion-card-header>
+  </ion-card>
 
-    <section class="first">
-      <div class="section-content">
-        <ion-list class="ion-no-margin">
-          <ion-item *ngIf="data.tdetTdesc">
-            <ion-label>
-              <p class="label">Tipo de Opinión</p>
-              <h2>{{data.tdetTdesc}}</h2>
-            </ion-label>
-          </ion-item>
-          <ion-item *ngIf="data.ticoTdesc">
-            <ion-label>
-              <p class="label">Categoría</p>
-              <h2>{{data.ticoTdesc}}</h2>
-            </ion-label>
-          </ion-item>
-          <ion-item *ngIf="data.coopTdesc">
-            <ion-label>
-              <p class="label">Subcategoría</p>
-              <h2>{{data.coopTdesc}}</h2>
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>
-              <p class="label">Número</p>
-              <h2>{{data.resoNcorr}}</h2>
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>
-              <p class="label">Fecha de Solicitud</p>
-              <h2>{{data.resoFsolicitud}}</h2>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
-    </section>
+  <section class="first">
+    <div class="section-content">
+      <ion-list class="ion-no-margin">
+        @if (data.tdetTdesc) {
+        <ion-item>
+          <ion-label>
+            <p class="label">Tipo de Opinión</p>
+            <h2>{{data.tdetTdesc}}</h2>
+          </ion-label>
+        </ion-item>
+        }
+        @if (data.ticoTdesc) {
+        <ion-item>
+          <ion-label>
+            <p class="label">Categoría</p>
+            <h2>{{data.ticoTdesc}}</h2>
+          </ion-label>
+        </ion-item>
+        }
+        @if (data.coopTdesc) {
+        <ion-item>
+          <ion-label>
+            <p class="label">Subcategoría</p>
+            <h2>{{data.coopTdesc}}</h2>
+          </ion-label>
+        </ion-item>
+        }
+        <ion-item>
+          <ion-label>
+            <p class="label">Número</p>
+            <h2>{{data.resoNcorr}}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <p class="label">Fecha de Solicitud</p>
+            <h2>{{data.resoFsolicitud}}</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
 
-    <section *ngIf="data.resoTrespuesta">
-      <div class="section-header">Respuesta</div>
-      <div class="section-content">
-        <ion-list>
-          <ion-item>
-            <ion-label>
-              <p style="white-space: normal; margin-top: 5px; margin-bottom: 5px" [innerHTML]="data.resoTrespuesta"></p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
-    </section>
+  @if (data.resoTrespuesta) {
+  <section>
+    <div class="section-header">Respuesta</div>
+    <div class="section-content">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <p style="white-space: normal; margin-top: 5px; margin-bottom: 5px" [innerHTML]="data.resoTrespuesta"></p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+  }
 
-    <section *ngIf="data.resoTsugerencia">
-      <div class="section-header">Opinión</div>
-      <div class="section-content">
-        <ion-list>
-          <ion-item>
-            <ion-label>
-              <p style="white-space: normal; margin-top: 5px; margin-bottom: 5px" [innerHTML]="data.resoTsugerencia">
-              </p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
-    </section>
+  @if (data.resoTsugerencia) {
+  <section>
+    <div class="section-header">Opinión</div>
+    <div class="section-content">
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <p style="white-space: normal; margin-top: 5px; margin-bottom: 5px" [innerHTML]="data.resoTsugerencia">
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+  }
 
-  </ng-container>
-
-  <ng-container *ngIf="!data">
-    <ion-card color="white" class="primary-card">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-skeleton-text animated style="width: 40%; height: 20px;"></ion-skeleton-text>
-        </ion-card-title>
-      </ion-card-header>
-    </ion-card>
-
-    <section>
-      <div class="section-content">
-        <ion-list class="ion-no-margin">
-          <ion-item>
-            <ion-label>
-              <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
-              <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>
-              <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
-              <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>
-              <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
-              <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
-    </section>
-    <section>
-      <div class="section-content">
-        <ion-list class="ion-no-margin">
-          <ion-item>
-            <ion-label>
-              <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
-              <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>
-              <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
-              <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>
-              <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
-              <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
-    </section>
-  </ng-container>
+  }
+  @else {
+  <ion-card color="white" class="primary-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-skeleton-text animated style="width: 40%; height: 20px;"></ion-skeleton-text>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <section>
+    <div class="section-content">
+      <ion-list class="ion-no-margin">
+        <ion-item>
+          <ion-label>
+            <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+  <section>
+    <div class="section-content">
+      <ion-list class="ion-no-margin">
+        <ion-item>
+          <ion-label>
+            <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <ion-skeleton-text animated style="width: 30%; height:10px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 80%; height:14px;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </section>
+  }
 </ion-content>

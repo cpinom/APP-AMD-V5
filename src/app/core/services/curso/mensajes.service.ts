@@ -21,11 +21,14 @@ export class MensajesService extends PrivateService {
   getPrincipal(params: any, forceRefresh = false) {
     return this.post(`${this.baseUrl}/mensajes/v4/principal`, params, forceRefresh, undefined, true);
   }
-  agregarArchivoWeb(data: FormData, params: any) {
-    return this.uploadWeb(`${this.baseUrl}/mensajes/v4/agregar-archivo`, data, params);
-  }
-  agregarArchivo(filepath: string, filename: string, params: any) {
-    return this.upload(`${this.baseUrl}/mensajes/v4/agregar-archivo`, filepath, filename, params);
+  // agregarArchivoWeb(data: FormData, params: any) {
+  //   return this.uploadWeb(`${this.baseUrl}/mensajes/v4/agregar-archivo`, data, params);
+  // }
+  // agregarArchivo(filepath: string, filename: string, params: any) {
+  //   return this.upload(`${this.baseUrl}/mensajes/v4/agregar-archivo`, filepath, filename, params);
+  // }
+  agregarArchivoV5(messageId: string, params: any) {
+    return this.post(`${this.baseUrl}/mensajes/v5/agregar-archivo?messageId=${messageId}`, params);
   }
   eliminarArchivo(params: any) {
     return this.post(`${this.baseUrl}/mensajes/v4/eliminar-archivo`, params);

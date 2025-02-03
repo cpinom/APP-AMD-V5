@@ -1,0 +1,21 @@
+ion-content {
+  form {
+    // width: 90%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    // margin: 0 auto;
+    // position: absolute;
+    // top: 50%;
+    // left: 0;
+    // right: 0;
+    // transform: translateY(-50%);
+
+    .section-buttons {
+      margin: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

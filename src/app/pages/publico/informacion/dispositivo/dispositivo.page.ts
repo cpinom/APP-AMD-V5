@@ -1,20 +1,24 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Haptics } from '@capacitor/haptics';
-import { ActionSheetController, AlertController, IonInput, LoadingController, ModalController, Platform } from '@ionic/angular';
+import { ActionSheetController, AlertController, IonInput, IonNav, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { DispositivoService } from 'src/app/core/services/dispositivo.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Swiper } from 'swiper/types';
 import { AppGlobal } from '../../../../app.global';
 import { Geolocation } from '@capacitor/geolocation';
 import { Camera } from '@capacitor/camera';
+import { PinPage } from './pin/pin.page';
 
 @Component({
   selector: 'app-dispositivo',
-  templateUrl: './dispositivo.page.html',
-  styleUrls: ['./dispositivo.page.scss'],
+  template: '<ion-nav #nav></ion-nav>',
+  // templateUrl: './dispositivo.page.html',
+  // styleUrls: ['./dispositivo.page.scss'],
 })
 export class DispositivoPage implements AfterViewInit, OnDestroy {
+
+  @ViewChild('nav') nav: IonNav | undefined;
 
   @ViewChild('swiper') private swiperRef: ElementRef | undefined;
   @ViewChild('pinEl', { static: true }) pinEl!: IonInput;
@@ -63,7 +67,9 @@ export class DispositivoPage implements AfterViewInit, OnDestroy {
 
   }
   async ngAfterViewInit() {
-    debugger
+      await this.nav?.setRoot(PinPage);
+    }
+  async ngAfterViewInit1() {
     this.swiper = this.swiperRef?.nativeElement.swiper;
 
     const isValid = await this.api.dataValid();
@@ -79,8 +85,7 @@ export class DispositivoPage implements AfterViewInit, OnDestroy {
       }, 500);
     }
   }
-  ngOnDestroy() {
-  }
+  ngOnDestroy() { }
   onPinInput(ev: any) {
     const value = ev.target!.value;
     const filteredValue = value.replace(/[^0-9]+/g, '');
@@ -125,6 +130,10 @@ export class DispositivoPage implements AfterViewInit, OnDestroy {
     this.swiper.enable();
     this.swiper.slideTo(1, speed);
     this.swiper.disable();
+
+    if (this.pt.is('mobileweb')) {
+      return;
+    }
 
     try {
       let GeolocationPermission = await Geolocation.checkPermissions();

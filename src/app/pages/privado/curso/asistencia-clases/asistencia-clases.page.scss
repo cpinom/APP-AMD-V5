@@ -1,148 +1,22 @@
 @import "../curso.common.scss";
 @import "src/theme/tabla.scss";
 
-// ion-card.tabla {
-//     margin: 0;
-//     border-radius: 0;
-//     box-shadow: 0px 2px 4px #00000012;
-// }
-// section.tabla {
-//     box-shadow: 0 0 0 1px #dadce0;
-//     border-radius: 8px;
-//     // overflow: auto;
-//     // position: relative;
-
-//     table {
-//         width: 100%;
-//         text-align: center;
-
-//         // &.clone {
-//         //     width: auto;
-//         //     position: absolute;
-//         //     top: 0;
-//         //     left: 0;
-//         //     background-color: white;
-//         // }
-
-//         th,
-//         td {
-//             border-top: 1px solid #dee2e6;
-//             border-right: 1px solid #dee2e6;
-//             padding: 8px;
-//             font-size: 14px;
-//             color: #4a4a4a;
-//             // vertical-align: top;
-
-//             ion-icon {
-//                 font-size: 20px;
-
-//                 &.ausente {
-//                     color: #cc0000;
-//                 }
-//                 &.presente {
-//                     color: #4caf50;
-//                 }
-//                 &.no-informada {
-//                     opacity: 0.4;
-//                 }
-//             }
-
-//             .avatar {
-//                 display: flex;
-//                 align-items: center;
-
-//                 ion-avatar {
-//                     height: 30px;
-//                     width: 30px;
-//                     margin-right: 5px;
-//                 }
-//             }
-//         }
-
-//         tr:first-child th {
-//             border-top: 0;
-//         }
-
-//         th:last-child,
-//         td:last-child {
-//             border-right: 0;
-//         }
-
-//         tbody tr:nth-of-type(odd) {
-//             background-color: rgba(0, 0, 0, 0.05);
-//         }
-
-//         tbody tr.selected {
-//             background-color: #1565c01a !important;
-//         }
-//     }
-// }
-
-.table-scroll {
-    position: relative;
-    overflow: hidden;
-}
-.table-wrap {
-    width: 100%;
-    overflow: auto;
-}
-.table-scroll table {
-    width: 100%;
-    margin: auto;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-.table-scroll th,
-.table-scroll td {
-    // padding:5px 10px;
-    // border:1px solid #000;
-    // background:#fff;
-    // white-space:nowrap;
-    // vertical-align:top;
-}
-.table-scroll thead,
-.table-scroll tfoot {
-    // background: #f9f9f9;
-}
-.clone {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
-.clone th,
-.clone td {
-    visibility: hidden;
-}
-.clone td,
-.clone th {
-    border-color: transparent;
-}
-.clone tbody th {
-    visibility: visible;
-    color: red;
-}
-.clone .fixed-side {
-    // border:1px solid #000;
-    background: #fff;
-    visibility: visible;
-}
-
-// .clone tr:nth-of-type(odd) .fixed-side {
-//     background-color: rgba(0, 0, 0, 0.05);
-// }
-
-.clone thead,
-.clone tfoot {
-    // background: transparent;
-}
-
-@media only screen and (max-width: 500px) {
-    ion-header {
-      ion-toolbar {
-        ion-title {
-          font-size: 18px !important;
-        }
-      }
+.tabla {
+    th {
+        font-weight: bold;
+    }
+    th,
+    td {
+        border-right: 0 none !important;
+    }
+    .mat-mdc-table-sticky-border-elem-left {
+        background-color: #fbfbfb !important;
+    }
+    ::ng-deep ion-badge {
+        margin-left: 8px;
+        font-size: 12px;
+        font-weight: normal;
+        --padding-start: 6px;
+        --padding-end: 6px;
     }
 }

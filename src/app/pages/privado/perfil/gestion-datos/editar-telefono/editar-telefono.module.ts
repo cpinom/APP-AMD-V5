@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { EditarTelefonoPage } from './editar-telefono.page';
 import { CodeInputModule } from 'angular-code-input';
-// import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @NgModule({
   imports: [
@@ -12,9 +11,8 @@ import { CodeInputModule } from 'angular-code-input';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    // NgxIntlTelInputModule,
     CodeInputModule
   ],
   declarations: [EditarTelefonoPage]
 })
-export class EditarTelefonoPageModule {}
+export class EditarTelefonoPageModule { }

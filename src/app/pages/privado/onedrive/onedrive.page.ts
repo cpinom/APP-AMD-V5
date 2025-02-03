@@ -463,7 +463,7 @@ export class OnedrivePage implements OnInit {
     return `${this.global.Api}/api/onedrive/v1/thumbnail?driveId=${this.driveId}&fileId=${fileId}`;
   }
   resolverIcono(path: string) {
-    return this.utils.resolverIcono(path);
+    return this.utils.resolveIcon(path);
   }
   resolverFecha(fecha: string) {
     const fechaMoment = moment(fecha, "DD/MM/YYYY HH:mm", true);

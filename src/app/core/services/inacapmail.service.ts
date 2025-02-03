@@ -44,11 +44,14 @@ export class InacapmailService extends PrivateService {
   sendMessage(params: any) {
     return this.post(`${this.baseUrl}/inacapmail/v2/send-message`, params);
   }
-  addAttachmentWeb(data: FormData, params: any) {
-    return this.uploadWeb(`${this.baseUrl}/inacapmail/v2/add-attachment`, data, params);
-  }
-  addAttachment(filepath: string, filename: string, params: any) {
-    return this.upload(`${this.baseUrl}/inacapmail/v2/add-attachment`, filepath, filename, params);
+  // addAttachmentWeb(data: FormData, params: any) {
+  //   return this.uploadWeb(`${this.baseUrl}/inacapmail/v2/add-attachment`, data, params);
+  // }
+  // addAttachment(filepath: string, filename: string, params: any) {
+  //   return this.upload(`${this.baseUrl}/inacapmail/v2/add-attachment`, filepath, filename, params);
+  // }
+  addAttachmentV3(messageId: string, params: any) {
+    return this.post(`${this.baseUrl}/inacapmail/v3/add-attachment?messageId=${messageId}`, params);
   }
   removeAttachment(params: any) {
     return this.post(`${this.baseUrl}/inacapmail/v2/remove-attachment`, params);

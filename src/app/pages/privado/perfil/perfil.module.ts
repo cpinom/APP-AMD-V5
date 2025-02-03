@@ -6,7 +6,6 @@ import { PerfilPage } from './perfil.page';
 import { PrincipalPageModule } from './principal/principal.module';
 import { GestionPinPageModule } from './gestion-pin/gestion-pin.module';
 import { GestionDatosPageModule } from './gestion-datos/gestion-datos.module';
-import { GestionFotoPageModule } from './gestion-foto/gestion-foto.module';
 
 @NgModule({
   imports: [
@@ -15,8 +14,7 @@ import { GestionFotoPageModule } from './gestion-foto/gestion-foto.module';
     IonicModule,
     PrincipalPageModule,
     GestionPinPageModule,
-    GestionDatosPageModule,
-    GestionFotoPageModule
+    GestionDatosPageModule
   ],
   declarations: [PerfilPage]
 })

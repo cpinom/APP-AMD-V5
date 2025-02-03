@@ -25,10 +25,10 @@
             <ion-item (click)="cargarApuntes(item)" class="{{item.selected ? 'selected' : ''}}">
               <ion-label>
                 <h2>Libro {{item.lclaNcorr}}</h2>
-                <p>{{item.lclaFclase}}</p>
+                <p>{{resolverFecha(item.lclaFclase)}}</p>
               </ion-label>
               @if (item.apuntes == 1) {
-              <ion-badge slot="end">1</ion-badge>
+              <ion-badge slot="end">&nbsp;</ion-badge>
               }
             </ion-item>
             }
@@ -41,28 +41,32 @@
       @for (item of apuntes; track $index) {
       <ion-card>
         <ion-card-header>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="toolbar">
             <span>{{item.amcoFregistro}}</span>
-            <ion-icon src="assets/icon/edit.svg" (click)="editarApunte(item)"></ion-icon>
+            <ion-button fill="clear" color="medium" (click)="editarApunte(item)" size="small">
+              <ion-icon src="assets/icon/edit.svg" slot="start"></ion-icon>
+              <ion-label>Editar</ion-label>
+            </ion-button>
           </div>
         </ion-card-header>
         <ion-card-content>
           <div class="comentario">
-            <p>{{item.amcoTobservacion || 'Sin comentarios...'}}</p>
+            <p [innerHTML]="resolverObservacion(item.amcoTobservacion)"></p>
           </div>
           @if (item.documentos.length) {
           <div class="archivos">
             @for (doc of item.documentos; track $index) {
-            <ion-thumbnail (click)="archivoTap(item, doc)">
-              <!-- <ion-icon src="assets/icon/add_circle.svg"></ion-icon> -->
-            </ion-thumbnail>
+            <div class="archivo" (click)="archivoTap(item, doc)">
+              <ion-icon [src]="resolverIcono(doc.amcdTnombre)"></ion-icon>
+              <span>{{doc.amcdTnombre}}</span>
+            </div>
             }
           </div>
           }
         </ion-card-content>
       </ion-card>
       }
-      <section style="padding: 15px; text-align: center;">
+      <section class="footer" style="padding: 15px; text-align: center;">
         <ion-button shape="round" color="primary" (click)="agregarApunte = true">Agregar Apunte</ion-button>
       </section>
       }
@@ -72,9 +76,10 @@
           <ion-card-header>Agregar Apunte</ion-card-header>
           <ion-card-content>
             <ion-list>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-textarea labelPlacement="stacked" label="Comentarios" placeholder="Escriba un comentario..."
-                  formControlName="amcoTobservacion"></ion-textarea>
+                  formControlName="amcoTobservacion" [rows]="10" [errorText]="amcoTobservacionError" [counter]="true"
+                  [maxlength]="500"></ion-textarea>
               </ion-item>
               @if (documentos.length == 0) {
               <ion-item class="archivo" (click)="adjuntarArchivo(adjuntosInput)">
@@ -86,19 +91,22 @@
               }
               @else {
               <ion-item class="archivo">
-                @for (item of documentos; track $index) {
-                <ion-thumbnail>
-                  <!-- <ion-icon src="assets/icon/add_circle.svg"></ion-icon> -->
-                </ion-thumbnail>
+                @for (doc of documentos; track $index) {
+                <div class="archivo">
+                  <ion-icon [src]="resolverIcono(doc.amcdTnombre)"></ion-icon>
+                  <span>{{doc.amcdTnombre}}</span>
+                </div>
                 }
-                <ion-thumbnail>
+                @if(documentos.length <= 2) { <ion-thumbnail>
                   <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
-                </ion-thumbnail>
+                  </ion-thumbnail>
+                  }
               </ion-item>
               }
             </ion-list>
             <section>
               <ion-button type="submit" shape="round" color="primary">Guardar Apunte</ion-button>
+              <p style="margin-top: 10px;">* Se pueden agregar hasta dos archivos, sin superar los 150mb.</p>
             </section>
           </ion-card-content>
         </ion-card>
@@ -108,40 +116,50 @@
       <form [formGroup]="form" (ngSubmit)="guardarApunte()">
         <ion-card>
           <ion-card-header>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="toolbar">
               <span>{{apunte.amcoFregistro}}</span>
-              <ion-icon src="assets/icon/delete.svg" color="danger" (click)="eliminarApunte()"></ion-icon>
+              <ion-button fill="clear" color="danger" (click)="eliminarApunte()" size="small">
+                <ion-icon src="assets/icon/delete.svg" slot="start"></ion-icon>
+                <ion-label>Eliminar</ion-label>
+              </ion-button>
             </div>
           </ion-card-header>
           <ion-card-content>
             <ion-list>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-textarea labelPlacement="stacked" label="Comentarios" placeholder="Escriba un comentario..."
-                  formControlName="amcoTobservacion"></ion-textarea>
+                  formControlName="amcoTobservacion" [rows]="10" [errorText]="amcoTobservacionError" [counter]="true"
+                  [maxlength]="500"></ion-textarea>
               </ion-item>
               @if (apunte.documentos.length == 0) {
               <ion-item class="archivo" (click)="adjuntarArchivo(adjuntosInput)">
                 <ion-thumbnail slot="start">
-                  <!-- <ion-icon src="assets/icon/add_circle.svg"></ion-icon> -->
+                  <ion-icon src="assets/icon/add_circle.svg" color="medium"></ion-icon>
                 </ion-thumbnail>
                 <ion-label>Adjuntar Archivo o Imagen</ion-label>
               </ion-item>
               }
               @else {
               <ion-item class="archivo">
-                @for (item of apunte.documentos; track $index) {
-                <ion-thumbnail>
-                  <!-- <ion-icon src="assets/icon/add_circle.svg"></ion-icon> -->
-                </ion-thumbnail>
-                }
-                <ion-thumbnail>
-                  <ion-icon src="assets/icon/add_circle.svg"></ion-icon>
-                </ion-thumbnail>
+                <div class="archivos">
+                  @for (doc of apunte.documentos; track $index) {
+                  <div class="archivo" (click)="archivoTap(apunte, doc)">
+                    <ion-icon [src]="resolverIcono(doc.amcdTnombre)" color="medium"></ion-icon>
+                    <span>{{doc.amcdTnombre}}</span>
+                  </div>
+                  }
+                  <div class="archivo add" (click)="adjuntarArchivo(adjuntosInput)">
+                    <ion-icon src="assets/icon/add_circle.svg" color="medium"></ion-icon>
+                  </div>
+                  <!-- <ion-thumbnail (click)="adjuntarArchivo(adjuntosInput)">
+                    <ion-icon src="assets/icon/add_circle.svg" color="medium"></ion-icon>
+                  </ion-thumbnail> -->
+                </div>
               </ion-item>
               }
             </ion-list>
             <section>
-              <ion-button shape="round" color="secondary" (click)="cancelarEditar()">Cancelar</ion-button>
+              <ion-button fill="outline" shape="round" color="primary" (click)="cancelarEditar()">Cancelar</ion-button>
               <ion-button type="submit" shape="round" color="primary">Guardar Apunte</ion-button>
             </section>
           </ion-card-content>

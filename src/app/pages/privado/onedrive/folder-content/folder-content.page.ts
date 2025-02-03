@@ -480,7 +480,7 @@ export class FolderContentPage implements OnInit {
     }
   }
   resolverIcono(path: string) {
-    return this.utils.resolverIcono(path);
+    return this.utils.resolveIcon(path);
   }
   resolverFecha(fecha: string) {
     const fechaMoment = moment(fecha, "DD/MM/YYYY HH:mm", true);

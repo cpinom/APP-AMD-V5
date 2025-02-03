@@ -12,6 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '../../services/snackbar.service';
 import { ErrorService } from '../../services/error.service';
 import * as moment from 'moment';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-mensaje',
@@ -20,11 +21,12 @@ import * as moment from 'moment';
 })
 export class MensajeComponent implements OnInit, OnDestroy {
 
+  @ViewChild('adjuntosInput') adjuntarEl!: ElementRef;
   @ViewChild('correoInput') correoInput!: ElementRef<HTMLInputElement>;
   @ViewChild('cuerpo') cuerpoInput!: IonTextarea;
   @ViewChild('contenido') messageEl!: ElementRef;
 
-  messageId: string | undefined;
+  messageId!: string;
   isReply = false;
   message: any;
   correo: string | undefined;
@@ -55,9 +57,8 @@ export class MensajeComponent implements OnInit, OnDestroy {
     private utils: UtilsService,
     private domSanitizer: DomSanitizer,
     private snackbar: SnackbarService,
-    private loading: LoadingController,
+    private dialog: DialogService,
     private error: ErrorService,
-    private alertCtrl: AlertController,
     private renderer: Renderer2) {
 
     this.mensajeForm = this.fb.group({
@@ -155,13 +156,13 @@ export class MensajeComponent implements OnInit, OnDestroy {
     this.correoCtrl.setValue(null);
     this.updateMessage();
   }
-  remove(correo: string): void {
+  async remove(correo: string) {
     if (!this.emailInitial) {
       const index = this.correos.indexOf(correo);
 
       if (index >= 0) {
         this.correos.splice(index, 1);
-        this.updateMessage();
+        await this.updateMessage();
       }
     }
   }
@@ -183,13 +184,13 @@ export class MensajeComponent implements OnInit, OnDestroy {
   }
   bindMessageBody() {
     if (this.isReply) {
-      let links = this.messageEl.nativeElement.querySelectorAll('a[href]');
+      const links = this.messageEl.nativeElement.querySelectorAll('a[href]');
 
       if (links) {
         Array.from(links).forEach((link: any) => {
           this.renderer.listen(link, 'click', (e) => {
             e.preventDefault();
-            let url = link['href'];
+            const url = link['href'];
             this.utils.openLink(url);
           });
         });
@@ -199,87 +200,113 @@ export class MensajeComponent implements OnInit, OnDestroy {
   async adjuntarArchivos(inputEl: any) {
     if (this.pt.is('mobileweb')) {
       inputEl.click();
-    } else {
-      const file = await this.media.getMedia();
+    }
+    else {
+      const media = await this.media.getMedia();
 
-      if (file) {
-        let fileSize = file.size / 1024 / 1024;
-        let index = this.adjuntos.length;
+      if (media) {
+        const fileSize = media?.size! / 1024 / 1024;
+        const base64String = media.data;
 
-        if (fileSize <= 3) {
-          this.adjuntos.push({});
-          this.actualizaMensaje = true;
+        if (fileSize >= 25) {
+          this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 25 MB.');
+          return;
+        }
 
-          try {
-            const response: any = await this.api.addAttachment(file.path, file.name, { messageId: this.messageId });
-            const { data } = response;
-
-            if (data.success) {
-              this.adjuntos[index] = {
-                id: data.id,
-                name: file.name,
-                type: data.type,
-                size: data.size,
-                content: file?.data
-              };
-            }
+        try {
+          await this.uploadBase64Fragmented(base64String, media.name);
+        }
+        catch (error: any) {
+          if (error && error.status == 401) {
+            this.error.handle(error);
+            return
           }
-          catch (error: any) {
-            if (error && error.status == 401) {
-              this.error.handle(error);
-              return;
-            }
-            this.adjuntos.splice(index, 1);
-            this.snackbar.showToast('No fue posible cargar el archivo.', 2000);
-          }
-          finally {
-            this.actualizaMensaje = false;
-          }
-        } else {
-          this.snackbar.showToast('Los documentos no pueden exceder los 3 MB.', 2000);
+
+          await this.presentError('Cargar Archivos', 'No se pudo procesar el archivo. Vuelve a intentarlo.');
         }
       }
     }
   }
-  async adjuntar(ev: any) {
-    let formData = new FormData();
-    let file = ev.target.files[0];
-    var fileSize = file.size / 1024 / 1024;
-    let index = this.adjuntos.length;
+  async adjuntar(event: any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      const fileSize = file.size / 1024 / 1024;
 
-    if (fileSize <= 3) {
-      formData.append('file', file);
-      this.adjuntos.push({});
-      this.actualizaMensaje = true;
+      if (fileSize >= 25) {
+        await this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 25 MB.');
+        return;
+      }
 
       try {
-        const response = await this.api.addAttachmentWeb(formData, { messageId: this.messageId });
-        const { data } = response;
-
-        if (data.success) {
-          let base64 = await this.utils.convertBlobToBase64(file) as string;
-
-          this.adjuntos[index] = {
-            id: data.id,
-            name: file.name,
-            type: file.type,
-            size: data.size,
-            content: base64
-          };
-        }
-        else {
-          throw Error();
-        }
+        const base64 = await this.utils.fileToBase64(file);
+        await this.uploadBase64Fragmented(base64, file.name);
       }
-      catch (error) {
-        this.adjuntos.splice(index, 1);
-        this.snackbar.showToast('No fue posible cargar el archivo.', 2000);
+      catch (error: any) {
+        if (error && error.status == 401) {
+          this.error.handle(error);
+          return;
+        }
+
+        await this.presentError('Cargar Archivos', 'No se pudo procesar el archivo. Vuelve a intentarlo.');
       }
       finally {
-        this.actualizaMensaje = false;
+        this.adjuntarEl.nativeElement.value = '';
       }
-    } else {
-      this.snackbar.showToast('Los documentos no pueden exceder los 3 MB.', 2000);
+    }
+  }
+  async uploadBase64Fragmented(base64String: string, fileName: string): Promise<void> {
+    const fragments = this.utils.divideBase64(base64String);
+    const totalParts = fragments.length;
+    const loading = await this.dialog.showLoading({ message: 'Cargando archivo...' });
+
+    try {
+      for (let i = 0; i < fragments.length; i++) {
+        const base64Fragment = fragments[i];
+        const partNumber = i + 1;
+        const params = {
+          file: base64Fragment,
+          fileName: encodeURIComponent(fileName),
+          partNumber: partNumber,
+          totalParts: totalParts
+        };
+
+        if (totalParts > 1 && partNumber == totalParts) {
+          loading.message = '(100%) finalizando....';
+        }
+
+        const response = await this.api.addAttachmentV3(this.messageId, params);
+        const result = response.data;
+
+        if (result.success) {
+          if (result.code == 202) {
+            const progreso = Math.round(result.progress);
+            loading.message = `(${progreso}%) procesando....`;
+          }
+          else if (result.id) {
+            const index = this.adjuntos.length;
+
+            this.adjuntos[index] = {
+              id: result.id,
+              name: fileName,
+              type: result.type,
+              size: result.size,
+              content: base64String
+            };
+
+            this.snackbar.showToast('Archivo cargado correctamente.', 3000, 'success');
+          }
+        }
+        else {
+          throw Error(result);
+        }
+
+      }
+    }
+    catch (error) {
+      return Promise.reject(error);
+    }
+    finally {
+      await loading.dismiss();
     }
   }
   async descargarAdjunto(doc: any, ev: any) {
@@ -324,7 +351,7 @@ export class MensajeComponent implements OnInit, OnDestroy {
     if (this.mensajeForm.valid) {
       this.deshabilitarEventos();
 
-      const loading = await this.loading.create({ message: 'Enviado correo...' });
+      const loading = await this.dialog.showLoading({ message: 'Enviado correo...' });
       const params = {
         messageId: this.messageId,
         destinatarios: this.correos.join(','),
@@ -332,31 +359,27 @@ export class MensajeComponent implements OnInit, OnDestroy {
         cuerpo: this.body?.value || '',
       };
 
-      loading.present();
-
       try {
         await this.api.sendMessage(params);
 
-        this.messageId = undefined;
+        this.messageId = '';
 
         if (this.isReply) {
-          this.presentSuccess('Correo respondido correctamente.');
-          this.modalCtrl.dismiss(undefined, 'reply');
+          await this.presentSuccess('Correo respondido correctamente.');
+          await this.modalCtrl.dismiss(undefined, 'reply');
         }
         else {
-          this.presentSuccess('Correo enviado correctamente.');
-          this.modalCtrl.dismiss(undefined, 'send');
+          await this.presentSuccess('Correo enviado correctamente.');
+          await this.modalCtrl.dismiss(undefined, 'send');
         }
       }
       catch (error: any) {
         if (error.status == 401) {
           this.error.handle(error);
         }
-        debugger
       }
       finally {
-        loading.dismiss();
-        // this.api.marcarVista(this.Vista);
+        await loading.dismiss();
       }
     }
   }
@@ -379,10 +402,10 @@ export class MensajeComponent implements OnInit, OnDestroy {
     }
   }
   async cerrar() {
-    this.modalCtrl.dismiss(this.messageId, 'cancel');
+    await this.modalCtrl.dismiss(this.messageId, 'cancel');
   }
-  presentSuccess(mensaje: string) {
-    this.alertCtrl.create({
+  async presentSuccess(mensaje: string) {
+    await this.dialog.showAlert({
       backdropDismiss: false,
       keyboardClose: false,
       cssClass: 'success-alert',
@@ -394,7 +417,17 @@ export class MensajeComponent implements OnInit, OnDestroy {
           role: 'ok'
         }
       ]
-    }).then(alert => alert.present())
+    })
+  }
+  async presentError(title: string, message: string) {
+    const alert = await this.dialog.showAlert({
+      cssClass: 'alert-message',
+      message: `<img src="./assets/images/warning.svg" /><br />${message}`,
+      header: title,
+      buttons: ['Aceptar']
+    });
+
+    return alert;
   }
   mostrarMiniatura(type: string) {
     return type.indexOf('image/') > -1;

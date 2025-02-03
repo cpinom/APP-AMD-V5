@@ -4,6 +4,7 @@ import { AsistenciaService } from 'src/app/core/services/curso/asistencia.servic
 import { ErrorService } from 'src/app/core/services/error.service';
 import { AppGlobal } from '../../../../app.global';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-asistencia-clases',
@@ -16,6 +17,8 @@ export class AsistenciaClasesPage implements OnInit {
   alumnos: any;
   mostrarCargando = true;
   mostrarData = false;
+  displayedColumns: any[] = [];
+  infoColumns: any[] = [];
 
   constructor(private api: AsistenciaService,
     private global: AppGlobal,
@@ -36,7 +39,7 @@ export class AsistenciaClasesPage implements OnInit {
       const { data } = response;
 
       if (data.success) {
-        this.alumnos = data.alumnos;
+        await this.resolverAsistencia(data.alumnos);
       }
       else {
         throw Error();
@@ -58,6 +61,44 @@ export class AsistenciaClasesPage implements OnInit {
       ev.target.complete();
     });
   }
+  async resolverAsistencia(data: any) {
+    this.displayedColumns = ['persTnombre', 'asistencia'];
+    this.infoColumns = [];
+
+    try {
+      data.forEach((alumno: any) => {
+
+        alumno.clases.forEach((clase: any) => {
+
+          if (!alumno.hasOwnProperty(clase.lclaNcorr.toString())) {
+            alumno[clase.lclaNcorr.toString()] = clase;
+          }
+
+          if (!this.displayedColumns.includes(clase.lclaNcorr.toString())) {
+            this.displayedColumns.push(clase.lclaNcorr.toString());
+
+            let fecha = moment(clase.lclaFclase, 'DD/MM/YYYY');
+            let diaSemana = fecha.format("ddd").replace('.', '');
+            diaSemana = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+
+            this.infoColumns.push({
+              key: clase.lclaNcorr.toString(),
+              label: `${diaSemana} ${fecha.format("DD/MM/YYYY")}`
+            });
+          }
+
+        });
+
+      });
+      
+      this.alumnos = data;
+
+      return Promise.resolve();
+    }
+    catch {
+      return Promise.reject();
+    }
+  }
   resolverFoto(persNcorr: any) {
     return `${this.global.Api}/api/v4/avatar/${persNcorr}`;
   }
@@ -67,23 +108,6 @@ export class AsistenciaClasesPage implements OnInit {
     if (alnoNoportunidad == 3) return 'Tercera Oportunidad';
     if (alnoNoportunidad == 4) return 'Cuarta Oportunidad';
     return '';
-  }
-  get clases() {
-    let clases: any[] = [];
-
-    if (this.alumnos && this.alumnos.length) {
-      this.alumnos.forEach((alumno: any) => {
-        if (alumno.clases.length > clases.length) {
-          clases = alumno.clases;
-        }
-      });
-
-      clases.forEach((clase: any) => {
-        clase.tieneComentario = clase.lcmoTcomentario.length > 0
-      })
-    }
-
-    return clases;
   }
 
 }

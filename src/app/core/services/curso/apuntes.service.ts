@@ -26,12 +26,12 @@ export class ApuntesService extends PrivateService {
   getHorarioSeccion(params: any) {
     return this.post(`${this.baseUrl}/apuntes/v4/horario-seccion`, params);
   }
-  cargarArchivoWeb(data: FormData, params?: any) {
-    return this.uploadWeb(`${this.baseUrl}/apuntes/v4/cargar-archivo`, data, params);
-  }
-  async cargarArchivo(filepath: string, filename: string, params?: any) {
-    return this.upload(`${this.baseUrl}/apuntes/v4/cargar-archivo`, filepath, filename, params);
-  }
+  // cargarArchivoWeb(data: FormData, params?: any) {
+  //   return this.uploadWeb(`${this.baseUrl}/apuntes/v4/cargar-archivo`, data, params);
+  // }
+  // async cargarArchivo(filepath: string, filename: string, params?: any) {
+  //   return this.upload(`${this.baseUrl}/apuntes/v4/cargar-archivo`, filepath, filename, params);
+  // }
   cargarArchivoV5(amcoNcorr: any, lclaNcorr: any, ssecNcorr: any, params: any) {
     return this.post(`${this.baseUrl}/apuntes/v5/cargar-archivo?amcoNcorr=${amcoNcorr}&lclaNcorr=${lclaNcorr}&ssecNcorr=${ssecNcorr}`, params);
   }

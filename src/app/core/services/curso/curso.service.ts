@@ -116,11 +116,14 @@ export class CursoService extends PrivateService {
   getTicketsSoporte(params: any): Promise<any> {
     return this.post(`${this.baseUrl}/curso/v4/tickets-soporte`, params);
   }
-  cargarArchivoTicketWeb(data: FormData, params?: any) {
-    return this.uploadWeb(`${this.baseUrl}/curso/v4/agregar-archivo-ticket`, data, params);
-  }
-  async cargarArchivoTicket(filepath: string, filename: string, params?: any) {
-    return this.upload(`${this.baseUrl}/curso/v4/agregar-archivo-ticket`, filepath, filename, params);
+  // cargarArchivoTicketWeb(data: FormData, params?: any) {
+  //   return this.uploadWeb(`${this.baseUrl}/curso/v4/agregar-archivo-ticket`, data, params);
+  // }
+  // async cargarArchivoTicket(filepath: string, filename: string, params?: any) {
+  //   return this.upload(`${this.baseUrl}/curso/v4/agregar-archivo-ticket`, filepath, filename, params);
+  // }
+  cargarArchivoTicketV5(aptiNcorr: any, params: any) {
+    return this.post(`${this.baseUrl}/curso/v5/agregar-archivo-ticket?aptiNcorr=${aptiNcorr}`, params);
   }
   descargarArchivoTicket(params: any): Promise<any> {
     return this.post(`${this.baseUrl}/curso/v4/descargar-archivo-ticket`, params);

@@ -9,7 +9,8 @@
 
 <ion-content>
 
-  <section *ngIf="perfil" style="margin-top: 20px;">
+  @if (perfil) {
+  <section style="margin-top: 20px;">
     <div class="section-content">
       <ion-list>
         <ion-item>
@@ -27,8 +28,10 @@
       </ion-list>
     </div>
   </section>
+  }
 
-  <section *ngIf="permitirEditar">
+  @if (permitirEditar) {
+  <section>
     <div class="section-header">Editar datos</div>
     <div class="section-content">
       <ion-list>
@@ -43,5 +46,6 @@
       </ion-list>
     </div>
   </section>
+  }
 
 </ion-content>

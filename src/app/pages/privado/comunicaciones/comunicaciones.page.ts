@@ -156,8 +156,8 @@ export class ComunicacionesPage implements OnInit, OnDestroy {
         const fileSize = media?.size! / 1024 / 1024;
         const base64String = media.data;
 
-        if (fileSize >= 150) {
-          this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 150 MB.');
+        if (fileSize >= 25) {
+          this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 25 MB.');
           return;
         }
 
@@ -217,8 +217,8 @@ export class ComunicacionesPage implements OnInit, OnDestroy {
       let file = event.target.files[0];
       let fileSize = file.size / 1024 / 1024;
 
-      if (fileSize >= 150) {
-        await this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 150 MB.');
+      if (fileSize >= 25) {
+        await this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 25 MB.');
         return;
       }
 

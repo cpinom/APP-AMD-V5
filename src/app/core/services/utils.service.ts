@@ -3,13 +3,17 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Platform } from '@ionic/angular';
 import { FileOpener } from '@capacitor-community/file-opener';
 import { Browser } from '@capacitor/browser';
+import * as moment from 'moment';
+import { Q } from '@angular/cdk/keycodes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
 
-  constructor(private pt: Platform) { }
+  constructor(private pt: Platform) {
+    moment.locale('es');
+  }
 
   convertBlobToBase64(blob: Blob) {
     return new Promise((resolve, reject) => {
@@ -76,7 +80,7 @@ export class UtilsService {
       reader.readAsDataURL(file);
     });
   }
-  resolverIcono(path: string) {
+  resolveIcon(path: string) {
     const extension = this.getFileExtension(path) ?? '';
     // Mapeo de extensiones a tipos de íconos
     const iconMap: { [key: string]: string } = {
@@ -91,6 +95,13 @@ export class UtilsService {
       'txt': 'description',
 
       // Imágenes
+      'jpg': 'image',
+      'jpeg': 'image',
+      'png': 'image',
+      'gif': 'image',
+      'bmp': 'image',
+      'webp': 'image',
+      'svg': 'image',
 
       // Videos
       'mp4': 'video_library',
@@ -132,12 +143,47 @@ export class UtilsService {
 
     return filePath.substring(lastDotIndex + 1).toLowerCase();
   }
+  getMimeType(extension: string) {
+    // Mapa de extensiones a MIME types
+    const mimeTypes: { [key: string]: string } = {
+      "jpg": "image/jpeg",
+      "jpeg": "image/jpeg",
+      "png": "image/png",
+      "gif": "image/gif",
+      "webp": "image/webp",
+      "svg": "image/svg+xml",
+      "pdf": "application/pdf",
+      "txt": "text/plain",
+      "html": "text/html",
+      "css": "text/css",
+      "js": "application/javascript",
+      "json": "application/json",
+      "xml": "application/xml",
+      "mp4": "video/mp4",
+      "mp3": "audio/mpeg",
+      "zip": "application/zip",
+      "rar": "application/vnd.rar",
+      "7z": "application/x-7z-compressed",
+      "doc": "application/msword",
+      "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "xls": "application/vnd.ms-excel",
+      "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    };
+
+    return mimeTypes[extension.toLowerCase()] || "application/octet-stream";
+  }
   isImage(path: string): boolean {
     const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.tiff', '.ico'];
     const extension = this.getFileExtension(path);
 
     // Validar si la extensión está en la lista
     return extension ? validExtensions.includes(`.${extension}`) : false;
+  }
+  resolveDate(fecha: string, formatOutput: string = 'DD/MM/YYYY') {
+    return moment(fecha, 'YYYY-MM-DDTHH:mm:ssZ').format(formatOutput);
+  }
+  resolveExactDate(fecha: string, formatOutput: string = 'DD/MM/YYYY', formatInput: string = 'YYYY-MM-DDTHH:mm:ssZ') {
+    return moment(fecha, formatInput).format(formatOutput);
   }
 
 }

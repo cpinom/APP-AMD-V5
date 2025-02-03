@@ -227,62 +227,6 @@ export class PrivateService {
 
     return Promise.reject(response);
   }
-  public upload = async (url: string, filepath: string, filename: string, params?: any) => {
-    const auth = await this.auth.getAuth();
-
-    if (auth == null) {
-      throw Error('ACCESS_TOKEN_MISSING');
-    }
-
-    const headers = {
-      'Authorization': `Bearer ${auth.access_token}`
-    };
-
-    if (params) {
-      url = `${url}?${$.param(params)}`;
-    }
-
-    return new Promise(async (resolve, reject) => {
-      // const request = this.http.uploadFile(url, {}, headers, filepath, 'file');
-
-      // request.then((response: any) => {
-      //   response.data = JSON.parse(response.data);
-      //   resolve(response);
-      // });
-
-      // request.catch((error: any) => {
-      //   reject(error)
-      // });
-    })
-  }
-  public uploadWeb = async (url: string, data: FormData, params?: any) => {
-    const auth = await this.auth.getAuth();
-
-    if (auth == null) {
-      throw Error('ACCESS_TOKEN_MISSING');
-    }
-
-    if (params) {
-      url = `${url}?${$.param(params)}`;
-    }
-
-    const options: HttpOptions = {
-      url: url,
-      responseType: 'json',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${auth.access_token}`
-      },
-      data: data
-    };
-    const response = await CapacitorHttp.post(options);
-
-    if (response.status == 200) {
-      return response;
-    }
-
-    return Promise.reject(response);
-  }
   public removeStoreRequest(url: string) {
     this.caching.invalidateCacheEntry(url);
   }

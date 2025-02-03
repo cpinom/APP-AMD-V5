@@ -1,9 +1,9 @@
 <ion-header class="tab-content">
   <ion-toolbar>
-    <ion-title>Gestor de Notas</ion-title>
-    <ion-buttons slot="end">
-      <ion-back-button text="Volver Atrás"></ion-back-button>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
     </ion-buttons>
+    <ion-title>Gestor de Notas</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -32,7 +32,7 @@
           <ion-col class="ion-text-right">Ponderación: <b>{{evaluacion.caliNponderacion}}%</b></ion-col>
         </ion-row>
         <ion-row>
-          <ion-col>Fecha Evaluación: <b>{{evaluacion.caliFevaluacion}}</b></ion-col>
+          <ion-col>Fecha Evaluación: <b>{{resolverFecha(evaluacion.caliFevaluacion)}}</b></ion-col>
           <ion-col class="ion-text-right">Ingreso de notas hasta: <b>{{evaluacion.caliFtermino}}</b></ion-col>
         </ion-row>
       </section>

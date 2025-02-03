@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { AlertController, IonRouterOutlet, LoadingController, ModalController, Platform } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import * as moment from 'moment';
 import { BuzonopinionService } from 'src/app/core/services/buzonopinion.service';
 import { ErrorService } from 'src/app/core/services/error.service';
@@ -10,6 +10,7 @@ import { UtilsService } from 'src/app/core/services/utils.service';
 import { DetalleOpinionPage } from './detalle-opinion/detalle-opinion.page';
 import { MediaService } from 'src/app/core/services/media.service';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-buzon-opiniones',
@@ -18,6 +19,7 @@ import { VISTAS_DOCENTE } from 'src/app/app.contants';
 })
 export class BuzonOpinionesPage implements OnInit {
 
+  @ViewChild('adjuntarInput') adjuntarEl!: ElementRef;
   tabModel = 0;
   form: FormGroup;
   patternStr = '^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ!@#"\'\n\r\$%\^\&*\ \)\(+=.,_-]+$';
@@ -34,15 +36,12 @@ export class BuzonOpinionesPage implements OnInit {
 
   constructor(private api: BuzonopinionService,
     private fb: FormBuilder,
-    private loading: LoadingController,
     private error: ErrorService,
     private pt: Platform,
-    private alertCtrl: AlertController,
+    private dialog: DialogService,
     private snackbar: SnackbarService,
     private utils: UtilsService,
     private domSanitizer: DomSanitizer,
-    private modalCtrl: ModalController,
-    private routerOutlet: IonRouterOutlet,
     private media: MediaService) {
 
     moment.locale('es');
@@ -63,8 +62,8 @@ export class BuzonOpinionesPage implements OnInit {
     })
 
   }
-  ngOnInit() {
-    this.cargar();
+  async ngOnInit() {
+    await this.cargar();
     this.api.marcarVista(VISTAS_DOCENTE.BUZON_OPINIONES);
   }
   async cargar() {
@@ -130,9 +129,7 @@ export class BuzonOpinionesPage implements OnInit {
     }
   }
   async cargarSubcategorias(ticoCcod: any) {
-    const loading = await this.loading.create({ message: 'Cargando...' });
-
-    await loading.present();
+    const loading = await this.dialog.showLoading({ message: 'Cargando...' });
 
     try {
       const params = { ticoCcod: ticoCcod };
@@ -164,113 +161,126 @@ export class BuzonOpinionesPage implements OnInit {
       input.click();
     }
     else {
-      const file = await this.media.getMedia();
+      const media = await this.media.getMedia();
 
-      if (file) {
-        const params = { tuserCcod: this.tipoUsuario };
-        const fileSize = file?.size! / 1024 / 1024;
-        const loading = await this.loading.create({ message: 'Cargando archivo...' });
+      if (media) {
+        const fileSize = media?.size! / 1024 / 1024;
+        const base64String = media.data;
 
-        if (fileSize <= 3) {
-          await loading.present();
-
-          try {
-            const respone: any = await this.api.cargarArchivo(file?.path!, file?.name!, params);
-            const { data } = respone;
-
-            if (data.success == false) {
-              this.snackbar.showToast(data.message);
-              return;
-            }
-
-            this.documento = {
-              name: file.name,
-              type: file.name.endsWith('.jpg') ? 'image/jpeg' : '',
-              content: file.data
-            };
-
-            this.solicitudId = data.resoNcorr;
-          }
-          catch (error: any) {
-            if (error && error.status == 401) {
-              this.error.handle(error);
-              return;
-            }
-
-            this.snackbar.showToast('No pudimos cargar el archivo.', 3000, 'danger');
-          }
-          finally {
-            loading.dismiss();
-          }
+        if (fileSize >= 150) {
+          this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 150 MB.');
+          return;
         }
-        else {
-          this.snackbar.showToast('Los archivos no pueden exceder los 3 MB.', 2000);
+
+        try {
+          await this.uploadBase64Fragmented(base64String, media.name);
+        }
+        catch (error: any) {
+          if (error && error.status == 401) {
+            this.error.handle(error);
+            return
+          }
+
+          await this.presentError('Cargar Archivos', 'No se pudo procesar el archivo. Vuelve a intentarlo.');
         }
       }
     }
   }
   async adjuntarWeb(event: any) {
     if (event.target.files.length > 0) {
-      let formData = new FormData();
       let file = event.target.files[0];
-      var fileSize = file.size / 1024 / 1024;
-      let loading = await this.loading.create({ message: 'Cargando archivo...' });
+      let fileSize = file.size / 1024 / 1024;
 
-      if (fileSize <= 3) {
-        formData.append('file', file);
-
-        await loading.present();
-
-        try {
-          const params = { tuserCcod: this.tipoUsuario };
-          const response = await this.api.cargarArchivoWeb(formData, params);
-          const { data } = response;
-
-          if (data.success == false) {
-            this.snackbar.showToast(data.message);
-            return;
-          }
-
-          const base64 = await this.utils.convertBlobToBase64(file);
-
-          this.documento = {
-            name: file.name,
-            type: file.type,
-            content: base64
-          };
-
-          this.solicitudId = data.resoNcorr;
-        }
-        catch (error: any) {
-          if (error && error.status == 401) {
-            this.error.handle(error);
-            return;
-          }
-
-          this.snackbar.showToast('No pudimos cargar el archivo.', 3000, 'danger');
-        }
-        finally {
-          await loading.dismiss();
-        }
-      } else {
-        this.snackbar.showToast('El archivo no pueden exceder los 3 MB.', 2000);
+      if (fileSize >= 150) {
+        await this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 150 MB.');
+        return;
       }
+
+      try {
+        const base64 = await this.utils.fileToBase64(file);
+        await this.uploadBase64Fragmented(base64, file.name);
+      }
+      catch (error: any) {
+        if (error && error.status == 401) {
+          this.error.handle(error);
+          return;
+        }
+
+        await this.presentError('Cargar Archivos', 'No se pudo procesar el archivo. Vuelve a intentarlo.');
+      }
+      finally {
+        this.adjuntarEl.nativeElement.value = '';
+      }
+    }
+  }
+  async uploadBase64Fragmented(base64String: string, fileName: string): Promise<void> {
+    const fragments = this.utils.divideBase64(base64String);
+    const totalParts = fragments.length;
+    const loading = await this.dialog.showLoading({ message: 'Cargando archivo...' });
+    const tuserCcod = this.tipoUsuario;
+
+    try {
+      for (let i = 0; i < fragments.length; i++) {
+        const base64Fragment = fragments[i];
+        const partNumber = i + 1;
+        const params = {
+          file: base64Fragment,
+          fileName: encodeURIComponent(fileName),
+          partNumber: partNumber,
+          totalParts: totalParts
+        };
+
+        if (totalParts > 1 && partNumber == totalParts) {
+          loading.message = '(100%) finalizando....';
+        }
+
+        const response = await this.api.cargarArchivoV2(tuserCcod, params);
+        const result = response.data;
+
+        if (result.success) {
+          if (result.code == 202) {
+            const progreso = Math.round(result.progress);
+            loading.message = `(${progreso}%) procesando....`;
+          }
+          else if (result.code == 200) {
+            const fileExtension = this.utils.getFileExtension(fileName);
+            const fileType = this.utils.getMimeType(fileExtension || '');
+
+            this.documento = {
+              name: fileName,
+              type: fileType,
+              content: base64String
+            };
+
+            this.solicitudId = result.data.resoNcorr;
+            this.snackbar.showToast('Archivo cargado correctamente.', 3000, 'success');
+          }
+        }
+        else {
+          throw Error(result);
+        }
+
+      }
+    }
+    catch (error) {
+      return Promise.reject(error);
+    }
+    finally {
+      await loading.dismiss();
     }
   }
   async enviar() {
     if (this.form.valid) {
       const params = Object.assign(this.form.value, { tuserCcod: this.tipoUsuario, resoNcorr: this.solicitudId });
-      const loading = await this.loading.create({ message: 'Enviando...' });
-
-      await loading.present();
+      const loading = await this.dialog.showLoading({ message: 'Enviando...' });
 
       try {
         const response = await this.api.enviarOpinion(params);
         const { data } = response;
 
         if (data.success) {
-          this.cargar();
-          this.presentSuccess('Su opinión N° ' + data.resoNcorr + ' se ha ingresado con éxito.');
+          await this.cargar();
+          await this.presentSuccess('Su opinión N° ' + data.resoNcorr + ' se ha ingresado con éxito.');
         }
         else {
           this.snackbar.showToast(data.message, 3000, 'danger');
@@ -293,7 +303,7 @@ export class BuzonOpinionesPage implements OnInit {
     }
   }
   async detalleOpinion(resoNcorr: any) {
-    const modal = await this.modalCtrl.create({
+    await this.dialog.showModal({
       component: DetalleOpinionPage,
       componentProps: {
         tipoUsuario: this.tipoUsuario,
@@ -301,11 +311,9 @@ export class BuzonOpinionesPage implements OnInit {
       },
       // presentingElement: this.routerOutlet.nativeEl
     });
-
-    await modal.present();
   }
-  presentSuccess(mensaje: string) {
-    this.alertCtrl.create({
+  async presentSuccess(mensaje: string) {
+    const alert = await this.dialog.showAlert({
       backdropDismiss: false,
       keyboardClose: false,
       cssClass: 'success-alert',
@@ -317,7 +325,19 @@ export class BuzonOpinionesPage implements OnInit {
           role: 'ok'
         }
       ]
-    }).then(alert => alert.present())
+    });
+
+    return alert;
+  }
+  async presentError(title: string, message: string) {
+    const alert = await this.dialog.showAlert({
+      cssClass: 'alert-message',
+      message: `<img src="./assets/images/warning.svg" /><br />${message}`,
+      header: title,
+      buttons: ['Aceptar']
+    });
+
+    return alert;
   }
   reiniciar() {
     this.clopCcod?.setValue(this.clasificaciones[0].clopCcod);
@@ -325,6 +345,7 @@ export class BuzonOpinionesPage implements OnInit {
     this.coopCcod?.setValue(this.temas[0].coopCcod);
     this.mensaje?.setValue('');
     this.mensaje?.reset();
+    this.documento = undefined;
   }
   mostrarMiniatura(type: string) {
     return type.indexOf('image/') > -1;

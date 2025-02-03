@@ -98,7 +98,7 @@ export class SoporteTecnicoPage implements OnInit {
           await loading.present();
 
           try {
-            const respone: any = await this.api.cargarArchivoTicket(file?.path!, file?.name!, params);
+            const respone: any = {};//await this.api.cargarArchivoTicket(file?.path!, file?.name!, params);
             const { data } = respone;
 
             if (data.success) {
@@ -142,7 +142,7 @@ export class SoporteTecnicoPage implements OnInit {
         await loading.present();
 
         try {
-          const response: any = await this.api.cargarArchivoTicketWeb(formData, params);
+          const response: any={}; //= await this.api.cargarArchivoTicketWeb(formData, params);
           const { data } = response;
 
           if (data.success) {

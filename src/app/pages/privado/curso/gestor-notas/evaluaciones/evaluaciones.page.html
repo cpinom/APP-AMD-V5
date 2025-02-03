@@ -10,62 +10,87 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div class="loaderInacap" *ngIf="mostrarCargando">
+  @if (mostrarCargando) {
+  <div class="loaderInacap">
     <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
+  }
 
-  <ng-container *ngIf="mostrarData && evaluaciones">
-
-    <section class="evaluaciones" *ngIf="mostrarData && evaluaciones.length">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="6" *ngFor="let eval of evaluaciones; let i = index;">
-            <ion-card [class.right]="1 === i % 2">
-              <ion-card-content>
-                <ion-list>
-                  <ion-item>
-                    <ion-label class="titulo">
-                      {{eval.orden}} - {{eval.tevaTdesc}} {{eval.caliNponderacion}}%
-                    </ion-label>
-                    <ion-icon slot="end" src="assets/icon/{{resolverIconoEvaluacion(eval)}}.svg" color="medium"></ion-icon>
-                  </ion-item>
+  @if (mostrarData && evaluaciones) {
+  @if (evaluaciones.length > 0) {
+  <section class="evaluaciones">
+    <ion-grid>
+      <ion-row>
+        @for (eval of evaluaciones; track $index) {
+        <ion-col size="6">
+          <ion-card [class.right]="1 === $index % 2">
+            <ion-card-content>
+              <ion-list>
+                <ion-item>
+                  <ion-label class="titulo">
+                    {{eval.orden}} - {{eval.tevaTdesc}} {{eval.caliNponderacion}}%
+                  </ion-label>
+                  <ion-icon slot="end" src="assets/icon/{{resolverIconoEvaluacion(eval)}}.svg" color="medium"></ion-icon>
+                </ion-item>
+                <ion-item lines="full">
+                  <ion-icon slot="start" src="assets/icon/calendar_today.svg" color="medium"></ion-icon>
+                  <ion-label>Fecha de evaluación: {{resolverFecha(eval.caliFevaluacion)}}</ion-label>
+                </ion-item>
+                @if (eval.ranking && eval.ranking.asistencia) {
                   <ion-item lines="full">
-                    <ion-icon slot="start" src="assets/icon/calendar_today.svg" color="medium"></ion-icon>
-                    <ion-label>Fecha evaluación: {{eval.caliFevaluacion}}</ion-label>
+                    <ion-icon slot="start" src="assets/icon/font_download.svg" color="medium"></ion-icon>
+                    <ion-label>Asistencia: {{eval.ranking.asistencia}} de {{eval.ranking.asistencia+eval.ranking.inasistencia}}</ion-label>
                   </ion-item>
-                  <ion-item lines="full" *ngIf="eval.justificaciones > 0">
+                }
+                @if (eval.justificaciones > 0) {
+                <ion-item lines="full">
+                  <ion-icon slot="start" src="assets/icon/info.svg" color="warning"></ion-icon>
+                  @if (eval.justificaciones == 1) {
+                  <ion-label>1 justificación de inasistencia</ion-label>
+                  }
+                  @else {
+                  <ion-label>{{eval.justificaciones}} justificaciones de inasistencia</ion-label>
+                  }
+                </ion-item>
+                }
+                @else {
+                  <ion-item lines="full">
                     <ion-icon slot="start" src="assets/icon/info.svg" color="warning"></ion-icon>
-                    <ion-label *ngIf="eval.justificaciones == 1">1 justificación de inasistencia</ion-label>
-                    <ion-label *ngIf="eval.justificaciones > 1">{{eval.justificaciones}} justificaciones de inasistencia</ion-label>
+                    <ion-label>--</ion-label>
                   </ion-item>
-                  <ion-item lines="none" class="ion-activatable" (click)="calificaciones(eval)">
-                    <ion-label class="ion-text-center accion" [color]="resolverColorEvaluacion(eval)">
-                      Ingresar Notas 
-                      <ion-icon src="assets/icon/chevron_right.svg"></ion-icon>
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </section>
-
-    <div class="empty-state" *ngIf="evaluaciones.length == 0">
-      <div>
-        <ion-icon src="assets/icon/access_time.svg"></ion-icon>
-        <p>Sin registros en estos momentos.</p>
-      </div>
+                }
+                <ion-item lines="none" class="ion-activatable" (click)="calificaciones(eval)">
+                  <ion-label class="ion-text-center accion" [color]="resolverColorEvaluacion(eval)">
+                    Ingresar Notas
+                    <ion-icon src="assets/icon/chevron_right.svg"></ion-icon>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+  </section>
+  }
+  @else {
+  <div class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/access_time.svg"></ion-icon>
+      <p>Sin registros en estos momentos.</p>
     </div>
+  </div>
+  }
+  }
 
-  </ng-container>
-
-  <div class="empty-state" *ngIf="mostrarData && !evaluaciones">
+  @if (mostrarData && !evaluaciones) {
+  <div class="empty-state">
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Sin registros en estos momentos.</p>
     </div>
   </div>
+  }
 
 </ion-content>

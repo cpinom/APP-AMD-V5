@@ -8,6 +8,7 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { AutenticacionPage } from './autenticacion/autenticacion.page';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-calificaciones',
@@ -189,6 +190,14 @@ export class CalificacionesPage implements OnInit {
       return true;
     }
     return false;
+  }
+  resolverFecha(fecha: string) {
+    const fechaDate = moment(fecha, 'DD/MM/YYYY');
+    let diaSemana = fechaDate.format("ddd").replace(".", "");
+    diaSemana = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
+    let mes = fechaDate.format('MMMM');
+    mes = mes.charAt(0).toUpperCase() + mes.slice(1);
+    return `${diaSemana} ${fechaDate.format('DD')} de ${mes}`;
   }
   mostrarMensajeBloqueo(alumno: any) {
     let mensaje = '';

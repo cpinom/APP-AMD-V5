@@ -61,8 +61,8 @@ export class DetalleOpinionPage implements OnInit {
 
     return '';
   }
-  cerrar() {
-    this.modalCtrl.dismiss();
+  async cerrar() {
+    await this.modalCtrl.dismiss();
   }
 
 }

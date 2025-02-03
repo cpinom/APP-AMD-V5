@@ -6,6 +6,7 @@ import { AsistenciaClasesPageRoutingModule } from './asistencia-clases-routing.m
 import { AsistenciaClasesPage } from './asistencia-clases.page';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { ComponentsModule } from 'src/app/core/components/components.module';
+import { AppMaterialModule } from 'src/app/app-material.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { ComponentsModule } from 'src/app/core/components/components.module';
     IonicModule,
     AsistenciaClasesPageRoutingModule,
     DirectivesModule,
-    ComponentsModule
+    ComponentsModule,
+    AppMaterialModule
   ],
   declarations: [AsistenciaClasesPage]
 })

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonInput, ModalController, ToastController } from '@ionic/angular';
+import { IonInput, ModalController, Platform, ToastController } from '@ionic/angular';
 import { CodeInputComponent } from 'angular-code-input';
 import { SnackbarService } from '../services/snackbar.service';
 import { AuthService } from './auth.service';
@@ -36,10 +36,11 @@ export class AuthPage implements OnInit, AfterViewInit {
     private snackbar: SnackbarService,
     private toast: ToastController,
     private utils: UtilsService,
-    private perfil: PerfilService) {
+    private perfil: PerfilService,
+    private pt: Platform) {
 
     this.cuentaForm = this.fb.group({
-      usuario: ['', Validators.required]//15012915-k
+      usuario: ['', Validators.required]
     });
 
     this.loginForm = this.fb.group({
@@ -58,7 +59,13 @@ export class AuthPage implements OnInit, AfterViewInit {
       if (this.errorMsg) {
         this.errorMsg = '';
       }
-    })
+    });
+
+    if (this.pt.is('mobileweb')) {
+      this.cuentaForm.get('usuario')?.setValue('166459362');
+      this.loginForm.get('usuario')?.setValue('166459362');
+      this.loginForm.get('usuario')?.setValue('Anto?E200');
+    }
 
   }
   ngAfterViewInit() {

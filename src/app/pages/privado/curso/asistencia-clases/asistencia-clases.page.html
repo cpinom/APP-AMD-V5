@@ -10,89 +10,94 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div class="loaderInacap" *ngIf="mostrarCargando">
+  @if (mostrarCargando) {
+  <div class="loaderInacap">
     <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
+  }
 
-  <ng-container *ngIf="mostrarData && alumnos">
+  @if (mostrarData && alumnos) {
+  @if (alumnos.length > 0) {
+  <ion-card class="tabla">
 
-    <ion-card class="tabla" *ngIf="alumnos.length">
+    <ion-card-content>
+      <section class="tabla" style="overflow: auto;">
 
-      <ion-card-content>
-        <section class="tabla">
-          <div id="table-scroll" class="table-scroll">
-            <div class="table-wrap">
-              <table class="main-table">
-                <thead>
-                  <tr>
-                    <th class="fixed-side">Nombre Estudiante</th>
-                    <th class="fixed-side">Asistencia</th>
-                    <th *ngFor="let clase of clases; let x = index;">
-                      <span style="display: block;">{{clase.lclaFclase}}</span>
-                      <ng-container *ngIf="clase.tieneComentario">
-                        <ion-icon id="est-comentario-{{x}}" color="medium" src="assets/icon/info.svg" (click)="$event.stopPropagation()"></ion-icon>
-                        <ion-popover trigger="est-comentario-{{x}}" side="right" alignment="end">
-                          <ng-template>
-                            <ion-content class="ion-padding">{{clase.lcmoTcomentario}}</ion-content>
-                          </ng-template>
-                        </ion-popover>
-                      </ng-container>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of alumnos; let i = index;">
-                    <td class="fixed-side ion-text-nowrap ion-text-left">
-                      <div class="avatar">
-                        <app-cached-image [src]="resolverFoto(item.persNcorr)"></app-cached-image>
-                        <span>{{item.persTapePaterno}}, {{item.persTnombre}}</span>
-                        <!-- <ion-badge color="medium" *ngIf="item.alnoNoportunidad >= 3">{{ item.alnoNoportunidad }}</ion-badge> -->
-                        <ng-container *ngIf="item.alnoNoportunidad >= 3">
-                          <ion-badge id="est-oportunidad-{{ i }}" color="medium" (click)="$event.stopPropagation()">
-                            {{ item.alnoNoportunidad }}
-                          </ion-badge>
-                          <ion-popover trigger="est-oportunidad-{{ i }}" side="right" alignment="end">
-                            <ng-template>
-                              <ion-content class="ion-padding">{{ resolverOportunidad(item.alnoNoportunidad) }}</ion-content>
-                            </ng-template>
-                          </ion-popover>
-                        </ng-container>
-                      </div>
-                    </td>
-                    <td class="fixed-side">{{ item.asistencia }}%</td>
-                    <td *ngFor="let clase of clases; let i = index">
-                      <ion-icon class="no-informada" src="assets/icon/radio_button_unchecked.svg" *ngIf="!item.clases[i] || item.clases[i].esasNcorr == 0"></ion-icon>
-                      <ion-icon class="ausente" src="assets/icon/cancel.svg" *ngIf="item.clases[i] && item.clases[i].esasNcorr == 1"></ion-icon>
-                      <ion-icon class="presente" src="assets/icon/check_circle.svg" *ngIf="item.clases[i] && item.clases[i].esasNcorr == 2"></ion-icon>
-                    </td>
-                    <!-- <td *ngFor="let clase of item.clases">
-                      <ion-icon class="no-informada" src="assets/icon/radio_button_unchecked.svg" *ngIf="clase.esasNcorr == 0"></ion-icon>
-                      <ion-icon class="ausente" src="assets/icon/cancel.svg" *ngIf="clase.esasNcorr == 1"></ion-icon>
-                      <ion-icon class="presente" src="assets/icon/check_circle.svg" *ngIf="clase.esasNcorr == 2"></ion-icon>
-                    </td> -->
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </ion-card-content>
-    </ion-card>
+        <table mat-table [dataSource]="alumnos">
 
-    <div class="empty-state" *ngIf="alumnos.length == 0">
-      <div>
-        <ion-icon src="assets/icon/access_time.svg"></ion-icon>
-        <p>Sin registros en estos momentos.</p>
-      </div>            
+          <ng-container matColumnDef="persTnombre" sticky>
+            <th mat-header-cell *matHeaderCellDef>Nombre Estudiante</th>
+            <td mat-cell *matCellDef="let element; let i = index" class="fixed-side ion-text-nowrap ion-text-left">
+              <div class="avatar">
+                <app-cached-image [src]="resolverFoto(element.persNcorr)"></app-cached-image>
+                <span>{{element.persTapePaterno}}, {{element.persTnombre}}</span>
+                @if (element.alnoNoportunidad >= 3) {
+                <ion-badge id="est-oportunidad-{{i}}" color="medium" (click)="$event.stopPropagation()">
+                  {{element.alnoNoportunidad}}
+                </ion-badge>
+                <ion-popover trigger="est-oportunidad-{{i}}" side="right" alignment="end">
+                  <ng-template>
+                    <ion-content class="ion-padding">{{resolverOportunidad(element.alnoNoportunidad)}}</ion-content>
+                  </ng-template>
+                </ion-popover>
+                }
+              </div>
+            </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="asistencia">
+            <th mat-header-cell *matHeaderCellDef>Asistencia</th>
+            <td mat-cell *matCellDef="let element" class="fixed-side ion-text-center">{{element.asistencia}}%</td>
+          </ng-container>
+
+          @for (item of infoColumns; track $index) {
+          <ng-container [matColumnDef]="item.key">
+            <th mat-header-cell *matHeaderCellDef class="ion-text-center">{{item.label}}</th>
+            <td mat-cell *matCellDef="let element" class="ion-text-center">
+              @if (element[item.key]) {
+              @if (element[item.key].esasNcorr == 0) {
+              <ion-icon class="no-informada" src="assets/icon/radio_button_unchecked.svg"></ion-icon>
+              }
+              @else if (element[item.key].esasNcorr == 1) {
+              <ion-icon class="ausente" src="assets/icon/cancel.svg"></ion-icon>
+              }
+              @else if (element[item.key].esasNcorr == 2) {
+              <ion-icon class="presente" src="assets/icon/check_circle.svg"></ion-icon>
+              }
+              }
+              @else {
+              <ion-icon class="no-informada" src="assets/icon/radio_button_unchecked.svg"></ion-icon>
+              }
+            </td>
+          </ng-container>
+          }
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+      </section>
+    </ion-card-content>
+  </ion-card>
+  }
+  @else {
+  <div class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/access_time.svg"></ion-icon>
+      <p>Sin registros en estos momentos.</p>
     </div>
+  </div>
+  }
+  }
 
-  </ng-container>
-
-  <div class="empty-state" *ngIf="mostrarData && !alumnos">
+  @if (mostrarData && !alumnos) {
+  <div class="empty-state">
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Sin registros en estos momentos.</p>
-    </div>            
+    </div>
   </div>
+  }
 
 </ion-content>

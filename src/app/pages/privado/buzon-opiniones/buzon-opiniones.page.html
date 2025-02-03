@@ -26,86 +26,107 @@
           </ion-segment-button>
         </ion-segment>
       </div>
-      <ng-container *ngIf="tabModel == 0">
-        <form [formGroup]="form">
-          <ion-list>
-            <ion-item>
-              <ion-select formControlName="clopCcod" label="Tipo de Opinión" labelPlacement="stacked"
-                placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
-                <ion-select-option [value]="item.clopCcod" *ngFor="let item of clasificaciones">
-                  {{item.clopTdesc}}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-select formControlName="ticoCcod" label="Categoría" labelPlacement="stacked"
-                placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
-                <ion-select-option [value]="item.ticoCcod" *ngFor="let item of topicos">
-                  {{item.ticoTdesc}}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-select formControlName="coopCcod" label="Subcategoría" labelPlacement="stacked"
-                placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
-                <ion-select-option [value]="item.coopCcod" *ngFor="let item of temas">
-                  {{item.coopTdesc}}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-textarea formControlName="resoTsugerencia" label="Opinión" labelPlacement="stacked"
-                placeholder="Ingrese aquí su opinión" rows="6" counter="true" maxlength="2000"
-                [errorText]="mensajeError"></ion-textarea>
-            </ion-item>
-            <ion-item-divider>
-              <ion-label>Adjuntar Archivo</ion-label>
-            </ion-item-divider>
-            <ion-item *ngIf="!documento" class="ion-activatable" (click)="adjuntar(adjuntarInput)">
-              <ion-icon src="assets/icon/add_a_photo.svg" slot="start" color="medium"></ion-icon>
-              <ion-label>Adjuntar foto o documento</ion-label>
-            </ion-item>
-            <ion-item *ngIf="documento">
-              <ng-container *ngIf="mostrarMiniatura(documento.type)">
-                <ion-thumbnail slot="start">
-                  <img [src]="resolverMiniatura(documento)" />
-                </ion-thumbnail>
-                <ion-label>{{documento.name}}</ion-label>
-              </ng-container>
-              <ng-container *ngIf="!mostrarMiniatura(documento.type)">
-                <ion-icon slot="start" src="assets/icon/picture_as_pdf.svg" color="medium"></ion-icon>
-                <ion-label>{{documento.name}}</ion-label>
-              </ng-container>
-              <ion-button style="--border-width: 2px; height: 25px;" fill="outline" slot="end" size="small" color="danger" (click)="solicitudId = 0; documento = undefined">Eliminar</ion-button>
-            </ion-item>
-          </ion-list>
-        </form>
-      </ng-container>
-      <ng-container *ngIf="tabModel == 1">
-        <div class="loaderInacap" *ngIf="mostrarCargando">
-          <ion-spinner name="lines" color="primary"></ion-spinner>
-        </div>
-        <ion-list *ngIf="mostrarData && opiniones.length">
-          <ion-item *ngFor="let item of opiniones" class="ion-activatable" detail="true" (click)="detalleOpinion(item.resoNcorr)">
-            <ion-label>
-              <h2>{{item.resoTsugerencia}}</h2>
-              <p>Estado: {{item.esreTdesc}}</p>
-              <p>Fecha: {{resolverFecha(item.resoFsolicitud)}}</p>
-            </ion-label>
+      @if (tabModel == 0) {
+      <form [formGroup]="form">
+        <ion-list>
+          <ion-item>
+            <ion-select formControlName="clopCcod" label="Tipo de Opinión" labelPlacement="stacked"
+              placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+              @for (item of clasificaciones; track $index) {
+              <ion-select-option [value]="item.clopCcod">
+                {{item.clopTdesc}}
+              </ion-select-option>
+              }
+            </ion-select>
           </ion-item>
+          <ion-item>
+            <ion-select formControlName="ticoCcod" label="Categoría" labelPlacement="stacked"
+              placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+              @for (item of topicos; track $index) {
+              <ion-select-option [value]="item.ticoCcod">
+                {{item.ticoTdesc}}
+              </ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select formControlName="coopCcod" label="Subcategoría" labelPlacement="stacked"
+              placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+              @for (item of temas; track $index) {
+              <ion-select-option [value]="item.coopCcod">
+                {{item.coopTdesc}}
+              </ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+          <ion-item lines="full">
+            <ion-textarea formControlName="resoTsugerencia" label="Opinión" labelPlacement="stacked"
+              placeholder="Ingrese aquí su opinión" rows="6" counter="true" maxlength="2000"
+              [errorText]="mensajeError"></ion-textarea>
+          </ion-item>
+          <ion-item-divider>
+            <ion-label>Adjuntar Archivo</ion-label>
+          </ion-item-divider>
+          @if (!documento) {
+          <ion-item class="ion-activatable" (click)="adjuntar(adjuntarInput)">
+            <ion-icon src="assets/icon/add_a_photo.svg" slot="start" color="medium"></ion-icon>
+            <ion-label>Adjuntar foto o documento</ion-label>
+          </ion-item>
+          }
+          @else {
+          <ion-item>
+            @if (mostrarMiniatura(documento.type)) {
+            <ion-thumbnail slot="start">
+              <img [src]="resolverMiniatura(documento)" />
+            </ion-thumbnail>
+            <ion-label>{{documento.name}}</ion-label>
+            }
+            @else if (!mostrarMiniatura(documento.type)) {
+            <ion-icon slot="start" src="assets/icon/picture_as_pdf.svg" color="medium"></ion-icon>
+            <ion-label>{{documento.name}}</ion-label>
+            }
+            <ion-button style="--border-width: 2px; height: 25px;" fill="outline" slot="end" size="small" color="danger"
+              (click)="solicitudId = 0; documento = undefined">Eliminar</ion-button>
+          </ion-item>
+          }
         </ion-list>
-        <section *ngIf="mostrarData && opiniones.length === 0" class="empty-state">
-          <div>
-            <p>Sin opiniones históricas en este momento.</p>
-          </div>
-        </section>
-      </ng-container>
+      </form>
+      }
+      @else if(tabModel == 1) {
+      @if (mostrarCargando) {
+      <div class="loaderInacap">
+        <ion-spinner name="lines" color="primary"></ion-spinner>
+      </div>
+      }
+      @if (mostrarData && opiniones?.length) {
+      <ion-list>
+        @for (item of opiniones; track $index) {
+        <ion-item class="ion-activatable" detail="true" (click)="detalleOpinion(item.resoNcorr)">
+          <ion-label>
+            <h2>{{item.resoTsugerencia}}</h2>
+            <p>Estado: {{item.esreTdesc}}</p>
+            <p>Fecha: {{resolverFecha(item.resoFsolicitud)}}</p>
+          </ion-label>
+        </ion-item>
+        }
+      </ion-list>
+      }
+      @else if (mostrarData && opiniones?.length===0) {
+      <section class="empty-state">
+        <div>
+          <p>Sin opiniones históricas en este momento.</p>
+        </div>
+      </section>
+      }
+      }
     </div>
   </section>
 
-  <section style="margin: 15px 30px;" *ngIf="tabModel == 0">
+  @if (tabModel == 0) {
+  <section style="margin: 15px 30px;">
     <ion-button color="primary" shape="round" expand="block" (click)="enviar()">Enviar Opinión</ion-button>
   </section>
+  }
 
   <input type="file" #adjuntarInput style="display: none;" (change)="adjuntarWeb($event)"
     accept="application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,image/*" />

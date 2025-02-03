@@ -23,15 +23,17 @@
       <p class="bold">Versión {{version}}</p>
       <p class="bold">Ambiente {{environment}}</p>
       <p>INACAP</p>
-      <P>Copyright © 2023</P>
+      <P>Copyright © 2025</P>
     </section>
 
-    <section class="section-barcode" *ngIf="mostrarBarcode">
+    @if (mostrarBarcode) {
+    <section class="section-barcode">
       <img #barcode />
     </section>
+    }
 
     <section class="btn-configuracion">
-      <ion-button color="secondary" shape="round" (click)="configuracion()">
+      <ion-button fill="outline" shape="round" color="primary" (click)="configuracion()">
         <ion-icon slot="start" src="assets/icon/lock.svg"></ion-icon>
         Configuración
       </ion-button>

@@ -35,11 +35,14 @@ export class BuzonopinionService extends PrivateService {
   getDetalleOpinion(params: any) {
     return this.post(`${this.baseUrl}/buzon-opinion/v1/detalle-opinion`, params);
   }
-  cargarArchivoWeb(data: FormData, params: any) {
-    return this.uploadWeb(`${this.baseUrl}/buzon-opinion/v1/cargar-archivo`, data, params);
-  }
-  cargarArchivo(filepath: string, filename: string, params: any) {
-    return this.upload(`${this.baseUrl}/buzon-opinion/v1/cargar-archivo`, filepath, filename, params);
+  // cargarArchivoWeb(data: FormData, params: any) {
+  //   return this.uploadWeb(`${this.baseUrl}/buzon-opinion/v1/cargar-archivo`, data, params);
+  // }
+  // cargarArchivo(filepath: string, filename: string, params: any) {
+  //   return this.upload(`${this.baseUrl}/buzon-opinion/v1/cargar-archivo`, filepath, filename, params);
+  // }
+  cargarArchivoV2(tuserCcod: any, params: any) {
+    return this.post(`${this.baseUrl}/buzon-opinion/v2/cargar-archivo?tuserCcod=${tuserCcod}`, params);
   }
 
 }

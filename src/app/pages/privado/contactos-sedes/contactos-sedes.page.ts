@@ -23,8 +23,8 @@ export class ContactosSedesPage implements OnInit {
     private mensaje: MensajeService,
     private snackbar: SnackbarService) { }
 
-  ngOnInit() {
-    this.cargar();
+  async ngOnInit() {
+    await this.cargar();
     this.api.marcarVista(VISTAS_DOCENTE.CONTACTOS_SEDES);
   }
   async cargar() {

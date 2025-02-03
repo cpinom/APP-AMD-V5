@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Configuración</ion-title>
+    <!-- <ion-buttons slot="start">
+      <ion-nav-link router-direction="back">
+        Volver
+      </ion-nav-link>
+      <ion-back-button text="Volver"></ion-back-button>
+    </ion-buttons> -->
+    @if (mostrarCargando) {
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  @if (!data) {
+  <div class="section-pin">
+    <form [formGroup]="pinForm" (ngSubmit)="validarPin()">
+      <h3><ion-icon src="assets/icon/lock.svg"></ion-icon>PIN de seguridad Sede</h3>
+      <ion-list>
+        <ion-input mode="md" #pinEl type="password" inputmode="numeric" fill="solid" label="Ingrese un PIN de 6 digitos"
+          labelPlacement="floating" formControlName="pin"
+          helperText="El PIN es provisto por el Administrador de Casa Central" (ionInput)="onPinInput($event)"
+          maxlength="6">
+        </ion-input>
+      </ion-list>
+      <section>
+        <ion-button type="submit" color="primary" shape="round"
+          [disabled]="!pinForm.valid || mostrarCargando">Siguiente</ion-button>
+      </section>
+    </form>
+  </div>
+  }
+  @else {
+  <section class="section-config">
+    <div class="section-items">
+      <ion-list inset="true">
+        <ion-item lines="none">
+          <ion-icon slot="start" src="assets/icon/tablet.svg" style="font-size: 48px;"></ion-icon>
+          <ion-label>
+            @if (!data.tablet.nuevo) {
+            <h2 class="configurado">
+              Código: <ion-icon src="assets/icon/check_circle.svg"></ion-icon>{{data.tablet.aptaCtablets}}
+            </h2>
+            }
+            @if (data.tablet.nuevo) {
+            <h2 class="no-configurado">
+              Código: <ion-icon src="assets/icon/warning.svg"></ion-icon>No configurado
+            </h2>
+            }
+            <p>UUID: {{data.tablet.aptaTuuid}}</p>
+            <p>ID APP: {{data.tablet.aptaNcorr}}</p>
+            <p>Sede: {{data.sedeTdesc}}</p>
+            <p class="estado">
+              Estado: {{resolverEstado(data.tablet.estaCcod)}} <ion-icon src="assets/icon/info.svg"></ion-icon>
+            </p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      @if (data.tablet.estaCcod == 1) {
+      <section class="title-config">
+        <h2>Elija una opción de configuración</h2>
+      </section>
+      <ion-list inset="true">
+        <ion-radio-group [(ngModel)]="modoConfig">
+          <ion-item lines="none" *ngIf="data && !data.tablet.nuevo">
+            <ion-radio slot="start" [value]="0" mode="md" labelPlacement="end" justify="start" color="primary">
+              Modificar Dispositivo</ion-radio>
+          </ion-item>
+          <ion-item lines="none" *ngIf="data && data.tablet.nuevo">
+            <ion-radio slot="start" [value]="1" mode="md" labelPlacement="end" justify="start" color="primary">
+              Configurar Nuevo Dispositivo</ion-radio>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-radio slot="start" [value]="2" mode="md" labelPlacement="end" justify="start" color="primary">
+              Reemplazar por uno existente</ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+      }
+    </div>
+    <section class="section-buttons">
+      <ion-button fill="outline" shape="round" color="primary" (click)="salir()">Salir</ion-button>
+      <ion-button color="primary" shape="round" (click)="modoConfigTap()" style="margin-left: 10px;"
+        [disabled]="modoConfig == undefined">Siguiente</ion-button>
+    </section>
+    @if (data.tablet.estaCcod != 1) {
+    <div class="empty-state">
+      <div>
+        <ion-icon src="assets/icon/info.svg"></ion-icon>
+        <p>Tablet no disponible en estos momentos.</p>
+        <ion-button color="secondary" shape="round" (click)="salir()">Salir</ion-button>
+      </div>
+    </div>
+    }
+  </section>
+  }
+
+</ion-content>

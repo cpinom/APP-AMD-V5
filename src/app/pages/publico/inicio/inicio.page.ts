@@ -33,8 +33,8 @@ export class InicioPage implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() {
-    this.cargar();
+  async ngOnInit() {
+    await this.cargar();
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -58,10 +58,15 @@ export class InicioPage implements OnInit, OnDestroy {
       this.mostrarData = true;
     }
   }
-  recargar() {
+  recargar(e?: any) {
     this.mostrarCargando = true;
     this.mostrarData = false;
-    this.cargar();
+    this.cargar().finally(() => {
+      e && e.target.complete();
+    });
+  }
+  resolverFecha(fecha: string) {
+    return this.utils.resolveDate(fecha, 'DD/MM/YYYY HH:mm');
   }
   async mostrarLink(url: string) {
     await this.utils.openLink(url);
