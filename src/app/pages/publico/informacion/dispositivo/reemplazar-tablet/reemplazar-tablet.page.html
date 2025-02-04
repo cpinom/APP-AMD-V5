@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Reemplazar tablet</ion-title>
+    <ion-title>Configuración Dispositivo</ion-title>
     <ion-buttons slot="start">
       <ion-back-button text="Volver"></ion-back-button>
     </ion-buttons>
@@ -8,4 +8,47 @@
 </ion-header>
 
 <ion-content>
+
+  <section class="main-content">
+    <section class="section-search">
+      <ion-searchbar placeholder="Buscar" [(ngModel)]="tabletFiltro" (ionInput)="filtrarTablets()"
+        (ionClear)="resetTablets()"></ion-searchbar>
+    </section>
+    <section class="section-tablets">
+      @if (data && tabletsFiltradas.length) {
+      <ion-list inset="true">
+        <ion-radio-group [(ngModel)]="tabletSeleccionada">
+          @for (item of tabletsFiltradas; track $index) {
+          <ion-item>
+            <ion-icon slot="start" src="assets/icon/tablet.svg" color="medium"></ion-icon>
+            <ion-radio [value]="item" mode="md">
+              <ion-label>
+                <span [innerHTML]="resaltarTexto(item)"></span>
+              </ion-label>
+            </ion-radio>
+          </ion-item>
+          }
+        </ion-radio-group>
+      </ion-list>
+      }
+      @else {
+      <ion-list inset="true">
+        <ion-item>
+          <ion-icon slot="start" src="assets/icon/warning.svg" color="warning"></ion-icon>
+          <ion-label>
+            <h2>No se encontraron tablets</h2>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      }
+    </section>
+    <div class="section-buttons">
+      <ion-nav-link router-direction="back">
+        <ion-button fill="outline" shape="round" color="primary">Volver</ion-button>
+      </ion-nav-link>
+      <ion-button color="primary" shape="round" [disabled]="!tabletSeleccionada"
+        (click)="reemplazarTap()">Reemplazar</ion-button>
+    </div>
+  </section>
+
 </ion-content>

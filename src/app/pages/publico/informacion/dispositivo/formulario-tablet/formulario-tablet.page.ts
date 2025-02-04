@@ -41,12 +41,23 @@ export class FormularioTabletPage implements OnInit {
 
   }
   ngOnInit() {
+    if (this.modoConfig == 0) {
+      this.tabletForm.get('aptaTuuid')?.setValue(this.data.tablet.aptaTuuid);
+      this.tabletForm.get('aptaNcorr')?.setValue(this.data.tablet.aptaNcorr);
+      this.tabletForm.get('sedeTdesc')?.setValue(this.data.sedeTdesc);
+      this.aptaCtablets?.setValue(this.data.tablet.aptaCtablets);
+      this.aptaNserie?.setValue(this.data.tablet.aptaNserie);
+    }
+    else if (this.modoConfig == 1) {
+      this.tabletForm.get('aptaTuuid')?.setValue(this.data.tablet.aptaTuuid);
+      this.tabletForm.get('aptaNcorr')?.setValue(this.data.tablet.aptaNcorr);
+      this.tabletForm.get('sedeTdesc')?.setValue(this.data.sedeTdesc);
+    }
+
   }
   async guardarTablet() {
     if (this.tabletForm.valid) {
       const loading = await this.dialog.showLoading({ message: 'Procesando...' });
-
-      this.mostrarCargando = true;
 
       try {
         const params = Object.assign({ amseTpin: this.data.amseTpin, sedeCcod: this.data.sedeCcod }, this.tabletForm.value);
@@ -54,29 +65,31 @@ export class FormularioTabletPage implements OnInit {
         const { data } = response;
 
         if (data.success) {
+          await loading.dismiss();
+
           if (data.code == 1) {
-            await this.presentSuccess('Configuración', 'Tablet registrada correctamente.');
-            this.modal.dismiss();
-            this.api.clearData();
+            await this.presentSuccess('Configuración', `Tablet "${this.aptaCtablets?.value}" registrada correctamente.`);
+            await this.modal.dismiss();
+            await this.api.clearData();
           }
           else if (data.code == 2) {
             await this.presentError('Configuración', `Ya existe un Código Tablet "${this.aptaCtablets?.value}". Intente con otro.`);
+            await Haptics.vibrate();
             this.aptaCtablets?.setValue('');
-            Haptics.vibrate();
           }
           else if (data.code == 3) {
             await this.presentSuccess('Configuración', 'Tablet migrada correctamente.');
-            this.modal.dismiss();
-            this.api.clearData();
+            await this.modal.dismiss();
+            await this.api.clearData();
           }
           else if (data.code == 4) {
             await this.presentError('Configuración', 'El nuevo ID APP ingresado no corresponde a un código valido.');
-            Haptics.vibrate();
+            await Haptics.vibrate();
           }
         }
         else {
           await this.presentError('Configuración', data.message);
-          Haptics.vibrate();
+          await Haptics.vibrate();
         }
       }
       catch (error: any) {
@@ -84,10 +97,10 @@ export class FormularioTabletPage implements OnInit {
       }
       finally {
         await loading.dismiss();
-        this.mostrarCargando = false;
       }
 
-    } else {
+    }
+    else {
       this.tabletForm.markAllAsTouched();
     }
   }
@@ -132,7 +145,6 @@ export class FormularioTabletPage implements OnInit {
 
     return alert;
   }
-
   get codigoError() {
     if (this.aptaCtablets?.hasError('required')) return 'Campo es obligatorio.';
     if (this.aptaCtablets?.hasError('minlength')) return 'Mínimo de 10 caracteres.';

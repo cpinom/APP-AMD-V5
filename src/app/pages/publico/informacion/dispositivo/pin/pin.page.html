@@ -1,12 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Configuración</ion-title>
-    <!-- <ion-buttons slot="start">
-      <ion-nav-link router-direction="back">
-        Volver
-      </ion-nav-link>
-      <ion-back-button text="Volver"></ion-back-button>
-    </ion-buttons> -->
+    <ion-title>Configuración Dispositivo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
     @if (mostrarCargando) {
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
     }
@@ -67,25 +66,32 @@
         <ion-radio-group [(ngModel)]="modoConfig">
           <ion-item lines="none" *ngIf="data && !data.tablet.nuevo">
             <ion-radio slot="start" [value]="0" mode="md" labelPlacement="end" justify="start" color="primary">
-              Modificar Dispositivo</ion-radio>
+              Modificar Dispositivo
+            </ion-radio>
           </ion-item>
           <ion-item lines="none" *ngIf="data && data.tablet.nuevo">
             <ion-radio slot="start" [value]="1" mode="md" labelPlacement="end" justify="start" color="primary">
-              Configurar Nuevo Dispositivo</ion-radio>
+              Configurar Nuevo Dispositivo
+            </ion-radio>
           </ion-item>
           <ion-item lines="none">
             <ion-radio slot="start" [value]="2" mode="md" labelPlacement="end" justify="start" color="primary">
-              Reemplazar por uno existente</ion-radio>
+              Reemplazar por uno existente
+            </ion-radio>
+            @if (contadorTablets > 0) {
+            <ion-badge slot="end">{{contadorTablets}}</ion-badge>
+            }
           </ion-item>
         </ion-radio-group>
       </ion-list>
       }
     </div>
+    @if (data.tablet.estaCcod == 1) {
     <section class="section-buttons">
       <ion-button fill="outline" shape="round" color="primary" (click)="salir()">Salir</ion-button>
-      <ion-button color="primary" shape="round" (click)="modoConfigTap()" style="margin-left: 10px;"
-        [disabled]="modoConfig == undefined">Siguiente</ion-button>
+      <ion-button color="primary" shape="round" (click)="modoConfigTap()" style="margin-left: 10px;" [disabled]="modoConfig == undefined">Siguiente</ion-button>
     </section>
+    }
     @if (data.tablet.estaCcod != 1) {
     <div class="empty-state">
       <div>

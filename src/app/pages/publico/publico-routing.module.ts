@@ -33,18 +33,6 @@ const routes: Routes = [
         loadChildren: () => import('./servicios/servicios.module').then(m => m.ServiciosPageModule)
       }
     ]
-  },
-  {
-    path: 'pin',
-    loadChildren: () => import('./informacion/dispositivo/pin/pin.module').then( m => m.PinPageModule)
-  },
-  {
-    path: 'reemplazar-tablet',
-    loadChildren: () => import('./informacion/dispositivo/reemplazar-tablet/reemplazar-tablet.module').then( m => m.ReemplazarTabletPageModule)
-  },
-  {
-    path: 'formulario-tablet',
-    loadChildren: () => import('./informacion/dispositivo/formulario-tablet/formulario-tablet.module').then( m => m.FormularioTabletPageModule)
   }
 ];
 

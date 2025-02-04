@@ -49,6 +49,7 @@ ion-content {
   }
   p.estado {
     display: flex;
+    align-items: center;
 
     ion-icon {
       font-size: 20px;
@@ -69,13 +70,13 @@ ion-content {
         font-size: 20px;
       }
     }
-
-    .section-items {
-    }
     .section-buttons {
       margin: 16px;
       display: flex;
       justify-content: space-between;
+    }
+    .empty-state {
+      height: 100%;
     }
   }
 }

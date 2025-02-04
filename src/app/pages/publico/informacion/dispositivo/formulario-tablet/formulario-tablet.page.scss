@@ -1,16 +1,15 @@
 ion-content {
+  --background: var(--ion-color-white);
+
   form {
-    // width: 90%;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     height: 100%;
-    // margin: 0 auto;
-    // position: absolute;
-    // top: 50%;
-    // left: 0;
-    // right: 0;
-    // transform: translateY(-50%);
+
+    ion-list {
+      box-shadow: none !important;
+    }
 
     .section-buttons {
       margin: 16px;

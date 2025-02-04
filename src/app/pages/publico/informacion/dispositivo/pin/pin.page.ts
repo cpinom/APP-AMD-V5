@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IonInput, IonNav } from '@ionic/angular';
+import { IonInput, IonNav, ModalController } from '@ionic/angular';
 import { AppGlobal } from 'src/app/app.global';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { DispositivoService } from 'src/app/core/services/dispositivo.service';
@@ -25,7 +25,8 @@ export class PinPage implements OnInit, OnDestroy {
     private global: AppGlobal,
     private api: DispositivoService,
     private dialog: DialogService,
-    private nav: IonNav) {
+    private nav: IonNav,
+    private modal: ModalController) {
 
     this.pinForm = this.fb.group({
       pin: [, Validators.compose([
@@ -149,7 +150,15 @@ export class PinPage implements OnInit, OnDestroy {
   }
   salir() {
     this.data = null;
-    // this.nav.pop();
+  }
+  async cerrar() {
+    await this.modal.dismiss();
+  }
+  get contadorTablets() {
+    if (this.data) {
+      return this.data.tablets.filter((t: any) => t.aptaNcorr != this.data.tablet.aptaNcorr).length;
+    }
+    return 0;
   }
 
 }

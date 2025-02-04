@@ -2,11 +2,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { IonNav, ModalController } from '@ionic/angular';
 import { DispositivoPage } from '../dispositivo/dispositivo.page';
 import { AuthService } from 'src/app/core/auth/auth.service';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AppGlobal } from 'src/app/app.global';
 import * as JsBarcode from 'jsbarcode';
 import { DispositivoService } from 'src/app/core/services/dispositivo.service';
 import { PerfilService } from 'src/app/core/services/perfil.service';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-principal',
@@ -21,10 +21,10 @@ export class PrincipalPage implements OnInit {
   constructor(private modal: ModalController,
     private nav: IonNav,
     private auth: AuthService,
-    private snackbar: SnackbarService,
     private global: AppGlobal,
     private api: DispositivoService,
-    private perfil: PerfilService) { }
+    private perfil: PerfilService,
+    private dialog: DialogService) { }
 
   ngOnInit() {
   }
@@ -66,8 +66,18 @@ export class PrincipalPage implements OnInit {
       await this.nav.push(DispositivoPage);
     }
     else {
-      this.snackbar.showToast('Se debe cerrar sesión para continuar.');
+      await this.presentError('Configuración Dispositivo', 'Se debe cerrar sesión para continuar.');
     }
+  }
+  async presentError(title: string, message: string) {
+    const alert = await this.dialog.showAlert({
+      cssClass: 'alert-message',
+      message: `<img src="./assets/images/warning.svg" /><br />${message}`,
+      header: title,
+      buttons: ['Aceptar']
+    });
+
+    return alert;
   }
   async cerrar() {
     await this.modal.dismiss();

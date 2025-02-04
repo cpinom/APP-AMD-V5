@@ -153,7 +153,7 @@
     ion-button {
       // min-height: 45px;
       &.button-outline {
-        --border-width: 2px
+        --border-width: 2px;
       }
       &.button-round {
         min-height: 45px;
@@ -204,6 +204,31 @@
         &::part(content) {
           box-shadow: none !important;
           border-radius: 0px !important;
+        }
+      }
+    }
+
+    ion-alert {
+      &.alert-message {
+        img {
+          width: 48px;
+          height: 48px;
+        }
+      }
+      &.success-alert {
+        div.image {
+          text-align: center;
+          margin: 5px 0;
+
+          ion-icon {
+            font-size: 48px;
+            color: var(--ion-color-success);
+          }
+
+          img {
+            width: 60px;
+            margin: 0 auto 10px;
+          }
         }
       }
     }

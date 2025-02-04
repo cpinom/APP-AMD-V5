@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { IonNav } from '@ionic/angular';
 import { PrincipalPage } from './principal/principal.page';
 
