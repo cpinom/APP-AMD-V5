@@ -278,6 +278,12 @@
       --ion-color-white-shade: #232534;
       --ion-color-white-tint: #3e3f4f;
 
+      section {
+        .section-content {
+          box-shadow: 0px 4px 8px 0px rgba(74, 78, 110, 0.15);;
+        }
+      }
+
       ion-list {
         &.list-inset {
           box-shadow: 0px 4px 8px rgba(74, 78, 110, 0.15);

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActionSheetController, ModalController } from '@ionic/angular';
+import { ActionSheetController, IonNav } from '@ionic/angular';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { DispositivoService } from 'src/app/core/services/dispositivo.service';
+import { EventsService } from 'src/app/core/services/events.services';
 
 @Component({
   selector: 'app-reemplazar-tablet',
@@ -19,7 +20,8 @@ export class ReemplazarTabletPage implements OnInit {
   constructor(private action: ActionSheetController,
     private dialog: DialogService,
     private api: DispositivoService,
-    private modal: ModalController) { }
+    private nav: IonNav,
+    private events: EventsService) { }
 
   ngOnInit() {
     this.tablets = this.getTablets();
@@ -81,16 +83,18 @@ export class ReemplazarTabletPage implements OnInit {
       };
 
       try {
-        const response = await this.api.actualizarTablet(params);
+        const response = await this.api.actualizarTabletV5(params);
         const { data } = response;
 
         if (data.success) {
-          if (data.code == 3) {
+          await loading.dismiss();
+          
+          if (data.data.codigo == 3) {
+            this.events.app.next(data.data);
             await this.presentSuccess('Configuración Dispositivo', 'Tablet migrada correctamente.');
-            await this.modal.dismiss();
-            await this.api.clearData();
+            await this.nav.pop();
           }
-          else if (data.code == 4) {
+          else if (data.data.codigo == 4) {
             await this.presentError('Configuración Dispositivo', 'El nuevo ID APP ingresado no corresponde a un código valido.');
           }
         }

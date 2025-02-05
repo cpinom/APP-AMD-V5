@@ -22,6 +22,9 @@ export class OnedriveService extends PrivateService {
     this.baseUrl = `${global.Api}/${this.apiPrefix}`;
   }
 
+  getCursos() {
+    return this.get(`${this.baseUrl}/v1/cursos`);
+  }
   getPrincipal(driveId: string) {
     return this.get(`${this.baseUrl}/v1/principal?driveId=${driveId}`);
   }
@@ -44,6 +47,9 @@ export class OnedriveService extends PrivateService {
   }
   eliminarArchivo(folderId: string, fileId: string) {
     return this.delete(`${this.baseUrl}/v1/eliminar-archivo?folderId=${folderId}&fileId=${fileId}`);
+  }
+  compartirArchivo(params: any) {
+    return this.post(`${this.baseUrl}/v1/compartir`, params);
   }
   async setStorage(key: string, value: any) {
     await Preferences.set({

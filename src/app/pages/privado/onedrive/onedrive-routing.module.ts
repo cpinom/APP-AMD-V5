@@ -10,7 +10,11 @@ const routes: Routes = [
   {
     path: ':folderId/:folderName',
     loadChildren: () => import('./folder-content/folder-content.module').then( m => m.FolderContentPageModule)
+  },  {
+    path: 'compartir',
+    loadChildren: () => import('./compartir/compartir.module').then( m => m.CompartirPageModule)
   }
+
 
 ];
 

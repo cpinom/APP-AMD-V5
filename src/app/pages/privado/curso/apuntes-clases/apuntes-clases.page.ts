@@ -5,6 +5,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 import { ActionSheetController, Platform } from '@ionic/angular';
 import * as moment from 'moment';
+import { AppGlobal } from 'src/app/app.global';
 import { ApuntesService } from 'src/app/core/services/curso/apuntes.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { ErrorService } from 'src/app/core/services/error.service';
@@ -41,7 +42,8 @@ export class ApuntesClasesPage implements OnInit {
     private media: MediaService,
     private fb: FormBuilder,
     private action: ActionSheetController,
-    private snackbar: SnackbarService) {
+    private snackbar: SnackbarService,
+    private global: AppGlobal) {
 
     this.form = this.fb.group({
       amcoNcorr: [0],
@@ -505,6 +507,9 @@ export class ApuntesClasesPage implements OnInit {
   resolverIcono(path: string) {
     return this.utils.resolveIcon(path);
   }
+  resolverImagen(amcdNcorr: string) {
+    return `${this.global.Api}/api/apuntes/v5/thumbnail?amcdNcorr=${amcdNcorr}`;
+  }
   resolverObservacion(text: string) {
     if (!text) return 'Sin comentarios...';
     let textoConSaltos = text.replace(/\n/g, "<br/>");
@@ -517,6 +522,9 @@ export class ApuntesClasesPage implements OnInit {
     let mes = fechaDate.format('MMMM');
     mes = mes.charAt(0).toUpperCase() + mes.slice(1);
     return `${diaSemana} ${fechaDate.format('DD')} de ${mes}`;
+  }
+  esImagen(path: string) {
+    return this.utils.isImage(path);
   }
   get amcoNcorr() { return this.form.get('amcoNcorr'); }
   get amcoTobservacion() { return this.form.get('amcoTobservacion'); }

@@ -61,6 +61,25 @@ export class PublicoService {
       return Promise.reject(error);
     }
   }
+  public patch = async (url: string, params?: any) => {
+    const options: HttpOptions = {
+      url: url,
+      method: 'patch',
+      responseType: 'json',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: params || {}
+    };
+
+    const response = await CapacitorHttp.patch(options);
+
+    if (response.status == 200) {
+      return response;
+    }
+
+    return Promise.reject(response);
+  }
   getPrincipal() {
     return this.get(`${this.baseUrl}/v3/principal`);
   }

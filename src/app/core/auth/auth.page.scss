@@ -5,12 +5,16 @@ ion-content {
         height: 100%;
 
         .container {
-            height: 80%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             width: 100%;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            transform: translateY(calc(-50% - 44px));
 
             section.logo {
                 img {

@@ -10,6 +10,7 @@ import { MediaService } from 'src/app/core/services/media.service';
 import { OnedriveService } from 'src/app/core/services/onedrive.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { UtilsService } from 'src/app/core/services/utils.service';
+import { CompartirPage } from './compartir/compartir.page';
 
 @Component({
   selector: 'app-onedrive',
@@ -34,11 +35,11 @@ export class OnedrivePage implements OnInit {
     private alert: AlertController,
     private action: ActionSheetController,
     private media: MediaService,
-    private snackbar: SnackbarService) { 
+    private snackbar: SnackbarService) {
 
-      moment.locale('es');
+    moment.locale('es');
 
-    }
+  }
 
   async ngOnInit() {
     await this.cargar();
@@ -128,7 +129,7 @@ export class OnedrivePage implements OnInit {
       const loading = await this.dialog.showLoading({ message: 'Creando...' });
 
       try {
-        const response = await this.api.crearCarpeta({ 
+        const response = await this.api.crearCarpeta({
           carpeta: nombreCarpeta,
           driveId: this.driveId
         });
@@ -299,6 +300,26 @@ export class OnedrivePage implements OnInit {
       await loading.dismiss();
     }
   }
+  async compartirTap(file: any) {
+
+    await this.dialog.showModal({
+      component: CompartirPage,
+      componentProps: {
+        data: file
+      }
+    })
+    /*debugger
+
+    const response1 = await this.api.getCursos();
+
+    const params = {
+      driveId: this.driveId,
+      fileId: file.id,
+      destinatarios: ['vandit.va@gmail.com'].join(',')
+    };
+    const response = await this.api.compartirArchivo(params);
+    debugger*/
+  }
   async optionsTap(item: any, e: any) {
     e.stopPropagation();
 
@@ -327,6 +348,12 @@ export class OnedrivePage implements OnInit {
           text: 'Descargar',
           handler: () => {
             this.descargarTap(item);
+          }
+        },
+        {
+          text: 'Compartir',
+          handler: () => {
+            this.compartirTap(item);
           }
         },
         {
@@ -467,22 +494,22 @@ export class OnedrivePage implements OnInit {
   }
   resolverFecha(fecha: string) {
     const fechaMoment = moment(fecha, "DD/MM/YYYY HH:mm", true);
-    
-        // Comparar con la fecha actual
-        const hoy = moment();
-    
-        if (fechaMoment.isSame(hoy, 'day')) {
-          return `Hoy a las ${fechaMoment.format("HH:mm")}`;
-        }
-        else if (fechaMoment.isSame(hoy.clone().subtract(1, 'day'), 'day')) {
-          return `Ayer a las ${fechaMoment.format("HH:mm")}`;
-        } 
-        else if (fechaMoment.isSame(hoy, 'week')) {
-          return `${fechaMoment.format("[El] dddd [a las] HH:mm")}`; // Día de la semana y hora
-        }
-    
-        // Por defecto, retornar la fecha original formateada
-        return fecha;
+
+    // Comparar con la fecha actual
+    const hoy = moment();
+
+    if (fechaMoment.isSame(hoy, 'day')) {
+      return `Hoy a las ${fechaMoment.format("HH:mm")}`;
+    }
+    else if (fechaMoment.isSame(hoy.clone().subtract(1, 'day'), 'day')) {
+      return `Ayer a las ${fechaMoment.format("HH:mm")}`;
+    }
+    else if (fechaMoment.isSame(hoy, 'week')) {
+      return `${fechaMoment.format("[El] dddd [a las] HH:mm")}`; // Día de la semana y hora
+    }
+
+    // Por defecto, retornar la fecha original formateada
+    return fecha;
   }
   isImage(path: string): boolean {
     return this.utils.isImage(path);

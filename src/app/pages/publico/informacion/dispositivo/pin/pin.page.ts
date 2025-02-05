@@ -6,6 +6,8 @@ import { DialogService } from 'src/app/core/services/dialog.service';
 import { DispositivoService } from 'src/app/core/services/dispositivo.service';
 import { FormularioTabletPage } from '../formulario-tablet/formulario-tablet.page';
 import { ReemplazarTabletPage } from '../reemplazar-tablet/reemplazar-tablet.page';
+import { EventsService } from 'src/app/core/services/events.services';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pin',
@@ -20,13 +22,17 @@ export class PinPage implements OnInit, OnDestroy {
   data: any;
   modoConfig!: number;
   interval!: any;
+  eventSubscription!: Subscription;
 
   constructor(private fb: FormBuilder,
     private global: AppGlobal,
     private api: DispositivoService,
     private dialog: DialogService,
     private nav: IonNav,
-    private modal: ModalController) {
+    private modal: ModalController,
+    private events: EventsService) {
+
+    this.eventSubscription = this.events.app.subscribe(this.onTabletCreated.bind(this));
 
     this.pinForm = this.fb.group({
       pin: [, Validators.compose([
@@ -51,6 +57,10 @@ export class PinPage implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy() {
+    if (this.eventSubscription) {
+      this.eventSubscription.unsubscribe();
+    }
+
     if (this.interval) {
       clearInterval(this.interval);
     }
@@ -71,6 +81,7 @@ export class PinPage implements OnInit, OnDestroy {
         if (data.success) {
           await this.api.setDeviceId(data.data.tablet.aptaNcorr);
           await this.api.setAuth(data.data, 3);
+          
           this.data = data.data;
           this.verificarExpiracion();
         }
@@ -85,6 +96,25 @@ export class PinPage implements OnInit, OnDestroy {
       }
       finally {
         this.mostrarCargando = false;
+      }
+    }
+  }
+  async onTabletCreated(data: any) {
+    if (this.data) {
+      if (data.codigo == 1) {
+        this.data.tablet.aptaCtablets = data.tablet.aptaCtablets;
+        this.data.tablet.aptaNserie = data.tablet.aptaNserie;
+        this.data.tablet.estaCcod = data.tablet.estaCcod;
+        this.data.tablet.nuevo = false;
+        await this.api.setAuth(this.data, 3);
+      }
+      else if (data.codigo == 3) {
+        this.data.tablet.aptaCtablets = data.tablet.aptaCtablets;
+        this.data.tablet.aptaNserie = data.tablet.aptaNserie;
+        this.data.tablet.estaCcod = data.tablet.estaCcod;
+        this.data.tablet.nuevo = false;
+        this.data.tablets = data.tablets;
+        await this.api.setAuth(this.data, 3);
       }
     }
   }
@@ -119,24 +149,6 @@ export class PinPage implements OnInit, OnDestroy {
     else if (this.modoConfig == 2) {
       this.nav.push(ReemplazarTabletPage, { data: this.data });
     }
-    // if (this.modoConfig == 0) {
-    //   this.tabletForm.get('aptaTuuid')?.setValue(this.data.tablet.aptaTuuid);
-    //   this.tabletForm.get('aptaNcorr')?.setValue(this.data.tablet.aptaNcorr);
-    //   this.tabletForm.get('sedeTdesc')?.setValue(this.data.sedeTdesc);
-    //   this.aptaCtablets?.setValue(this.data.tablet.aptaCtablets);
-    //   this.aptaNserie?.setValue(this.data.tablet.aptaNserie);
-    //   this.swiper.slideTo(2, 0)
-    // }
-    // else if (this.modoConfig == 1) {
-    //   this.tabletForm.get('aptaTuuid')?.setValue(this.data.tablet.aptaTuuid);
-    //   this.tabletForm.get('aptaNcorr')?.setValue(this.data.tablet.aptaNcorr);
-    //   this.tabletForm.get('sedeTdesc')?.setValue(this.data.sedeTdesc);
-    //   this.swiper.slideTo(2, 0)
-    // }
-    // else if (this.modoConfig == 2) {
-    //   this.swiper.slideTo(3, 0)
-    // }
-    // this.swiper.disable()
   }
   async presentError(title: string, message: string) {
     const alert = await this.dialog.showAlert({
@@ -148,7 +160,8 @@ export class PinPage implements OnInit, OnDestroy {
 
     return alert;
   }
-  salir() {
+  async salir() {
+    await this.api.clearData();
     this.data = null;
   }
   async cerrar() {

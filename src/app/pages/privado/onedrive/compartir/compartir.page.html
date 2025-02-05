@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">
+        <ion-label>Cerrar</ion-label>
+      </ion-button>
+    </ion-buttons>
+    @if (data) {
+    <ion-title>Compartir: {{data.name}}</ion-title>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <section class="main">
+    <ion-list inset="true">
+      <ion-item>
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input type="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Mensaje</ion-label>
+        <ion-textarea></ion-textarea>
+      </ion-item>
+    </ion-list>
+    <section class="buttons">
+      <ion-button fill="outline" shape="round" color="primary" (click)="cerrar()">Salir</ion-button>
+      <ion-button color="primary" shape="round" (click)="compartir()">Compartir</ion-button>
+    </section>
+  </section>
+  
+</ion-content>

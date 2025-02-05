@@ -95,6 +95,7 @@ export class PrivadoPage implements OnInit, OnDestroy {
     this.cargarCuentasCorreos();
   }
   ngOnInit() {
+    this.global.NotificationFlag = true;
     // this.cargar();
     this.api.marcarVista(VISTAS_DOCENTE.PRINCIPAL);
   }

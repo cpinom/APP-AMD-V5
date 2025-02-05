@@ -20,6 +20,9 @@ export class DispositivoService extends PublicoService {
   actualizarTablet(params: any) {
     return this.post(`${this.baseUrl}/dispositivo/v4/actualizar-tablet`, params);
   }
+  actualizarTabletV5(params: any) {
+    return this.patch(`${this.baseUrl}/dispositivo/v5/actualizar-tablet`, params);
+  }
   actualizarBateriaTablet(params: any) {
     return this.post(`${this.baseUrl}/dispositivo/v4/estado-bateria`, params);
   }
@@ -31,7 +34,7 @@ export class DispositivoService extends PublicoService {
   }
   async setAuth(value: any, minutes: moment.DurationInputArg1) {
     const expiration_date = moment().add(minutes, 'minutes');
-    Object.assign(value, { expiration_date: expiration_date })
+    Object.assign(value, { expiration_date: expiration_date });
     await this.setStorage('Data', JSON.stringify(value))
   }
   async getData() {

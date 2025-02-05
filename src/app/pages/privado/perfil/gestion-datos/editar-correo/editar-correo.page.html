@@ -14,7 +14,9 @@
     </ion-card-header>
   </ion-card>
 
-  <ng-container *ngIf="perfil && !mostrarCodigo">
+  <div class="contenedor">
+
+    @if (perfil && !mostrarCodigo) {
     <form [formGroup]="form">
       <section>
         <div class="section-header">Datos Personales</div>
@@ -22,13 +24,15 @@
           <ion-list>
             <ion-item>
               <ion-label position="stacked">Correo</ion-label>
-              <ion-input type="email" formControlName="persTemail" placeholder="Ingrese un correo" clearInput></ion-input>
+              <ion-input type="email" formControlName="persTemail" placeholder="Ingrese un correo"
+                clearInput></ion-input>
             </ion-item>
             <div class="invalid" *ngIf="submitted && correo?.hasError('email')">Correo inválido</div>
             <div class="invalid" *ngIf="submitted && correo?.hasError('required')">Campo obligatorio</div>
             <ion-item>
               <ion-label position="stacked">Confirmar correo</ion-label>
-              <ion-input type="email" formControlName="persTemailConfirma" placeholder="Ingrese un correo de confirmación" clearInput></ion-input>
+              <ion-input type="email" formControlName="persTemailConfirma"
+                placeholder="Ingrese un correo de confirmación" clearInput></ion-input>
             </ion-item>
             <div class="invalid" *ngIf="submitted && correoConfirma?.hasError('email')">Correo inválido</div>
             <div class="invalid" *ngIf="submitted && correoConfirma?.hasError('required')">Campo obligatorio</div>
@@ -55,23 +59,26 @@
         </ion-grid>
       </section>
     </form>
-  </ng-container>
+    }
 
-  <ng-container *ngIf="mostrarCodigo">
+
+    @if (mostrarCodigo) {
     <section>
       <div class="section-header">CÓDIGO DE CONFIRMACIÓN</div>
       <div class="section-content">
         <ion-list>
           <ion-item>
             <ion-icon color="success" src="assets/icon/check_circle.svg" slot="start"></ion-icon>
-            <ion-label>Se enviará un mail con el código de confirmación al correo ingresado. Si éste no llega en los próximos minutos, reenviar el código aquí.</ion-label>
+            <ion-label>Se enviará un mail con el código de confirmación al correo ingresado. Si éste no llega en los
+              próximos minutos, reenviar el código aquí.</ion-label>
           </ion-item>
         </ion-list>
       </div>
     </section>
 
     <div class="pin-contenedor">
-      <code-input #codeInput [isCodeHidden]="false" [codeLength]="6" (codeChanged)="onPinChanged($event)" (codeCompleted)="onPinCompleted($event)"></code-input>
+      <code-input #codeInput [isCodeHidden]="false" [codeLength]="6" (codeChanged)="onPinChanged($event)"
+        (codeCompleted)="onPinCompleted($event)"></code-input>
     </div>
 
     <section>
@@ -90,6 +97,8 @@
         </ion-row>
       </ion-grid>
     </section>
-  </ng-container>
+    }
+
+  </div>
 
 </ion-content>

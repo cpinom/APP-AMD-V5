@@ -172,6 +172,12 @@ export class FolderContentPage implements OnInit {
           }
         },
         {
+          text: 'Compartir',
+          handler: () => {
+            this.compartirTap(item);
+          }
+        },
+        {
           text: 'Eliminar',
           role: 'destructive',
           handler: () => {
@@ -445,6 +451,9 @@ export class FolderContentPage implements OnInit {
     finally {
       await loading.dismiss();
     }
+  }
+  async compartirTap(file: any) {
+    debugger
   }
   async eliminarTap(file: any) {
     const loading = await this.dialog.showLoading({ message: 'Eliminando...' });

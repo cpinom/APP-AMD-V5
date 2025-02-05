@@ -56,10 +56,17 @@
           @if (item.documentos.length) {
           <div class="archivos">
             @for (doc of item.documentos; track $index) {
+            @if (esImagen(doc.amcdTnombre)) {
+            <ion-thumbnail>
+              <img [src]="resolverImagen(doc.amcdNcorr)" />
+            </ion-thumbnail>
+            }
+            @else {
             <div class="archivo" (click)="archivoTap(item, doc)">
               <ion-icon [src]="resolverIcono(doc.amcdTnombre)"></ion-icon>
               <span>{{doc.amcdTnombre}}</span>
             </div>
+            }
             }
           </div>
           }

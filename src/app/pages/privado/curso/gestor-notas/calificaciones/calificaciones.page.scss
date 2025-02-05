@@ -1,11 +1,15 @@
 @import "../../curso.common.scss";
 @import "src/theme/tabla.scss";
 
-ion-buttons {
-    margin-right: 10px;
-
-    ion-back-button {
-        --ion-toolbar-color: #333;
+ion-header {
+    ion-buttons {
+        ion-back-button {
+            --ion-toolbar-color: #333;
+            width: 50px;
+        }
+    }
+    ion-title {
+        padding-inline-start: 52px !important;
     }
 }
 
@@ -93,10 +97,10 @@ ion-content {
 
 @media only screen and (max-width: 500px) {
     ion-header {
-      ion-toolbar {
-        ion-title {
-          font-size: 18px !important;
+        ion-toolbar {
+            ion-title {
+                font-size: 18px !important;
+            }
         }
-      }
     }
 }

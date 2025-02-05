@@ -270,6 +270,7 @@ ion-grid.asignaturas-perfil {
             margin: 0;
             border-radius: 0;
             box-shadow: 0px 2px 4px #00000012;
+            height: 100%;
 
             ion-list {
                 ion-label {
@@ -302,13 +303,13 @@ ion-grid.asignaturas-perfil {
                             color: var(--ion-color-success);
                         }
                         &.limon {
-                            color: #C9DD00;
+                            color: #c9dd00;
                         }
                         &.amarillo {
                             color: var(--ion-color-warning);
                         }
                         &.naranjo {
-                            color: #FF6100;
+                            color: #ff6100;
                         }
                         &.rojo {
                             color: var(--ion-color-danger);
@@ -344,6 +345,16 @@ ion-grid.asignaturas-perfil {
                         height: 200px !important;
                         width: 200px !important;
                     }
+                }
+            }
+
+            &.ajustar {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .contenido {
+                    height: 100%;
                 }
             }
         }
@@ -523,18 +534,16 @@ ion-modal.terminar-clase {
             overflow: auto;
         }
     }
-    ion-grid {    
+    ion-grid {
         ion-col {
             &.left {
                 padding: 0 !important;
                 margin-bottom: 15px;
             }
-    
+
             &.right {
-                padding: 0 !important
+                padding: 0 !important;
             }
-
-
         }
     }
 }
