@@ -6,11 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: AprendizajesEsperadosPage
-  },
-  // {
-  //   path: 'filtros',
-  //   loadChildren: () => import('./filtros/filtros.module').then(m => m.FiltrosPageModule)
-  // }
+  }
 ];
 
 @NgModule({

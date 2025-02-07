@@ -1,7 +1,23 @@
 ion-content {
-  section {
-    p {
-      margin: 20px;
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .scroll {
+      height: 100%;
+      overflow: auto;
+
+      .explain {
+        padding: 16px 16px 0;
+      }
+
+      ion-list {
+        ion-item {
+          --min-height: 70px
+        }
+      }
     }
   }
 }

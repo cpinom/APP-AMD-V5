@@ -1,13 +1,16 @@
 @import "../../curso.common.scss";
 
-
-ion-buttons {
-    margin-right: 10px;
-
-    ion-back-button {
+ion-header {
+    ion-buttons {
+      ion-back-button {
         --ion-toolbar-color: #333;
+        width: 50px;
+      }
     }
-}
+    ion-title {
+      padding-inline-start: 52px !important;
+    }
+  }
 
 ion-accordion-group {
     box-shadow: 0px 2px 4px #00000012;

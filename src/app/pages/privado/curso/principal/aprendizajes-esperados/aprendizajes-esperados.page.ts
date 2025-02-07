@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-import { LoadingController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { CursoService } from 'src/app/core/services/curso/curso.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { FiltrosPage } from './filtros/filtros.page';
 import { ErrorService } from 'src/app/core/services/error.service';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-aprendizajes-esperados',
@@ -31,7 +32,7 @@ export class AprendizajesEsperadosPage implements OnInit {
     private snack: SnackbarService,
     private error: ErrorService,
     private modalCtrl: ModalController,
-    private loading: LoadingController,
+    private dialog: DialogService,
     private snackbar: SnackbarService) { }
 
   ngOnInit() {
@@ -83,8 +84,10 @@ export class AprendizajesEsperadosPage implements OnInit {
     }
   }
   recargar(ev?: any) {
+    this.mostrarData = false;
+    this.mostrarCargando = ev ? false : true;
     this.cargar(true).finally(() => {
-      ev.target.complete();
+      ev && ev.target.complete();
     });
   }
   async filtrar() {
@@ -138,23 +141,14 @@ export class AprendizajesEsperadosPage implements OnInit {
     });
 
     await modal.present();
-
-    // let response = await modal.onWillDismiss();
-
-    // if (response.data) {
-    //   this.filtros = response.data;
-    //   this.cargar();
-    // }
   }
   async guardar(data: any, lclaNcorr: any) {
-    let loading = await this.loading.create({ message: 'Guardando...' });
-    let params = {
+    const loading = await this.dialog.showLoading({ message: 'Guardando...' });
+    const params = {
       codAsun: data.asunCcod,
       codAprendizaje: data.unobCcod,
       codLibros: lclaNcorr
     };
-
-    await loading.present();
 
     try {
       const response = await this.api.actualizaAvancesAprendizajes(params);

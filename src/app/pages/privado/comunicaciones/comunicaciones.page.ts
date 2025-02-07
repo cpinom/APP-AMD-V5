@@ -62,8 +62,8 @@ export class ComunicacionesPage implements OnInit, OnDestroy {
     })
 
   }
-  ngOnInit() {
-    this.cargar();
+  async ngOnInit() {
+    await this.cargar();
     this.api.marcarVista(VISTAS_DOCENTE.MENSAJES_SECCIONES);
   }
   ngOnDestroy() {

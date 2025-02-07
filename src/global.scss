@@ -242,6 +242,8 @@
 
     .barcode-scanning-modal {
       visibility: visible;
+      --height: 100%;
+      --width: 100%;
     }
 
     &.dark {
@@ -280,7 +282,7 @@
 
       section {
         .section-content {
-          box-shadow: 0px 4px 8px 0px rgba(74, 78, 110, 0.15);;
+          box-shadow: 0px 4px 8px 0px rgba(74, 78, 110, 0.15);
         }
       }
 

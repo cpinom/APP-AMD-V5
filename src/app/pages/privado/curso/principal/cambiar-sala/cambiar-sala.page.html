@@ -12,37 +12,42 @@
 <ion-content>
 
   <form [formGroup]="form" (ngSubmit)="enviar()">
-
-    <section>
-      <p>Ingrese el nuevo cambio de sala que se hará durante la clase en curso.</p>
-      <p>Sala planificada: <b>{{estadoClase.salaPlanificada}}</b></p>
-      <p *ngFor="let item of movimientos">{{ordinales[item.num]}}: <b>{{item.salaTdesc}}</b></p>
+    <section class="scroll">
+      <section class="explain">
+        <p>Ingrese el nuevo cambio de sala que se hará durante la clase en curso.</p>
+        <p>Sala planificada: <b>{{estadoClase.salaPlanificada}}</b></p>
+        @for (item of movimientos; track $index) {
+        <p>{{ordinales[item.num]}}: <b>{{item.salaTdesc}}</b></p>
+        }
+      </section>
+      <ion-list inset="true">
+        <ion-item detail="true" (click)="encanearTap()" class="ion-activatable">
+          <ion-icon slot="start" src="assets/icon/qr_code_scanner.svg"></ion-icon>
+          <ion-label>Escanear código QR</ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-list inset="true">
+        <ion-item>
+          <ion-icon slot="start" src="assets/icon/list.svg"></ion-icon>
+          <ion-select formControlName="sala" label="Seleccione Nuevo Cambio" labelPlacement="stacked"
+            placeholder="Seleccione una sala..." okText="Aceptar" cancelText="Cancelar">
+            @for (item of salas; track $index) {
+            <ion-select-option [value]="item.salaCcod">{{item.salaTdesc}}
+              ({{item.salaCiso}})
+            </ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      </ion-list>
     </section>
-
-    <ion-list style="margin-bottom: 10px;">
-      <ion-item detail="true" (click)="encanearTap()">
-        <ion-icon slot="start" src="assets/icon/qr_code_scanner.svg"></ion-icon>
-        <ion-label>Escanear código QR</ion-label>
-      </ion-item>
-    </ion-list>
-    <ion-list>
-      <ion-item>
-        <ion-icon slot="start" src="assets/icon/list.svg"></ion-icon>
-        <ion-select formControlName="sala" label="Seleccione Nuevo Cambio" labelPlacement="stacked" placeholder="Seleccione una sala..." okText="Aceptar" cancelText="Cancelar">
-          <ion-select-option *ngFor="let item of salas" [value]="item.salaCcod">{{item.salaTdesc}} ({{item.salaCiso}})</ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-list>
-
     <ion-row style="margin: 15px;">
       <ion-col>
         <ion-button fill="outline" shape="round" color="primary" expand="block" (click)="cerrar()">Cancelar</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button color="primary" expand="block" shape="round" type="submit">Registrar Nueva Sala</ion-button>
+        <ion-button color="primary" expand="block" shape="round" type="submit" [disabled]="form.invalid">Registrar Nueva Sala</ion-button>
       </ion-col>
     </ion-row>
-
   </form>
 
 </ion-content>

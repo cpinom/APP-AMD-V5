@@ -4,98 +4,105 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ng-container *ngIf="estadoClase">
+  @if (estadoClase) {
 
-    <section class="botones-acciones" *ngIf="estadoClase.estadoLibro == 1">
+  @if (estadoClase.estadoLibro == 1) {
+  <section class="botones-acciones">
+    <ion-button color="success" expand="block" shape="round" (click)="comenzarClase()"
+      [disabled]="deshabilitarIniciar">Comenzar Clase</ion-button>
+  </section>
+  }
+
+  <!-- <section class="botones-acciones">
       <ion-button color="success" expand="block" shape="round" (click)="comenzarClase()"
         [disabled]="deshabilitarIniciar">Comenzar Clase</ion-button>
-    </section>
+    </section> -->
 
-    <section class="botones-acciones">
-      <ion-button color="success" expand="block" shape="round" (click)="comenzarClase()"
-        [disabled]="deshabilitarIniciar">Comenzar Clase</ion-button>
-    </section>
-
-    <ng-container *ngIf="estadoClase.estadoLibro == 2">
-      <ion-card class="status">
-        <ion-card-header>
-          <ion-toolbar>
-            <ion-title>{{ seccion.asigTdesc }}</ion-title>
-            <ion-buttons slot="end">
-              <ion-button color="medium" (click)="mostrarAprendizajes()">
-                Avance de Aprendizaje Esperado
-                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="tiempo">
-            <div class="info-clase">
-              <span>Inicio de la clase: <b>{{estadoClase.horaInicio}}</b></span>
-              <span>Término de la clase: <b>{{estadoClase.horaTermino}}</b></span>
-            </div>
-            <ion-progress-bar [value]="estadoClase.porcentajeEnClase / 100" color="primary"></ion-progress-bar>
-            <div class="info-clase">
-              <span>Tiempo actual clase: <b>{{estadoClase.tiempoEnClase}}</b></span>
-              <span>Sala actual: <b>{{estadoClase.salaActual}}</b></span>
-            </div>
-          </div>
-          <ion-button fill="clear" color="danger" expand="full" (click)="terminarClase()">Terminar Clase</ion-button>
-        </ion-card-content>
-      </ion-card>
-      <ion-grid class="acciones">
-        <ion-row>
-          <ion-col>
-            <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cambiarSala()">
-              Comunicar Cambio de Sala
-            </ion-button>
-          </ion-col>
-          <ion-col>
-            <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="soporteTecnico()" 
-              *ngIf="estadoClase.estadoSoporte == 0 || estadoClase.estadoSoporte == 3">
-              Solicitar Apoyo Soporte TI
-            </ion-button>
-            <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cancelarTicket()" *ngIf="estadoClase.estadoSoporte == 2">
-              Soliciud Enviada
-            </ion-button>
-            <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cancelarTicket()" *ngIf="estadoClase.estadoSoporte == 9">
-              Ayuda en Camino
-            </ion-button>
-          </ion-col>
-          <ion-col>
-            <ion-button color="primary" shape="round" expand="full" (click)="actualizarAsistencia()">
-              Actualizar Asistencia Rápida
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ng-container>
-
-    <ion-grid class="acciones" *ngIf="estadoClase.estadoLibro == 3">
-      <p class="clase-finalizada">
-        <ion-icon src="assets/icon/info.svg"></ion-icon>
-        Clase Finalizada - {{resolverFechaTermino()}}</p>
-      <ion-row>
-        <ion-col>
-          <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="mostrarAprendizajes()">
+  @if (estadoClase.estadoLibro == 2) {
+  <ion-card class="status">
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-title>{{seccion.asigTdesc}}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button color="medium" (click)="mostrarAprendizajes()">
             Avance de Aprendizaje Esperado
+            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
           </ion-button>
-        </ion-col>
-        <ion-col *ngIf="false">
-          <ion-button color="primary" shape="round" expand="full">Solicitar Retroalimentación de Estudiantes</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="tiempo">
+        <div class="info-clase">
+          <span>Inicio de la clase: <b>{{estadoClase.horaInicio}}</b></span>
+          <span>Término de la clase: <b>{{estadoClase.horaTermino}}</b></span>
+        </div>
+        <ion-progress-bar [value]="estadoClase.porcentajeEnClase / 100" color="primary"></ion-progress-bar>
+        <div class="info-clase">
+          <span>Tiempo actual clase: <b>{{estadoClase.tiempoEnClase}}</b></span>
+          <span>Sala actual: <b>{{estadoClase.salaActual}}</b></span>
+        </div>
+      </div>
+      <ion-button fill="clear" color="danger" expand="full" (click)="terminarClase()">Terminar Clase</ion-button>
+    </ion-card-content>
+  </ion-card>
+  <ion-grid class="acciones">
+    <ion-row>
+      <ion-col>
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cambiarSala()">
+          Comunicar Cambio de Sala
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="soporteTecnico()"
+          *ngIf="estadoClase.estadoSoporte == 0 || estadoClase.estadoSoporte == 3">
+          Solicitar Apoyo Soporte TI
+        </ion-button>
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cancelarTicket()"
+          *ngIf="estadoClase.estadoSoporte == 2">
+          Soliciud Enviada
+        </ion-button>
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="cancelarTicket()"
+          *ngIf="estadoClase.estadoSoporte == 9">
+          Ayuda en Camino
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="primary" shape="round" expand="full" (click)="actualizarAsistencia()">
+          Actualizar Asistencia Rápida
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  }
 
-  </ng-container>
+  @if (estadoClase.estadoLibro == 3) {
+  <ion-grid class="acciones">
+    <p class="clase-finalizada">
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      Clase Finalizada - {{resolverFechaTermino()}}
+    </p>
+    <ion-row>
+      <ion-col>
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="mostrarAprendizajes()">
+          Avance de Aprendizaje Esperado
+        </ion-button>
+      </ion-col>
+      <ion-col *ngIf="false">
+        <ion-button color="primary" shape="round" expand="full">Solicitar Retroalimentación de Estudiantes</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  }
+
+  }
 
   <section class="horario">
     <ion-list>
       <ion-item>
         <ion-label>
           <h2>Horario</h2>
-          <p>{{ semanaTitulo }}</p>
+          <p>{{semanaTitulo}}</p>
         </ion-label>
         <div slot="end" class="botones">
           <ion-button color="primary" (click)="moverSemanaHorario(-1)" [disabled]="cargandoHorario">
@@ -111,7 +118,7 @@
       <ul *ngIf="!cargandoHorario">
         <li *ngFor="let item of horario">
           <div class="scroll">
-            <div class="title">{{ item.diasTdesc }}</div>
+            <div class="title">{{item.diasTdesc}}</div>
             <div class="content" *ngIf="cargandoHorario">
               <ion-skeleton-text animated style="width: 80%; height: 100%; margin: 0 auto 4px;"></ion-skeleton-text>
               <ion-skeleton-text animated style="width: 80%; height: 100%; margin: 0 auto 4px;"></ion-skeleton-text>
@@ -120,16 +127,17 @@
             <ng-container *ngIf="!cargandoHorario">
               <div class="content" *ngFor="let g of groupBy(item.bloques, 'sala', 'horaInicio')">
                 <p class="start-time" *ngFor="let hora of g.values">
-                  {{ hora.horaInicio }} - {{ hora.horaTermino }}
+                  {{hora.horaInicio}} - {{hora.horaTermino}}
                 </p>
-                <p class="classroom">Sala {{ g.key }}</p>
+                <p class="classroom">Sala {{g.key}}</p>
               </div>
               <div *ngIf="item.bloques.length == 0">Sin Clases</div>
             </ng-container>
           </div>
         </li>
       </ul>
-      <p style="margin: 0; text-align: center; font-size: 14px;" *ngIf="!cargandoHorario && !horario">Horario no disponible</p>
+      <p style="margin: 0; text-align: center; font-size: 14px;" *ngIf="!cargandoHorario && !horario">Horario no
+        disponible</p>
     </div>
   </section>
 
@@ -145,7 +153,7 @@
           <ion-label>
             <h2>Situación Estudiantes</h2>
           </ion-label>
-          <div slot="end">Total Estudiantes: {{ resumen.riesgos.total }}</div>
+          <div slot="end">Total Estudiantes: {{resumen.riesgos.total}}</div>
         </ion-item>
       </ion-list>
       <div class="contenido">
@@ -160,7 +168,7 @@
           </ion-row>
           <ion-row>
             <ion-col id="resumen-sr">
-              <strong class="numero verde">{{ resumen.riesgos.resumen['sr'] }}</strong>
+              <strong class="numero verde">{{resumen.riesgos.resumen['sr']}}</strong>
               <span>Sin Riesgos</span>
             </ion-col>
             <ion-popover class="popover-resumen" trigger="resumen-sr" *ngIf="resumen.riesgos.sinRiesgo.length">
@@ -176,7 +184,7 @@
               </ng-template>
             </ion-popover>
             <ion-col id="resumen-ra">
-              <strong class="numero amarillo">{{ resumen.riesgos.resumen['r/A'] }}</strong>
+              <strong class="numero amarillo">{{resumen.riesgos.resumen['r/A']}}</strong>
               <span>Asistencia</span>
             </ion-col>
             <ion-popover class="popover-resumen" trigger="resumen-ra" *ngIf="resumen.riesgos.riesgoAsistencia.length">
@@ -192,7 +200,7 @@
               </ng-template>
             </ion-popover>
             <ion-col id="resumen-rn">
-              <strong class="numero amarillo">{{ resumen.riesgos.resumen['r/N'] }}</strong>
+              <strong class="numero amarillo">{{resumen.riesgos.resumen['r/N']}}</strong>
               <span>Notas</span>
             </ion-col>
             <ion-popover class="popover-resumen" trigger="resumen-ra" *ngIf="resumen.riesgos.riesgoNota.length">
@@ -208,7 +216,7 @@
               </ng-template>
             </ion-popover>
             <ion-col id="resumen-rna" class="border">
-              <strong class="numero">{{ resumen.riesgos.resumen['rN/A'] }}</strong>
+              <strong class="numero">{{resumen.riesgos.resumen['rN/A']}}</strong>
               <span>Notas/Asist.</span>
             </ion-col>
             <ion-popover class="popover-resumen" trigger="resumen-rna" *ngIf="resumen.riesgos.riesgoNotaAsist.length">
@@ -224,10 +232,11 @@
               </ng-template>
             </ion-popover>
             <ion-col id="reprobado-a">
-              <strong class="numero rojo">{{ resumen.riesgos.resumen['ri'] }}</strong>
+              <strong class="numero rojo">{{resumen.riesgos.resumen['ri']}}</strong>
               <span>Asistencia</span>
             </ion-col>
-            <ion-popover class="popover-resumen" trigger="reprobado-a" *ngIf="resumen.riesgos.reprobadoAsistencia.length">
+            <ion-popover class="popover-resumen" trigger="reprobado-a"
+              *ngIf="resumen.riesgos.reprobadoAsistencia.length">
               <ng-template>
                 <ion-content>
                   <ion-list>
@@ -240,10 +249,11 @@
               </ng-template>
             </ion-popover>
             <ion-col id="reprobado-n">
-              <strong class="numero rojo">{{ resumen.riesgos.resumen['rr'] }}</strong>
+              <strong class="numero rojo">{{resumen.riesgos.resumen['rr']}}</strong>
               <span>Notas</span>
             </ion-col>
-            <ion-popover class="popover-resumen" trigger="reprobado-n" side="right" *ngIf="resumen.riesgos.reprobadoNota.length">
+            <ion-popover class="popover-resumen" trigger="reprobado-n" side="right"
+              *ngIf="resumen.riesgos.reprobadoNota.length">
               <ng-template>
                 <ion-content>
                   <ion-list>
@@ -277,9 +287,9 @@
         <ion-progress-bar [value]="resumen.avances.porcentajeRealizadas / 100" color="primary"></ion-progress-bar>
         <ion-grid class="detalle-horas">
           <ion-row>
-            <ion-col>{{ resumen.avances.clasesPlanificadas }} Horas Planificadas</ion-col>
-            <ion-col>Horas Realizadas: <strong>{{ resumen.avances.clasesRealizadas }} hora(s)</strong></ion-col>
-            <ion-col>Horas por Recuperar: <strong>{{ resumen.avances.clasesPorRecuperar }} hora(s)</strong></ion-col>
+            <ion-col>{{resumen.avances.clasesPlanificadas}} Horas Planificadas</ion-col>
+            <ion-col>Horas Realizadas: <strong>{{resumen.avances.clasesRealizadas}} hora(s)</strong></ion-col>
+            <ion-col>Horas por Recuperar: <strong>{{resumen.avances.clasesPorRecuperar}} hora(s)</strong></ion-col>
           </ion-row>
         </ion-grid>
       </div>
@@ -361,9 +371,9 @@
             </li>
             <li *ngFor="let item of resumen.oportunidades">
               <div class="scroll" style="height: 100%">
-                <div class="title">{{ item.label }}</div>
+                <div class="title">{{item.label}}</div>
                 <div class="content">
-                  <p class="start-time">{{ item.value }}</p>
+                  <p class="start-time">{{item.value}}</p>
                 </div>
               </div>
             </li>
@@ -389,7 +399,8 @@
               </ion-item>
             </ion-list>
             <div class="contenido linea chart">
-              <canvas baseChart [type]="'pie'" [datasets]="tiposEstudiantesCharts.dataset" [labels]="tiposEstudiantesCharts.labels" [options]="{responsive: true}"></canvas>
+              <canvas baseChart [type]="'pie'" [datasets]="tiposEstudiantesCharts.dataset"
+                [labels]="tiposEstudiantesCharts.labels" [options]="{responsive: true}"></canvas>
             </div>
             <ion-list>
               <ion-item lines="none" detail="true" (click)="mostrarTiposAlumnos()">
@@ -415,7 +426,8 @@
             </div>
             <ion-list *ngIf="resumen.avanceEvaluacion.fechaTermino">
               <ion-item lines="none">
-                <ion-label class="ion-text-center">Fecha de Término {{resumen.avanceEvaluacion.fechaTermino}}</ion-label>
+                <ion-label class="ion-text-center">Fecha de Término
+                  {{resumen.avanceEvaluacion.fechaTermino}}</ion-label>
               </ion-item>
             </ion-list>
           </ion-card>
@@ -435,16 +447,17 @@
               </ion-item>
             </ion-list>
             <div class="contenido linea">
-              <p>Información del Programa al que pertenecen sus estudiantes, y el detalle de las asignaturas pre-requisito a la suya.</p>
+              <p>Información del Programa al que pertenecen sus estudiantes, y el detalle de las asignaturas
+                pre-requisito a la suya.</p>
               <ion-grid *ngIf="resumen.prerequisitos">
                 <ion-row>
                   <ion-col size="6" class="nota-box">
                     <strong>{{resumen.prerequisitos.nroPlanes}}</strong>
-                    <p>Programas <br/>de Estudio</p>
+                    <p>Programas <br />de Estudio</p>
                   </ion-col>
                   <ion-col size="6" class="nota-box">
                     <strong>{{resumen.prerequisitos.nroAsignaturas}}</strong>
-                    <p>Asignatura <br/>Pre-requisito</p>
+                    <p>Asignatura <br />Pre-requisito</p>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -466,7 +479,8 @@
               </ion-item>
             </ion-list>
             <div class="contenido linea chart">
-              <canvas baseChart [type]="'pie'" [datasets]="perfilesEstudiantesCharts.dataset" [labels]="perfilesEstudiantesCharts.labels" [options]="{responsive: true}"></canvas>
+              <canvas baseChart [type]="'pie'" [datasets]="perfilesEstudiantesCharts.dataset"
+                [labels]="perfilesEstudiantesCharts.labels" [options]="{responsive: true}"></canvas>
             </div>
             <ion-list>
               <ion-item lines="none" detail="true" (click)="mostrarPefilAlumnos()">
@@ -489,12 +503,12 @@
       <div class="contenido" style="padding: 15px;">
         <div class="notificaciones" *ngFor="let item of resumen.notificaciones">
           <div class="fecha">
-            <span class="num">{{ item.fecha[0] }}</span>
-            <span class="mes">{{ item.fecha[1] }}</span>
+            <span class="num">{{item.fecha[0]}}</span>
+            <span class="mes">{{item.fecha[1]}}</span>
           </div>
           <div class="detail">
-            <h2>{{ item.tipo }}</h2>
-            <p>{{ item.descripcion }}</p>
+            <h2>{{item.tipo}}</h2>
+            <p>{{item.descripcion}}</p>
           </div>
         </div>
         <p class="empty" *ngIf="resumen.notificaciones.length == 0">No hay notificaciones para este curso</p>
@@ -531,16 +545,17 @@
             <ion-card-content>
               <ion-list>
                 <ion-item>
-                  <ion-select label="Motivo" labelPlacement="stacked" placeholder="Seleccione motivo" formControlName="motivo"
-                    okText="Aceptar" cancelText="Cancelar">
-                    <ion-select-option [value]="item.value" *ngFor="let item of motivos">{{item.text}}</ion-select-option>
+                  <ion-select label="Motivo" labelPlacement="stacked" placeholder="Seleccione motivo"
+                    formControlName="motivo" okText="Aceptar" cancelText="Cancelar">
+                    <ion-select-option [value]="item.value"
+                      *ngFor="let item of motivos">{{item.text}}</ion-select-option>
                   </ion-select>
                 </ion-item>
                 <div class="error" *ngIf="motivoError">{{motivoError}}</div>
                 <ion-item *ngIf="asistenciaForm.get('motivo')?.value == 3">
-                  <ion-textarea label="Justificación" labelPlacement="stacked" placeholder="Ingrese justificación de término."
-                    formControlName="justificacion" rows="6" counter="true" maxlength="2000" minlength="10"
-                    [errorText]="justificacionError"></ion-textarea>
+                  <ion-textarea label="Justificación" labelPlacement="stacked"
+                    placeholder="Ingrese justificación de término." formControlName="justificacion" rows="6"
+                    counter="true" maxlength="2000" minlength="10" [errorText]="justificacionError"></ion-textarea>
                 </ion-item>
               </ion-list>
             </ion-card-content>
@@ -548,7 +563,8 @@
           <ion-grid class="acciones">
             <ion-row>
               <ion-col>
-                <ion-button color="primary" shape="round" fill="outline" expand="block" (click)="actualizarAsistencia(terminarMdl)">Pasar Asistencia</ion-button>
+                <ion-button color="primary" shape="round" fill="outline" expand="block"
+                  (click)="actualizarAsistencia(terminarMdl)">Pasar Asistencia</ion-button>
               </ion-col>
               <ion-col>
                 <ion-button type="submit" color="primary" shape="round" expand="block">Sí, terminar clase</ion-button>

@@ -1,8 +1,8 @@
 <ion-header class="tab-content">
   <ion-toolbar>
     <ion-title>Avance Clases - Aprendizaje Esperado</ion-title>
-    <ion-buttons slot="end">
-      <ion-back-button text="Volver Atrás"></ion-back-button>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -13,101 +13,110 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div class="loaderInacap" *ngIf="mostrarCargando">
+  @if (mostrarCargando) {
+  <div class="loaderInacap">
     <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
+  }
 
-  <ng-container *ngIf="mostrarData && avances">
-    <ion-accordion-group [value]="accordionModel">
-      <ion-accordion value="aprendizajes">
-        <ion-item slot="header">
-          <ion-label>Horas Realizadas</ion-label>
-        </ion-item>
-        <div slot="content">
-          <section class="tabla">
-            <table>
-              <thead>
-                <tr>
-                  <th>Aprendizaje</th>
-                  <th class="ion-text-center">Horas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of aprendizajes">
-                  <td>{{item.unobTdescrip}}</td>
-                  <td class="ion-text-center">{{item.registro}}</td>
-                </tr>
-                <tr *ngIf="aprendizajes.length == 0">
-                  <td colspan="2" class="ion-text-center">Sin Registros...</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-        </div>
-      </ion-accordion>
-      <ion-accordion value="avance">
-        <ion-item slot="header">
-          <ion-label>Avance de Aprendizaje Esperado</ion-label>
-          <ion-icon slot="end" name="search-outline" (click)="mostrarFiltros($event)" style="margin-right: 10px;"></ion-icon>
-        </ion-item>
-        <div slot="content">
-          <section class="tabla">
-            <table>
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Clase</th>
-                  <th>Nº<br />Ingreso</th>
-                  <th>Nº<br />Recuperación</th>
-                  <th>Objetivo</th>
-                  <th>Aprendizaje Esperado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ng-container *ngFor="let item of avances">
-                  <ng-container *ngFor="let obj of item.objetivos; let i = index;">
-                    <tr>
-                      <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{item.fecha}}</td>
-                      <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{resolverEstadoClase(item)}}</td>
-                      <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{item.libro}}</td>
-                      <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{item.recuperacion}}</td>
-                      <td>{{ obj.objetivo }}</td>
-                      <td>
-                        <ng-container *ngIf="item.libro">
-                          <ion-radio-group [(ngModel)]="obj.visto" (ngModelChange)="guardar(obj, item.libro)">
-                            <div class="accion">
-                              <label>
-                                <ion-radio mode="md" [value]="1" color="primary"></ion-radio>Visto
-                              </label>
-                            </div>
-                            <div class="accion">
-                              <label>
-                                <ion-radio mode="md" [value]="2" color="primary"></ion-radio>No Visto
-                              </label>
-                            </div>
-                          </ion-radio-group>
-                        </ng-container>
-                      </td>
-                    </tr>
-                  </ng-container>
+  @if (mostrarData && avances) {
+  <ion-accordion-group [value]="accordionModel">
+    <ion-accordion value="aprendizajes">
+      <ion-item slot="header">
+        <ion-label>Horas Realizadas</ion-label>
+      </ion-item>
+      <div slot="content">
+        <section class="tabla">
+          <table>
+            <thead>
+              <tr>
+                <th>Aprendizaje</th>
+                <th class="ion-text-center">Horas</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of aprendizajes; track $index) {
+              <tr>
+                <td>{{item.unobTdescrip}}</td>
+                <td class="ion-text-center">{{item.registro}}</td>
+              </tr>
+              }
+              @if (aprendizajes.length == 0) {
+              <tr>
+                <td colspan="2" class="ion-text-center">Sin Registros...</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </ion-accordion>
+    <ion-accordion value="avance">
+      <ion-item slot="header">
+        <ion-label>Avance de Aprendizaje Esperado</ion-label>
+        <ion-icon slot="end" name="search-outline" (click)="mostrarFiltros($event)"
+          style="margin-right: 10px;"></ion-icon>
+      </ion-item>
+      <div slot="content">
+        <section class="tabla">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Clase</th>
+                <th>Nº<br />Ingreso</th>
+                <th>Nº<br />Recuperación</th>
+                <th>Objetivo</th>
+                <th>Aprendizaje Esperado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of avances">
+                <ng-container *ngFor="let obj of item.objetivos; let i = index;">
+                  <tr>
+                    <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{item.fecha}}</td>
+                    <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{resolverEstadoClase(item)}}</td>
+                    <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{item.libro}}</td>
+                    <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{item.recuperacion}}</td>
+                    <td>{{ obj.objetivo }}</td>
+                    <td>
+                      <ng-container *ngIf="item.libro">
+                        <ion-radio-group [(ngModel)]="obj.visto" (ngModelChange)="guardar(obj, item.libro)">
+                          <div class="accion">
+                            <label>
+                              <ion-radio mode="md" [value]="1" color="primary"></ion-radio>Visto
+                            </label>
+                          </div>
+                          <div class="accion">
+                            <label>
+                              <ion-radio mode="md" [value]="2" color="primary"></ion-radio>No Visto
+                            </label>
+                          </div>
+                        </ion-radio-group>
+                      </ng-container>
+                    </td>
+                  </tr>
                 </ng-container>
-                <tr *ngIf="avances && avances.length == 0">
-                  <td colspan="6" class="ion-text-center">Sin resultados...</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-        </div>
-      </ion-accordion>
-    </ion-accordion-group>
-  </ng-container>
+              </ng-container>
+              <tr *ngIf="avances && avances.length == 0">
+                <td colspan="6" class="ion-text-center">Sin resultados...</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+  }
 
-  <section *ngIf="mostrarData && !avances" class="empty-state">
+  @if (mostrarData && !mostrarCargando && !avances) {
+  <section class="empty-state">
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Información no disponible en este momento.</p>
       <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
     </div>
   </section>
+  }
 
 </ion-content>
