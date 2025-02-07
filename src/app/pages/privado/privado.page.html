@@ -25,6 +25,7 @@
   <form [formGroup]="periodoForm">
     <!-- <ion-item> -->
     <ion-select [interfaceOptions]="alertPeriodo" formControlName="periodo" okText="Actualizar" cancelText="Cerrar">
+      <div slot="label">Período</div>
       @for (item of periodos; track $index) {
       <ion-select-option [value]="item.periCcod">
         {{item.periTdesc}}
@@ -335,7 +336,7 @@
   </ion-grid>
 
   <section class="btn-cerrar">
-    <ion-button expand="full" color="white" (click)="logout()">Cerrar Sesión</ion-button>
+    <ion-button expand="full" color="white" shape="round" (click)="logout()">Cerrar Sesión</ion-button>
   </section>
 
   <p class="version">Versión - {{appVersion}}</p>

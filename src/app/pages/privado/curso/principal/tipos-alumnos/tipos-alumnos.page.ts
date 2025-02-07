@@ -66,16 +66,16 @@ export class TiposAlumnosPage implements OnInit {
       this.mostrarData = true;
     }
   }
-  recargar(ev: any) {
+  recargar(ev?: any) {
     this.cargar(true).finally(() => {
-      ev.target.complete();
+      ev && ev.target.complete();
     })
   }
   resolverFoto(persNcorr: any) {
     return `${this.global.Api}/api/v4/avatar/${persNcorr}`;
   }
   resolverColor(filtro: Filtro) {
-    return (filtro == this.filtroRiesgo) ? 'info' : 'secondary';
+    return (filtro == this.filtroRiesgo) ? 'solid' : 'outline';
   }
   resolverContador(filtro: Filtro) {
     if (this.alumnos) {

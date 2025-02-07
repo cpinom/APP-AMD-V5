@@ -11,21 +11,22 @@
 
 <ion-content>
 
-  <ng-container *ngIf="seccion">
+  @if (seccion) {
+  <section class="section-main">
     <ion-card class="solicitud">
       <ion-card-content>
         <section class="carrera">
           <div class="form-row">
             <label>Carrera</label>
-            <strong>{{ seccion.carrTdesc }}</strong>
+            <strong>{{seccion.carrTdesc}}</strong>
           </div>
           <div class="form-row">
             <label>Asignatura</label>
-            <strong>{{ seccion.asigTdesc }}</strong>
+            <strong>{{seccion.asigTdesc}}</strong>
           </div>
           <div class="form-row">
             <label>Código Sección</label>
-            <strong>{{ seccion.seccCcod }}</strong>
+            <strong>{{seccion.seccCcod}}</strong>
           </div>
         </section>
         <section class="tabla">
@@ -40,10 +41,10 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of alumnos">
-                <td class="ion-text-left">{{ item.persTapePaterno }}, {{ item.persTnombre }}</td>
-                <td>{{ item.cargNnotaFinal }}</td>
-                <td>{{ item.cargNasistencia }}%</td>
-                <td>{{ item.alnoCriesgoAlumno || 'Sin Riesgo' }}</td>
+                <td class="ion-text-left">{{item.persTapePaterno}}, {{item.persTnombre}}</td>
+                <td>{{item.cargNnotaFinal}}</td>
+                <td>{{item.cargNasistencia}}%</td>
+                <td>{{item.alnoCriesgoAlumno || 'Sin Riesgo'}}</td>
               </tr>
             </tbody>
           </table>
@@ -73,6 +74,7 @@
     <section class="btn-enviar">
       <ion-button color="primary" shape="round" expand="block" (click)="enviar()">Enviar Solicitud</ion-button>
     </section>
-  </ng-container>
+  </section>
+}
 
 </ion-content>

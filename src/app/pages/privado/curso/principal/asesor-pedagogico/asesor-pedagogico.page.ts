@@ -67,9 +67,9 @@ export class AsesorPedagogicoPage implements OnInit {
       this.mostrarData = true;
     }
   }
-  recargar(ev: any) {
+  recargar(ev?: any) {
     this.cargar(true).finally(() => {
-      ev.target.complete();
+      ev&&ev.target.complete();
     });
   }
   filtrarAlumnos() {

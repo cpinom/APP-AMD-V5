@@ -1,7 +1,7 @@
-ion-content {
-  ion-toolbar {
+
+ion-header {
+  ion-toolbar.title {
     --background: #fff;
-    box-shadow: 0px 2px 6px #00000033;
     --color: #333;
     --min-height: 56px;
 
@@ -12,6 +12,8 @@ ion-content {
       font-weight: 600;
     }
   }
+}
+ion-content {
   section {
     margin-top: 15px;
 

@@ -4,13 +4,12 @@
       <ion-back-button text="AMD" defaultHref="/privado"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar class="title" color="white">
+    <ion-title>Microsoft Teams</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-toolbar>
-    <ion-title>Microsoft Teams</ion-title>
-  </ion-toolbar>
 
   <div class="loaderInacap" *ngIf="mostrarCargando">
     <ion-spinner name="lines" color="primary"></ion-spinner>
@@ -36,6 +35,10 @@
         </ion-list>
       </div>
     </section>
+
+    <ion-infinite-scroll #infinite threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando eventos..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
     
     <div class="empty-state" *ngIf="eventos.length == 0">
       <div>

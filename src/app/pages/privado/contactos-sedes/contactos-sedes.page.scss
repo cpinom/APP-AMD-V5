@@ -1,3 +1,18 @@
+ion-header {
+  ion-toolbar.title {
+    --background: #fff;
+    --color: #333;
+    --min-height: 56px;
+
+    ion-title {
+      font-size: 24px;
+      padding-inline: 15px;
+      text-align: left;
+      font-weight: 600;
+    }
+  }
+}
+
 ion-content {
   ion-toolbar {
     --background: #fff;

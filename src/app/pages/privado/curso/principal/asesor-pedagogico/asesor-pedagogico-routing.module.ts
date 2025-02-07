@@ -6,11 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: AsesorPedagogicoPage
-  },
-  // {
-  //   path: 'solicitud-apoyo',
-  //   loadChildren: () => import('./solicitud-apoyo/solicitud-apoyo.module').then(m => m.SolicitudApoyoPageModule)
-  // }
+  }
 ];
 
 @NgModule({

@@ -69,9 +69,9 @@ export class RiesgosAlumnosPage implements OnInit {
       this.mostrarData = true;
     }
   }
-  recargar(ev: any) {
+  recargar(ev?: any) {
     this.cargar(true).finally(() => {
-      ev.target.complete();
+      ev && ev.target.complete();
     })
   }
   resolverFoto(persNcorr: any) {
@@ -85,7 +85,7 @@ export class RiesgosAlumnosPage implements OnInit {
     return '';
   }
   resolverColor(filtro: Filtro) {
-    return (filtro == this.filtro) ? 'info' : 'secondary';
+    return (filtro == this.filtro) ? 'solid' : 'outline';
   }
   aplicarFiltro(filtro: Filtro) {
     this.filtro = filtro;

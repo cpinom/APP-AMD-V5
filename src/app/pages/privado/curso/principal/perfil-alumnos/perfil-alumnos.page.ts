@@ -59,9 +59,9 @@ export class PerfilAlumnosPage implements OnInit {
       this.mostrarData = true;
     }
   }
-  recargar(ev: any) {
+  recargar(ev?: any) {
     this.cargar(true).finally(() => {
-      ev.target.complete();
+      ev && ev.target.complete();
     })
   }
   resolverFoto(persNcorr: any) {

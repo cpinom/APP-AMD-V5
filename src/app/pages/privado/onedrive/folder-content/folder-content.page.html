@@ -4,14 +4,14 @@
       <ion-back-button text="Volver" defaultHref="privado/onedrive"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
-
-<ion-content>
   @if (folderName) {
-  <ion-toolbar>
+  <ion-toolbar class="title">
     <ion-title>{{folderName}}</ion-title>
   </ion-toolbar>
   }
+</ion-header>
+
+<ion-content>
 
   @if (mostrarCargando) {
   <div class="loaderInacap">

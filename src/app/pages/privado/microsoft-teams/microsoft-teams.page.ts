@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppLauncher } from '@capacitor/app-launcher';
-import { IonPopover } from '@ionic/angular';
+import { IonInfiniteScroll, IonPopover } from '@ionic/angular';
 import * as moment from 'moment';
 import { ErrorService } from 'src/app/core/services/error.service';
 import { MicrosoftTeamsService } from 'src/app/core/services/microsoft-teams.service';
@@ -16,12 +16,15 @@ import { VISTAS_DOCENTE } from 'src/app/app.contants';
 })
 export class MicrosoftTeamsPage implements OnInit {
 
+  @ViewChild(IonInfiniteScroll) infiniteItem!: IonInfiniteScroll;
   @ViewChild('popover') popover!: IonPopover;
   mostrarCargando = true;
   mostrarData = false;
   eventos: any;
   evento: any;
   isOpen = false;
+  pageSize = 30;
+  skip = 0;
 
   constructor(private api: MicrosoftTeamsService,
     private error: ErrorService,
@@ -30,16 +33,25 @@ export class MicrosoftTeamsPage implements OnInit {
     moment.locale('es');
   }
   ngOnInit() {
-    this.cargar(true);
+    this.cargar();
     this.api.marcarVista(VISTAS_DOCENTE.TEAMS);
   }
-  async cargar(forceRefresh = false) {
+  async cargar() {
     try {
-      const response = await this.api.getEventos(forceRefresh);
+      const response = await this.api.getEventosV3(this.pageSize, this.skip);
       const { data } = response;
-
+      
       if (data.success) {
-        this.eventos = data.eventos;
+        if (!this.eventos) {
+          this.eventos = data.eventos;
+        }
+        else {
+          this.eventos = [...this.eventos, ...data.eventos];
+        }
+
+        if (this.infiniteItem) {
+          this.infiniteItem.disabled = !(data.eventos.length == this.pageSize);
+        }
       }
       else {
         throw Error();
@@ -56,10 +68,19 @@ export class MicrosoftTeamsPage implements OnInit {
       this.mostrarData = true;
     }
   }
+  loadData(ev: any) {
+    this.skip = this.pageSize + this.skip;
+    this.cargar().finally(() => {
+      ev.target.complete();
+    });
+  }
   recargar(ev?: any) {
-    this.mostrarCargando = true;
+    if (this.infiniteItem) {
+      this.infiniteItem.disabled = false;
+    }
+    
     this.mostrarData = false;
-    this.cargar(true).finally(() => {
+    this.cargar().finally(() => {
       ev && ev.target.complete();
     });
   }

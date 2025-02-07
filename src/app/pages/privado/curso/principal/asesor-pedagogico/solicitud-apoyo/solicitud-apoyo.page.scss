@@ -1,47 +1,56 @@
 @import "src/theme/tabla.scss";
 
-ion-card.solicitud {
-    border-radius: 0;
-    margin: 0;
-    box-shadow: 0px 1px 3px #00000033;
+section.section-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 
-    section.carrera {
-        padding: 0 0 15px 0;
+    ion-card.solicitud {
+        border-radius: 0;
+        margin: 0;
+        box-shadow: none;
+        overflow: auto;
 
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: 0;
-            margin-left: 0;
+        section.carrera {
+            height: 100%;
+            padding: 0 0 15px 0;
 
-            label {
-                flex: 0 0 130px;
-            }
+            .form-row {
+                display: flex;
+                flex-wrap: wrap;
+                margin-right: 0;
+                margin-left: 0;
 
-            strong {
-                color: #4a4a4a;
-                font-weight: 700;
-            }
-        }
-    }
+                label {
+                    flex: 0 0 130px;
+                }
 
-    section.formulario {
-        margin-top: 15px;
-
-        ion-list {
-            ion-item {
-                --padding-start: 0;
-                --inner-padding-end: 0;
+                strong {
+                    color: #4a4a4a;
+                    font-weight: 700;
+                }
             }
         }
-    }
 
-    div.error {
-        color: var(--ion-color-danger);
-        font-size: 12px;
-        margin-top: 5px;
+        section.formulario {
+            margin-top: 15px;
+
+            ion-list {
+                ion-item {
+                    --padding-start: 0;
+                    --inner-padding-end: 0;
+                }
+            }
+        }
+
+        div.error {
+            color: var(--ion-color-danger);
+            font-size: 12px;
+            margin-top: 5px;
+        }
     }
-}
-section.btn-enviar {
-    margin: 15px;
+    section.btn-enviar {
+        margin: 15px;
+    }
 }

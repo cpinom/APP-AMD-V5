@@ -8,6 +8,10 @@ ion-toolbar.periodos {
         border-top: 1px solid var(--ion-color-dark-tint);
     }
 
+    ion-select ::ng-deep .select-wrapper {
+        width: 100%;
+    }
+
     ion-item {
         --background: var(--ion-toolbar-background);
         --inner-border-width: 0;
@@ -606,7 +610,7 @@ section.btn-cerrar {
         margin: 0;
         height: 55px;
         font-size: 18px;
-        --box-shadow: 0px 1px 3px #00000033 !important;
+        --box-shadow: 0px 4px 8px 0px rgba(56, 59, 83, 0.15) !important;
 
         &::part(native) {
             color: var(--ion-color-danger);

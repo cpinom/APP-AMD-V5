@@ -63,16 +63,16 @@ export class OportunidadesAlumnosPage implements OnInit {
       this.mostrarData = true;
     }
   }
-  recargar(ev: any) {
+  recargar(ev?: any) {
     this.cargar(true).finally(() => {
-      ev.target.complete();
+      ev && ev.target.complete();
     })
   }
   resolverFoto(persNcorr: any) {
     return `${this.global.Api}/api/v4/avatar/${persNcorr}`;
   }
   resolverColor(filtro: number) {
-    return (filtro == this.filtro) ? 'info' : 'secondary';
+    return (filtro == this.filtro) ? 'solid' : 'outline';
   }
   aplicarFiltro(filtro: number) {
     this.filtro = filtro;
@@ -85,7 +85,7 @@ export class OportunidadesAlumnosPage implements OnInit {
   }
   resolverContador(filtro: number) {
     if (filtro == 0) return 'Todos';
-    return `${this.ordinales[filtro]}<br/>Oportunidad`;
+    return `${this.ordinales[filtro]} Oportunidad`;
   }
   procesarOportunidades() {
     let oportunidades: any = [0];

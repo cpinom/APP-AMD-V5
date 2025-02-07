@@ -1,11 +1,15 @@
 @import "../../curso.common.scss";
 @import "src/theme/tabla.scss";
 
-ion-buttons {
-  margin-right: 10px;
-
-  ion-back-button {
-      --ion-toolbar-color: #333;
+ion-header {
+  ion-buttons {
+      ion-back-button {
+          --ion-toolbar-color: #333;
+          width: 50px;
+      }
+  }
+  ion-title {
+      padding-inline-start: 52px !important;
   }
 }
 ion-card.alumnos {
