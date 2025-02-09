@@ -11,43 +11,55 @@
 
 <ion-content>
 
-  <p>Seleccione una solicitud de apoyo y le informaremos al Administrador de Red de la Sede.</p>
-
   <form [formGroup]="formTicket" (ngSubmit)="enviar()">
+    <section class="section-main">
+      <p>Seleccione una solicitud de apoyo y le informaremos al Administrador de Red de la Sede.</p>
 
-    <ion-card>
-      <ion-card-content style="padding-top: 0;">
+      <ion-list inset="true">
         <ion-item style="--padding-end: 16px">
-          <ion-select label="Tipo" labelPlacement="stacked" formControlName="tipo" placeholder="Seleccione un tipo..." okText="Aceptar" cancelText="Cancelar">
+          <ion-select label="Tipo" labelPlacement="stacked" formControlName="tipo" placeholder="Seleccione un tipo..."
+            okText="Aceptar" cancelText="Cancelar">
             <ion-select-option *ngFor="let item of tipos" [value]="item.apttCcod">{{item.apttTdesc}}</ion-select-option>
           </ion-select>
         </ion-item>
         <div class="error" *ngIf="tipoError">{{tipoError}}</div>
         <ion-item lines="none">
-          <ion-textarea labelPlacement="stacked" label="Comentario"  formControlName="comentario" placeholder="Escriba un comentario..." rows="5" maxlength="2000" counter="true" [errorText]="comentarioError"></ion-textarea>
+          <ion-textarea labelPlacement="stacked" label="Comentario" formControlName="comentario"
+            placeholder="Escriba un comentario..." rows="5" maxlength="2000" counter="true"
+            [errorText]="comentarioError"></ion-textarea>
         </ion-item>
-        <section>
-          <ion-button class="btn-adjuntar" fill="outline" color="medium" shape="round" (click)="adjuntar(adjuntarInput)">
+        <section class="archivos">
+          <ion-button class="btn-adjuntar" fill="outline" color="primary" shape="round"
+            (click)="adjuntar(adjuntarInput)" [disabled]="(documentos?.length ?? 0) >= 3">
             <ion-icon slot="start" src="assets/icon/photo_camera.svg"></ion-icon>
             Adjuntar Archivo / Tomar Foto
           </ion-button>
-          <p class="nota-archivos">* Se pueden agregar hasta dos archivos, sin superar los 3MB.</p>
         </section>
-        <div class="archivos" *ngIf="documentos?.length">
-          <div class="archivo-box" *ngFor="let doc of documentos" (click)="descargarDocumento(doc, $event)">
+        @if (documentos?.length) {
+        <div class="archivos">
+          @for (doc of documentos; track $index) {
+          <div class="archivo-box" (click)="descargarDocumento(doc, $event)">
             <div class="close" (click)="eliminarDocumento(doc, $event)">
               <ion-icon src="assets/icon/close.svg"></ion-icon>
             </div>
             <div class="inner">
-              <ion-icon src="assets/icon/picture_as_pdf.svg"></ion-icon>
-              <ion-label>{{ doc.aptaTnombre }}</ion-label>
+              @if (esImagen(doc.aptaTnombre)) {
+              <ion-thumbnail>
+                <img [src]="resolverImagen(doc.aptaNcorr)" />
+              </ion-thumbnail>
+              }
+              @else {
+              <ion-icon [src]="resolverIcono(doc.aptaTnombre)"></ion-icon>
+              <ion-label>{{doc.aptaTnombre}}</ion-label>
+              }
             </div>
           </div>
+          }
         </div>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-row style="margin: 15px;">
+        }
+      </ion-list>
+    </section>
+    <ion-row style="margin: 10px;">
       <ion-col>
         <ion-button fill="outline" shape="round" color="primary" expand="block" (click)="cerrar()">Cancelar</ion-button>
       </ion-col>
@@ -55,10 +67,9 @@
         <ion-button color="primary" expand="block" shape="round" type="submit">Solicitar Apoyo</ion-button>
       </ion-col>
     </ion-row>
-
   </form>
 
-  <input type="file" #adjuntarInput style="display: none;" (change)="adjuntarWeb($event)" accept="image/*" />
+  <input type="file" #adjuntarInput style="display: none;" (change)="adjuntarWeb($event)" accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*" />
 
 
 </ion-content>

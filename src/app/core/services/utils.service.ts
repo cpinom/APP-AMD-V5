@@ -4,14 +4,16 @@ import { Platform } from '@ionic/angular';
 import { FileOpener } from '@capacitor-community/file-opener';
 import { Browser } from '@capacitor/browser';
 import * as moment from 'moment';
-import { Q } from '@angular/cdk/keycodes';
+import { IOSSettings, NativeSettings } from 'capacitor-native-settings';
+import { DialogService } from './dialog.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilsService {
 
-  constructor(private pt: Platform) {
+  constructor(private pt: Platform,
+    private dialog: DialogService) {
     moment.locale('es');
   }
 
@@ -184,6 +186,29 @@ export class UtilsService {
   }
   resolveExactDate(fecha: string, formatOutput: string = 'DD/MM/YYYY', formatInput: string = 'YYYY-MM-DDTHH:mm:ssZ') {
     return moment(fecha, formatInput).format(formatOutput);
+  }
+  async showAlertCamera(header: string = 'Escanear Código QR') {
+    const alert = await this.dialog.showAlert({
+      header: header,
+      message: 'Permitir que AMD acceda a la cámara del dispositivo.',
+      buttons: [
+        {
+          text: '"Abrir" Configuración',
+          role: 'destructive',
+          handler: async () => {
+            await NativeSettings.openIOS({
+              option: IOSSettings.App,
+            });
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    return alert;
   }
 
 }

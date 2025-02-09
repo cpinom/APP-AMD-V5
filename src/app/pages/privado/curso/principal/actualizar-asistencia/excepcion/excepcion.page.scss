@@ -1,6 +1,19 @@
-div.error {
-    color: var(--ion-color-danger);
-    font-size: 12px;
-    margin-inline: 16px;
-    margin-top: 5px;
+ion-content {
+    .section-main {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+
+        .section-scroll {
+            height: 100%;
+            overflow: auto;
+        }
+    }
+    div.error {
+        color: var(--ion-color-danger);
+        font-size: 12px;
+        margin-inline: 16px;
+        margin-top: 5px;
+    }
 }

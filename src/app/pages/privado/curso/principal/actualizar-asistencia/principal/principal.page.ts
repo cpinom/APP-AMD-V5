@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-import { IonNav, LoadingController, ModalController, Platform } from '@ionic/angular';
+import { IonNav } from '@ionic/angular';
 import * as moment from 'moment';
 import { CursoService } from 'src/app/core/services/curso/curso.service';
 import { ErrorService } from 'src/app/core/services/error.service';
@@ -9,6 +9,7 @@ import { ExcepcionPage } from '../excepcion/excepcion.page';
 import { Geolocation } from '@capacitor/geolocation';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 enum Filtro {
   todos = 1,
@@ -33,11 +34,9 @@ export class PrincipalPage implements OnInit {
 
   constructor(private api: CursoService,
     private global: AppGlobal,
-    private modalCtrl: ModalController,
     private error: ErrorService,
-    private loading: LoadingController,
     private nav: IonNav,
-    private pt: Platform,
+    private dialog: DialogService,
     private snackbar: SnackbarService) {
     moment.locale('es');
   }
@@ -46,22 +45,6 @@ export class PrincipalPage implements OnInit {
       this.seccion = JSON.parse(result.value!);
       this.cargar();
     });
-
-    // let permission = await Geolocation.checkPermissions();
-    // let coordinates: any;
-
-    // if (permission.location == 'denied' || permission.location == 'prompt') {
-    //   if (this.pt.is('capacitor')) {
-    //     permission = await Geolocation.requestPermissions();
-    //   }
-    // }
-
-    // try {
-    //   coordinates = await Geolocation.getCurrentPosition();
-    // }
-    // catch { }
-
-    // this.coordinadas = coordinates;
   }
   async cargar() {
     try {
@@ -88,9 +71,43 @@ export class PrincipalPage implements OnInit {
       this.mostrarCargando = false;
     }
   }
-  procesarAsistencia(data: any) {
-    data.asistenciaActual = data.asistenciaActual == 0 || data.asistenciaActual == 1 ? 2 : 1;
-    this.guardarAsistencia();
+  async procesarAsistencia(alumno: any) {
+    if (alumno.asistenciaActual == 0) {
+      alumno.asistenciaActual = 2;
+    }
+    else if (alumno.asistenciaActual == 2) {
+
+      if (alumno.rasiFregistroInicio && !alumno.rasiFregistroTermino) {
+        const resultUsario = await this.resolverMarcaAsistencia();
+
+        if (resultUsario == 'AUSENTE') {
+          alumno.asistenciaActual = 1;
+        }
+        else if (resultUsario == 'RETIRO_ANTICIPADO') {
+          alumno.retiroAnticipado = true;
+        }
+        else {
+          return;
+        }
+      }
+      else if (alumno.rasiFregistroInicio && alumno.rasiFregistroTermino) {
+        const confirm = await this.confirmarMarcaAusencia();
+
+        if (!confirm) {
+          return;
+        }
+
+        alumno.asistenciaActual = 1;
+      }
+    }
+    else if (alumno.asistenciaActual == 1) {
+      alumno.asistenciaActual = 2;
+    }
+    else {
+      return;
+    }
+
+    await this.guardarAsistencia();
   }
   async guardarAsistencia() {
     let alumnos: any[] = [];
@@ -98,28 +115,21 @@ export class PrincipalPage implements OnInit {
     this.alumnos.forEach((alumno: any) => {
       alumnos.push({
         persNcorr: alumno.persNcorr,
-        esasNcorr: alumno.asistenciaActual
+        esasNcorr: alumno.asistenciaActual,
+        retiroAnticipado: alumno.retiroAnticipado === true
       });
     });
 
-    const loading = await this.loading.create({ message: 'Guardando...' });
-
-    await loading.present();
+    const loading = await this.dialog.showLoading({ message: 'Guardando...' });
 
     try {
-      // const params = {
-      //   lclaNcorr: this.seccion.lclaNcorr,
-      //   alumnos: alumnos,
-      //   lcmoNlatitud: this.coordinadas ? this.coordinadas.coords.latitude : null,
-      //   lcmoNlongitud: this.coordinadas ? this.coordinadas.coords.longitude : null
-      // }
       const params = {
         lclaNcorr: this.seccion.lclaNcorr,
         alumnos: alumnos,
         lcmoNlatitud: null,
         lcmoNlongitud: null
       }
-      const response = await this.api.guardarAsistencia(params);
+      const response = await this.api.guardarAsistenciaV5(params);
       const { data } = response;
 
       if (data.success) {
@@ -136,14 +146,67 @@ export class PrincipalPage implements OnInit {
         this.error.handle(error);
         return;
       }
-      this.snackbar.showToast('No pudimos procesar su solicitud. Vuelva a intentar.', 3000, 'danger');
+
+      await this.snackbar.showToast('No pudimos procesar su solicitud. Vuelva a intentar.', 3000, 'danger');
     }
     finally {
       await loading.dismiss();
     }
   }
+  async resolverMarcaAsistencia(): Promise<string | null> {
+    return new Promise(async (resolve) => {
+      await this.dialog.showAlert({
+        header: 'Selecciona una marca',
+        inputs: [
+          {
+            name: 'opcion',
+            type: 'radio',
+            label: 'Marcar Retiro Anticipado',
+            value: 'RETIRO_ANTICIPADO'
+          },
+          {
+            name: 'opcion',
+            type: 'radio',
+            label: 'Marcar Ausente',
+            value: 'AUSENTE'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cerrar',
+            role: 'cancel',
+            handler: () => resolve(null) // Retorna null si el usuario cierra sin elegir
+          },
+          {
+            text: 'Aceptar',
+            handler: (data) => resolve(data) // Retorna la opción elegida
+          }
+        ]
+      });
+    });
+  }
+  async confirmarMarcaAusencia(): Promise<boolean> {
+    return new Promise(async (resolve) => {
+      const alert = await this.dialog.showAlert({
+        header: 'Asistencia',
+        message: '¿Desea marcar como Ausente al estudiante?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => resolve(false)
+          },
+          {
+            text: 'Aceptar',
+            role: 'destructive',
+            handler: () => resolve(true)
+          }
+        ]
+      });
+    });
+  }
   async cerrar() {
-    await this.modalCtrl.dismiss();
+    await this.dialog.dismissModal();
   }
   aplicarFiltro(filtro: Filtro) {
     this.filtroAsistencia = filtro;
@@ -177,7 +240,7 @@ export class PrincipalPage implements OnInit {
     return `${this.global.Api}/api/v4/avatar/${persNcorr}`;
   }
   resolverColor(filtro: Filtro) {
-    return (filtro == this.filtroAsistencia) ? 'info' : 'secondary';
+    return (filtro == this.filtroAsistencia) ? 'solid' : 'outline';
   }
   resolverOportunidad(alnoNoportunidad: number) {
     if (alnoNoportunidad == 1) return 'Primera Oportunidad';
@@ -191,8 +254,7 @@ export class PrincipalPage implements OnInit {
       seccion: this.seccion,
       alumnos: this.alumnos,
       jefeCarrera: this.jefeCarrera
-    })
-
+    });
   }
   get permitirReportar() {
     if (!this.mostrarCargando && (this.alumnos && this.alumnos.length)) return true;

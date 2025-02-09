@@ -57,6 +57,9 @@ export class CursoService extends PrivateService {
   guardarAsistencia(params: any) {
     return this.post(`${this.baseUrl}/curso/v4/guardar-asistencia`, params);
   }
+  guardarAsistenciaV5(params: any) {
+    return this.post(`${this.baseUrl}/curso/v5/guardar-asistencia`, params);
+  }
   terminarClase(params: any) {
     return this.post(`${this.baseUrl}/curso/v4/terminar-clase`, params);
   }

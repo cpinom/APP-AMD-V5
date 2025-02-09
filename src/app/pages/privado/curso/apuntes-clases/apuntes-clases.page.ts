@@ -169,7 +169,7 @@ export class ApuntesClasesPage implements OnInit {
         const base64String = media.data;
 
         if (fileSize >= 150) {
-          this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 150 MB.');
+          await this.presentError('Cargar Archivos', 'Los documentos no pueden exceder los 150 MB.');
           return;
         }
 

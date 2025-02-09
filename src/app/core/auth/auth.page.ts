@@ -8,6 +8,7 @@ import { Haptics } from '@capacitor/haptics';
 import { Swiper } from 'swiper/types';
 import { UtilsService } from '../services/utils.service';
 import { PerfilService } from '../services/perfil.service';
+import { DialogService } from '../services/dialog.service';
 
 @Component({
   selector: 'app-auth',
@@ -30,11 +31,10 @@ export class AuthPage implements OnInit, AfterViewInit {
   errorMsg: string | undefined;
   mostrarVolver = false;
 
-  constructor(private modalCtrl: ModalController,
-    private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private auth: AuthService,
     private snackbar: SnackbarService,
-    private toast: ToastController,
+    private dialog: DialogService,
     private utils: UtilsService,
     private perfil: PerfilService,
     private pt: Platform) {
@@ -100,19 +100,21 @@ export class AuthPage implements OnInit, AfterViewInit {
           setTimeout(() => {
             if (this.poseePIN) {
               this.codeInput.focusOnField(0);
-            } else {
+            }
+            else {
               this.passwordInput.setFocus();
             }
           }, 750);
-        } else {
+        }
+        else {
           this.errorMsg = data.message;
-          this.hapticsVibrate();
+          await this.hapticsVibrate();
         }
       }
       catch (error) {
         console.log('error: ', error);
-        this.snackbar.showToast('El servicio no se encuentra disponible o presenta algunos problemas de cobertura, reintenta en un momento.');
-        this.hapticsVibrate();
+        await this.snackbar.showToast('El servicio no se encuentra disponible o presenta algunos problemas de cobertura, reintenta en un momento.');
+        await this.hapticsVibrate();
       }
       finally {
         this.procesando = false;
@@ -129,22 +131,25 @@ export class AuthPage implements OnInit, AfterViewInit {
         const { data } = response;
 
         if (data.success) {
-          await this.modalCtrl.dismiss(data.data);
-        } else if (data.passwordExpired === true) {
+          await this.dialog.dismissModal(data.data);
+        }
+        else if (data.passwordExpired === true) {
+          this.loginForm.get('clave')?.setValue('');
           await this.mostrarRecuperar(data.message, data.urlUpdatePassword);
-        } else {
+        }
+        else {
           if (data.code == 401 && this.codeInput) {
             this.codeInput.reset();
             this.codeInput.focusOnField(0);
           }
 
           this.errorMsg = data.message;
-          this.hapticsVibrate();
+          await this.hapticsVibrate();
         }
       }
       catch (error) {
-        this.snackbar.showToast('El servicio no se encuentra disponible o presenta algunos problemas de cobertura, reintenta en un momento.');
-        this.hapticsVibrate();
+        await this.snackbar.showToast('El servicio no se encuentra disponible o presenta algunos problemas de cobertura, reintenta en un momento.');
+        await this.hapticsVibrate();
       }
       finally {
         this.procesando = false;
@@ -152,7 +157,7 @@ export class AuthPage implements OnInit, AfterViewInit {
     }
   }
   async cerrar() {
-    await this.modalCtrl.dismiss(false);
+    await this.dialog.dismissModal(false);
   }
   onPinChanged(code: string) {
     this.loginForm.get('clave')?.setValue(code);
@@ -174,23 +179,24 @@ export class AuthPage implements OnInit, AfterViewInit {
     this.mostrarVolver = false;
   }
   async mostrarRecuperar(message: string, url: string) {
-    this.toast.getTop().then(currentToast => {
-      currentToast && currentToast.dismiss();
-    });
 
-    const toast = await this.toast.create({
+    await this.dialog.showAlert({
+      header: 'Actualizar contraseña',
       message: message,
-      color: 'dark',
-      buttons: [{
-        text: 'Actualizar ahora',
-        handler() {
-          window.open(url);
+      buttons: [        
+        {
+          text: 'Actualizar ahora',
+          role: 'destructive',
+          handler: async () => {
+            await this.utils.openLink(url);
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
         }
-      }],
-      duration: 5000
+      ]
     });
-
-    await toast.present();
   }
   async hapticsVibrate() {
     await Haptics.vibrate();

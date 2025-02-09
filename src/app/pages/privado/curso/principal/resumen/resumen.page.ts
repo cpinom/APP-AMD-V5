@@ -26,7 +26,7 @@ import { VISTAS_DOCENTE } from 'src/app/app.contants';
 import { BarcodeScanningModalComponent } from 'src/app/core/components/barcode-scanning-modal/barcode-scanning-modal.component';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { Barcode, BarcodeFormat, LensFacing } from '@capacitor-mlkit/barcode-scanning';
-import { IOSSettings, NativeSettings } from 'capacitor-native-settings';
+import { UtilsService } from 'src/app/core/services/utils.service';
 
 enum FORMA_COMENZAR {
   VALIDA_SALA = 1,
@@ -79,7 +79,8 @@ export class ResumenPage implements OnInit, OnDestroy {
     private pt: Platform,
     private dialog: DialogService,
     private fb: FormBuilder,
-    private action: ActionSheetController) {
+    private action: ActionSheetController,
+    private utils: UtilsService) {
 
     moment.locale('es');
 
@@ -136,7 +137,7 @@ export class ResumenPage implements OnInit, OnDestroy {
     this.iniciarTareas();
 
     this.estadoClase = {
-      estadoLibro:2,
+      estadoLibro: 1,
       horaInicio: '',
       horaTermino: '',
       porcentajeEnClase: 30,
@@ -216,30 +217,8 @@ export class ResumenPage implements OnInit, OnDestroy {
     }
   }
   async confirmarSala(codigoValido: boolean, salaCcodEjecucion?: number) {
+    debugger
     const loading = await this.dialog.showLoading({ message: 'Iniciando...' });
-
-    // let permission = await Geolocation.checkPermissions();
-    // let coordinates: any = undefined;
-
-    // if (permission.location == 'denied' || permission.location == 'prompt') {
-    //   if (this.pt.is('capacitor')) {
-    //     permission = await Geolocation.requestPermissions();
-    //   }
-    // }
-
-    // try {
-    //   coordinates = await Geolocation.getCurrentPosition();
-    // }
-    // catch { }
-
-    // const params = {
-    //   lclaNcorr: this.seccion.lclaNcorr,
-    //   lclaBsalaConfirmada: codigoValido ? 1 : 0,
-    //   salaCcodEjecucion: salaCcodEjecucion,
-    //   aptaTuuid: this.global.DeviceId,
-    //   lcmoNlatitud: coordinates ? coordinates.coords.latitude : null,
-    //   lcmoNlongitud: coordinates ? coordinates.coords.longitude : null
-    // };
 
     const params = {
       lclaNcorr: this.seccion.lclaNcorr,
@@ -254,6 +233,8 @@ export class ResumenPage implements OnInit, OnDestroy {
       const response = await this.api.iniciarClase(params);
       const { data } = response;
 
+      await loading.dismiss();
+
       if (data.success) {
         this.estadoClase = data.estadoClase;
         this.iniciarTareas();
@@ -261,8 +242,8 @@ export class ResumenPage implements OnInit, OnDestroy {
         this.api.marcarVista(VISTAS_DOCENTE.CURSO_INICIA_CLASE);
       }
       else {
-        this.presentFail(data.message);
-        this.hapticsVibrate();
+        await this.presentFail(data.message);
+        await this.hapticsVibrate();
       }
     }
     catch (error: any) {
@@ -271,7 +252,7 @@ export class ResumenPage implements OnInit, OnDestroy {
         return;
       }
 
-      this.snackbar.showToast('Ha ocurrido un error mientras se iniciaba la clase.', 3000, 'danger');
+      await this.snackbar.showToast('Ha ocurrido un error mientras se iniciaba la clase.', 3000, 'danger');
     }
     finally {
       this.deshabilitarIniciar = false;
@@ -321,15 +302,9 @@ export class ResumenPage implements OnInit, OnDestroy {
         let permission = await Camera.checkPermissions();
 
         if (permission.camera == 'denied' || permission.camera == 'prompt') {
-          alert('se solicita permiso');
           permission = await Camera.requestPermissions({ permissions: ['camera'] });
-          alert('se solicita permiso 2:' + permission.camera);
-
-          await NativeSettings.openIOS({
-            option: IOSSettings.App,
-          });
-
         }
+
         if (permission.camera == 'granted') {
           const barcode = await this.escanearQR();
 
@@ -342,16 +317,16 @@ export class ResumenPage implements OnInit, OnDestroy {
                 salaCcod = Number(barcode.rawValue);
               }
               else {
-                this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.');
+                await this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.');
               }
             }
             else {
-              this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
+              await this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
             }
           }
         }
         else {
-          alert('camara permisos: ' + permission.camera);
+          await this.utils.showAlertCamera();
         }
       }
       else {
@@ -382,7 +357,7 @@ export class ResumenPage implements OnInit, OnDestroy {
               message = `El código QR no es válido - Intentar nuevamente. Su sala planificada es ${this.seccion.salaTdesc}. Si la ubicación es correcta, seleccione SI`;
             }
 
-            loading.dismiss();
+            await loading.dismiss();
 
             const confirmar = await this.confirmarCodigo(message);
 
@@ -426,6 +401,7 @@ export class ResumenPage implements OnInit, OnDestroy {
           formats: [BarcodeFormat.QrCode],
           lensFacing: LensFacing.Back,
         },
+        animated: false
       });
 
       element.onDidDismiss().then((result) => {
@@ -450,17 +426,17 @@ export class ResumenPage implements OnInit, OnDestroy {
         cssClass: 'confirmar-codigo',
         buttons: [
           {
-            text: 'Sí, confirmar',
-            role: 'destructive',
-            handler: () => {
-              resolve(true);
-            }
-          },
-          {
             text: 'No',
             role: 'cancel',
             handler: () => {
               resolve(false);
+            }
+          },
+          {
+            text: 'Sí, confirmar',
+            role: 'destructive',
+            handler: () => {
+              resolve(true);
             }
           }
         ]
@@ -481,12 +457,13 @@ export class ResumenPage implements OnInit, OnDestroy {
       message: '¿Esta seguro que desea terminar la clase?',
       buttons: [
         {
-          text: 'Terminar Clase',
-          handler: this.confirmaTerminarClase.bind(this)
-        },
-        {
           text: 'Cancelar',
           role: 'cancel'
+        },
+        {
+          text: 'Terminar Clase',
+          role: 'destructive',
+          handler: this.confirmaTerminarClase.bind(this)
         }
       ]
     });
@@ -559,7 +536,7 @@ export class ResumenPage implements OnInit, OnDestroy {
         this.api.marcarVista(VISTAS_DOCENTE.CURSO_TERMINA_CLASE);
       }
       else {
-        this.snackbar.showToast(data.message, 3000, 'danger');
+        await this.snackbar.showToast(data.message, 3000, 'danger');
       }
     }
     catch (error: any) {
@@ -589,7 +566,7 @@ export class ResumenPage implements OnInit, OnDestroy {
       const { data } = response;
 
       if (data.success) {
-        loading.dismiss();
+        await loading.dismiss();
 
         const cambioSalaMdl = await this.modalCtrl.create({
           component: CambiarSalaPage,
@@ -607,7 +584,7 @@ export class ResumenPage implements OnInit, OnDestroy {
           }
         })
 
-        await cambioSalaMdl.present()
+        await cambioSalaMdl.present();
       }
     }
     catch (error: any) {
@@ -615,10 +592,11 @@ export class ResumenPage implements OnInit, OnDestroy {
         this.error.handle(error);
         return;
       }
-      this.snackbar.showToast('No pudimos cargar la información. Vuelva a intentar.', 3000, 'danger');
+
+      await this.snackbar.showToast('No pudimos cargar la información. Vuelva a intentar.', 3000, 'danger');
     }
     finally {
-      loading.dismiss();
+      await loading.dismiss();
     }
   }
   async soporteTecnico() {
@@ -698,7 +676,8 @@ export class ResumenPage implements OnInit, OnDestroy {
 
       if (data.success) {
         this.estadoClase = data.estado;
-        this.snackbar.showToast('Su solicitud ha sido cancelada correctamente.', 3000, 'success');
+        await loading.dismiss();
+        await this.snackbar.showToast('Su solicitud ha sido cancelada correctamente.', 3000, 'success');
       }
       else {
         throw Error();
@@ -709,10 +688,11 @@ export class ResumenPage implements OnInit, OnDestroy {
         this.error.handle(error);
         return;
       }
-      this.snackbar.showToast('No pudimos cancelar su solicitud. Vuelva a intentar.', 3000, 'danger')
+
+      await this.snackbar.showToast('No pudimos cancelar su solicitud. Vuelva a intentar.', 3000, 'danger')
     }
     finally {
-      loading.dismiss();
+      await loading.dismiss();
     }
   }
   async actualizarAsistencia(mdlTerminar?: IonModal) {
@@ -888,7 +868,7 @@ export class ResumenPage implements OnInit, OnDestroy {
     await alert.present();
   }
   async presentFail(mensaje: string) {
-    const alert = await this.alertCtrl.create({
+    await this.dialog.showAlert({
       backdropDismiss: false,
       keyboardClose: false,
       cssClass: 'fail-alert',
@@ -900,8 +880,6 @@ export class ResumenPage implements OnInit, OnDestroy {
         }
       ]
     });
-
-    await alert.present();
   }
   async hapticsVibrate() {
     await Haptics.vibrate();

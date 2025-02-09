@@ -28,12 +28,12 @@ export class SnackbarService {
       //debugger
     })
   }
-  showToast(message: string, duration?: number, color?: string, callback?: Function) {
-    this.toast.getTop().then(currentToast => {
-      currentToast && currentToast.dismiss();
-    });
+  async showToast(message: string, duration?: number, color?: string, callback?: Function) {
+    const currentToast = await this.toast.getTop();
 
-    this.toast.create({
+    currentToast?.dismiss();
+
+    const toast = await this.toast.create({
       message: message,
       duration: duration || this.duration,
       color: color ? color : 'dark',
@@ -45,7 +45,11 @@ export class SnackbarService {
           callback && callback();
         },
       }]
-    }).then(toast => toast.present());
+    });
+
+    await toast.present();
+
+    return toast;
   }
   async create(message: string, closable: boolean, color?: string) {
     this.toast.getTop().then(currentToast => {

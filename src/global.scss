@@ -231,6 +231,18 @@
           }
         }
       }
+
+      &.fail-alert {
+        div.image {
+          text-align: center;
+          ion-icon {
+            width: 60px;
+            margin: 0 auto 10px;
+            font-size: 60px;
+            color: var(--ion-color-medium);
+          }
+        }
+      }
     }
 
     &.barcode-scanning-active {

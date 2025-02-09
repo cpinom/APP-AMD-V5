@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Barcode, BarcodeFormat, LensFacing } from '@capacitor-mlkit/barcode-scanning';
 import { Camera } from '@capacitor/camera';
 import { Geolocation } from '@capacitor/geolocation';
-import { AlertController, ModalController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
 import { BarcodeScanningModalComponent } from 'src/app/core/components/barcode-scanning-modal/barcode-scanning-modal.component';
 import { CursoService } from 'src/app/core/services/curso/curso.service';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import { ErrorService } from 'src/app/core/services/error.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { UtilsService } from 'src/app/core/services/utils.service';
 
 @Component({
   selector: 'app-cambiar-sala',
@@ -26,36 +27,20 @@ export class CambiarSalaPage implements OnInit {
   form!: FormGroup;
   ordinales: any = ["Inicio Clase", "Primer cambio", "Segundo cambio", "Tercer cambio", "Cuarto cambio", "Quinto cambio", "Sexto cambio", "Séptimo cambio", "Octavo cambio", "Noveno cambio", "Décimo cambio"];
 
-  constructor(private modalCtrl: ModalController,
-    private api: CursoService,
+  constructor(private api: CursoService,
     private pt: Platform,
     private fb: FormBuilder,
     private dialog: DialogService,
     private error: ErrorService,
-    private snackbar: SnackbarService) {
+    private snackbar: SnackbarService,
+    private utils: UtilsService) {
 
     this.form = this.fb.group({
       sala: ['', Validators.required]
     });
 
   }
-  async ngOnInit() {
-    // let permission = await Geolocation.checkPermissions();
-    // let coordinates: any;
-
-    // if (permission.location == 'denied' || permission.location == 'prompt') {
-    //   if (this.pt.is('capacitor')) {
-    //     permission = await Geolocation.requestPermissions();
-    //   }
-    // }
-
-    // try {
-    //   coordinates = await Geolocation.getCurrentPosition();
-    // }
-    // catch { }
-
-    // this.coordinadas = coordinates;
-  }
+  ngOnInit() { }
   async encanearTap() {
     let mostrarEscaneo = true;
 
@@ -69,34 +54,14 @@ export class CambiarSalaPage implements OnInit {
       }
       if (permission.camera == 'granted') {
         mostrarEscaneo = true;
-        // const scanResult: BarcodeScanResult = await this.barcodeScanner.scan();
-
-        // if (!scanResult.cancelled) {
-        //   if (scanResult.format != 'QR_CODE') {
-        //     this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
-        //     return;
-        //   }
-
-        //   const salaCcod = Number(scanResult.text);
-        //   const existeSala = this.salas.filter((t: any) => t.salaCcod == salaCcod).length > 0;
-
-        //   if (existeSala) {
-        //     this.sala?.setValue(salaCcod);
-        //   }
-        //   else {
-        //     this.snackbar.showToast('El código QR escaneado no existe en el listado de salas disponibles. Intente seleccionando la sala.');
-        //   }
-        // }
       }
       else {
         mostrarEscaneo = false;
-        this.snackbar.showToast('Se deben verificar los permisos de la la Cámara.');
+        await this.utils.showAlertCamera();
       }
     }
 
-    debugger
     if (mostrarEscaneo) {
-      let salaCcod = 0;
       const barcode = await this.escanearQR();
 
       if (barcode) {
@@ -105,14 +70,23 @@ export class CambiarSalaPage implements OnInit {
           const validString = regex.test(barcode.rawValue);
 
           if (validString) {
-            salaCcod = Number(barcode.rawValue);
+            const salaCcod = Number(barcode.rawValue);
+            const existeSala = this.salas.filter((t: any) => t.salaCcod == salaCcod).length > 0;
+
+            if (existeSala) {
+              this.sala?.setValue(salaCcod);
+            }
+            else {
+              await this.snackbar.showToast('El código QR escaneado no existe en el listado de salas disponibles. Intente seleccionando la sala.');
+            }
+
           }
           else {
-            this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.');
+            await this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.');
           }
         }
         else {
-          this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
+          await this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
         }
       }
     }
@@ -127,10 +101,12 @@ export class CambiarSalaPage implements OnInit {
           formats: [BarcodeFormat.QrCode],
           lensFacing: LensFacing.Back,
         },
+        animated: false
       });
 
       element.onDidDismiss().then((result) => {
         const barcode: Barcode | undefined = result.data?.barcode;
+
         if (barcode) {
           resolve(barcode)
         }
@@ -163,7 +139,7 @@ export class CambiarSalaPage implements OnInit {
         await loading.dismiss();
 
         if (data.success) {
-          await this.modalCtrl.dismiss(data.estado);
+          await this.dialog.dismissModal(data.estado);
           await this.presentSuccess('El cambio de sala se comunicó correctamente.');
           this.api.marcarVista(VISTAS_DOCENTE.CURSO_CAMBIA_SALA);
         }
@@ -177,7 +153,7 @@ export class CambiarSalaPage implements OnInit {
           return;
         }
 
-        this.snackbar.showToast('No pudimos procesar su solicitud. Vuelva a intentar.', 3000, 'danger');
+        await this.snackbar.showToast('No pudimos procesar su solicitud. Vuelva a intentar.', 3000, 'danger');
       }
       finally {
         await loading.dismiss();
@@ -198,7 +174,7 @@ export class CambiarSalaPage implements OnInit {
   }
   async showConfirmation(message: string, header: string = 'Comunicar Cambio de Sala'): Promise<boolean> {
     return new Promise(async (resolve) => {
-      const alert = await this.dialog.showAlert({
+      await this.dialog.showAlert({
         header: header,
         message: message,
         buttons: [
@@ -209,15 +185,16 @@ export class CambiarSalaPage implements OnInit {
           },
           {
             text: 'Continuar',
+            role: 'destructive',
             handler: () => resolve(true)
           }
         ]
       });
-      await alert.present();
     });
   }
+
   async cerrar() {
-    await this.modalCtrl.dismiss();
+    await this.dialog.dismissModal();
   }
   get sala() { return this.form.get('sala'); }
 
