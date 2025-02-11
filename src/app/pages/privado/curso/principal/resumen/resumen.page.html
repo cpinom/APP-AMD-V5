@@ -13,11 +13,6 @@
   </section>
   }
 
-  <!-- <section class="botones-acciones">
-      <ion-button color="success" expand="block" shape="round" (click)="comenzarClase()"
-        [disabled]="deshabilitarIniciar">Comenzar Clase</ion-button>
-    </section> -->
-
   @if (estadoClase.estadoLibro == 2) {
   <ion-card class="status">
     <ion-card-header>
@@ -269,7 +264,7 @@
         </ion-grid>
       </div>
       <ion-list>
-        <ion-item lines="none" detail="true" (click)="mostrarRiesgosAlumnos()">
+        <ion-item lines="none" detail="true" (click)="mostrarRiesgosAlumnos()" class="ion-activatable">
           <ion-label class="ion-text-right">Ver detalle</ion-label>
         </ion-item>
       </ion-list>
@@ -321,7 +316,7 @@
               </ion-grid>
             </div>
             <ion-list>
-              <ion-item lines="none" detail="true" (click)="mostrarDistribucionNotas()">
+              <ion-item lines="none" detail="true" (click)="mostrarDistribucionNotas()" class="ion-activatable">
                 <ion-label class="ion-text-right">Ver Detalle</ion-label>
               </ion-item>
             </ion-list>
@@ -341,7 +336,7 @@
                 revisada por el Equipo de Apoyo Académico, y derivará la solicitud en caso que sea aprobado.</p>
             </div>
             <ion-list>
-              <ion-item lines="none" detail="true" (click)="mostrarAsesorPedagogico()">
+              <ion-item lines="none" detail="true" (click)="mostrarAsesorPedagogico()" class="ion-activatable">
                 <ion-label class="ion-text-right">Solicitar Apoyo</ion-label>
               </ion-item>
             </ion-list>
@@ -381,7 +376,7 @@
         </div>
       </div>
       <ion-list>
-        <ion-item lines="none" detail="true" (click)="mostrarOportunidadesAlumnos()">
+        <ion-item lines="none" detail="true" (click)="mostrarOportunidadesAlumnos()" class="ion-activatable">
           <ion-label class="ion-text-right">Ver detalle</ion-label>
         </ion-item>
       </ion-list>
@@ -403,7 +398,7 @@
                 [labels]="tiposEstudiantesCharts.labels" [options]="{responsive: true}"></canvas>
             </div>
             <ion-list>
-              <ion-item lines="none" detail="true" (click)="mostrarTiposAlumnos()">
+              <ion-item lines="none" detail="true" (click)="mostrarTiposAlumnos()" class="ion-activatable">
                 <ion-label class="ion-text-right">Ver Detalle</ion-label>
               </ion-item>
             </ion-list>
@@ -426,8 +421,10 @@
             </div>
             <ion-list *ngIf="resumen.avanceEvaluacion.fechaTermino">
               <ion-item lines="none">
-                <ion-label class="ion-text-center">Fecha de Término
-                  {{resumen.avanceEvaluacion.fechaTermino}}</ion-label>
+                <ion-label class="ion-text-center">
+                  Fecha de Término
+                  {{resumen.avanceEvaluacion.fechaTermino}}
+                </ion-label>
               </ion-item>
             </ion-list>
           </ion-card>
@@ -463,7 +460,7 @@
               </ion-grid>
             </div>
             <ion-list>
-              <ion-item lines="none" detail="true" (click)="mostrarAsignaturasPrereq()">
+              <ion-item lines="none" detail="true" (click)="mostrarAsignaturasPrereq()" class="ion-activatable">
                 <ion-label class="ion-text-right">Ver Detalle</ion-label>
               </ion-item>
             </ion-list>
@@ -483,7 +480,7 @@
                 [labels]="perfilesEstudiantesCharts.labels" [options]="{responsive: true}"></canvas>
             </div>
             <ion-list>
-              <ion-item lines="none" detail="true" (click)="mostrarPefilAlumnos()">
+              <ion-item lines="none" detail="true" (click)="mostrarPefilAlumnos()" class="ion-activatable">
                 <ion-label class="ion-text-right">Ver Detalle</ion-label>
               </ion-item>
             </ion-list>

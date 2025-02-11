@@ -64,7 +64,7 @@ export class OnedrivePage implements OnInit {
       if (result.success) {
         const { data } = result;
         this.driveId = data.driveId;
-        this.items = data.items;
+        this.items = this.resolverItems(data.items);
         this.mostrarData = true;
         await this.api.setStorage('driveId', this.driveId)
       }
@@ -136,7 +136,7 @@ export class OnedrivePage implements OnInit {
         const result = response.data;
 
         if (result.success) {
-          this.items = result.items;
+          this.items = this.resolverItems(result.items);
         }
         else {
           throw Error();
@@ -239,7 +239,7 @@ export class OnedrivePage implements OnInit {
             loading.message = `(${progreso}%) procesando....`;
           }
           else if (result.code == 200) {
-            this.items = result.data.items;
+            this.items = this.resolverItems(result.data.items);
             this.snackbar.showToast('Archivo cargado correctamente.', 3000, 'success');
           }
         }
@@ -385,7 +385,7 @@ export class OnedrivePage implements OnInit {
       const result = await this.api.eliminarArchivo(this.driveId, file.id);
 
       if (result.success) {
-        this.items = result.items;
+        this.items = this.resolverItems(result.items);
       }
       else {
         throw Error();
@@ -417,7 +417,7 @@ export class OnedrivePage implements OnInit {
         });
 
         if (result.success) {
-          this.items = result.items;
+          this.items = this.resolverItems(result.items);
         }
         else if (result.message) {
           this.snackbar.showToast(result.message, 3000, 'danger');
@@ -485,6 +485,15 @@ export class OnedrivePage implements OnInit {
         buttons: buttons
       }).then(alert => alert.present());
     });
+  }
+  resolverItems(items: any[]) {
+    return items.sort((a: any, b: any) => {
+      if (a.folder !== b.folder) {
+        return a.folder ? -1 : 1;
+      }
+
+      return 0;
+    })
   }
   resolverMiniatura(fileId: string) {
     return `${this.global.Api}/api/onedrive/v1/thumbnail?driveId=${this.driveId}&fileId=${fileId}`;

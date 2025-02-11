@@ -26,9 +26,9 @@ export class DispositivoService extends PublicoService {
   actualizarBateriaTablet(params: any) {
     return this.post(`${this.baseUrl}/dispositivo/v4/estado-bateria`, params);
   }
-  status(params: any) {
-    return this.post(`${this.baseUrl}/dispositivo/v4/status`, params);
-  }
+  // status(params: any) {
+  //   return this.post(`${this.baseUrl}/dispositivo/v4/status`, params);
+  // }
   registrarDispositivo(params: any) {
     return this.post(`${this.baseUrl}/dispositivo/v4/registro`, params);
   }

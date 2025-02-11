@@ -1,51 +1,8 @@
 ion-toolbar.periodos {
-    --border-width: 1px 0px 1px 0px;
+    --border-width: 1px 0px 0px 0px;
     --border-color: var(--ion-color-dark-tint);
-    --min-height: 0;
+    --min-height: 30px;
     border-radius: 0 0 5px 5px;
-
-    &.md {
-        border-top: 1px solid var(--ion-color-dark-tint);
-    }
-
-    ion-select ::ng-deep .select-wrapper {
-        width: 100%;
-    }
-
-    ion-item {
-        --background: var(--ion-toolbar-background);
-        --inner-border-width: 0;
-        --min-height: 0;
-        --padding-start: 0;
-        --inner-padding-end: 0;
-        --color: #fff !important;
-
-        /*ion-select {
-            font-size: var(--FS12);
-            min-height: 0;
-
-            &.md {
-                min-height: 22px;
-            }
-
-            &::part(container) {
-                flex: 1;
-                justify-content: center;
-            }
-
-            &::part(text) {
-                flex: none;
-            }
-
-            &.md::part(text) {
-                margin-left: 10px;
-            }
-
-            &::part(icon) {
-                color: #fff;
-            }
-        }*/
-    }
 }
 
 ion-toolbar {
@@ -59,6 +16,14 @@ ion-toolbar {
     // ion-title {
     //     text-align: center;
     // }
+}
+
+ion-header {
+    ion-toolbar {
+        ion-progress-bar {
+            --background: #41424D;
+        }
+    }
 }
 
 ion-card {

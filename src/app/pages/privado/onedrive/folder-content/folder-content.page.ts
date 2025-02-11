@@ -40,9 +40,9 @@ export class FolderContentPage implements OnInit {
     private global: AppGlobal,
     private nav: NavController) {
 
-      moment.locale('es');
-      
-    }
+    moment.locale('es');
+
+  }
 
   async ngOnInit() {
     const driveIdStoraged = await this.api.getStorage('driveId');
@@ -62,7 +62,7 @@ export class FolderContentPage implements OnInit {
 
       if (result.success) {
         const { data } = result;
-        this.items = data.items;
+        this.items = this.resolverItems(data.items);
       }
       else {
         throw Error();
@@ -119,7 +119,7 @@ export class FolderContentPage implements OnInit {
         const result = response.data;
 
         if (result.success) {
-          this.items = result.items;
+          this.items = this.resolverItems(result.items);
         }
         else if (result.message) {
           this.snackbar.showToast(result.message, 3000, 'danger');
@@ -303,7 +303,7 @@ export class FolderContentPage implements OnInit {
             loading.message = `(${progreso}%) procesando....`;
           }
           else if (result.code == 200) {
-            this.items = result.data.items;
+            this.items = this.resolverItems(result.data.items);
             this.snackbar.showToast('Archivo cargado correctamente.', 3000, 'success');
           }
         }
@@ -321,7 +321,6 @@ export class FolderContentPage implements OnInit {
     }
   }
   async renombrarCarpetaTap(folder: any) {
-    debugger
     const nombreCarpeta = await this.confimarNombreCarpeta(folder);
 
     if (nombreCarpeta) {
@@ -336,7 +335,7 @@ export class FolderContentPage implements OnInit {
         });
 
         if (result.success) {
-          this.items = result.items;
+          this.items = this.resolverItems(result.items);
         }
         else if (result.message) {
           this.snackbar.showToast(result.message, 3000, 'danger');
@@ -405,6 +404,15 @@ export class FolderContentPage implements OnInit {
       });
     });
   }
+  resolverItems(items: any[]) {
+    return items.sort((a: any, b: any) => {
+      if (a.folder !== b.folder) {
+        return a.folder ? -1 : 1;
+      }
+
+      return 0;
+    })
+  }
   resolverMiniatura(fileId: string) {
     return `${this.global.Api}/api/onedrive/v1/thumbnail?driveId=${this.driveId}&fileId=${fileId}`;
   }
@@ -462,7 +470,7 @@ export class FolderContentPage implements OnInit {
       const result = await this.api.eliminarArchivo(this.driveItemId, file.id);
 
       if (result.success) {
-        this.items = result.items;
+        this.items = this.resolverItems(result.items);
       }
       else {
         throw Error();
@@ -502,7 +510,7 @@ export class FolderContentPage implements OnInit {
     }
     else if (fechaMoment.isSame(hoy.clone().subtract(1, 'day'), 'day')) {
       return `Ayer a las ${fechaMoment.format("HH:mm")}`;
-    } 
+    }
     else if (fechaMoment.isSame(hoy, 'week')) {
       return `${fechaMoment.format("[El] dddd [a las] HH:mm")}`; // Día de la semana y hora
     }

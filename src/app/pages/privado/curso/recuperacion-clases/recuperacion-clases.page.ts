@@ -29,6 +29,10 @@ export class RecuperacionClasesPage implements OnInit {
   mostrarCargando = true;
   solicitud: any;
 
+  suspendidas: any[] | undefined;
+  aprobadas: any[] | undefined;
+  segmento: any;
+
   constructor(private api: RecuperacionesService,
     private modal: ModalController,
     private loading: LoadingController,
@@ -44,21 +48,25 @@ export class RecuperacionClasesPage implements OnInit {
     this.api.marcarVista(VISTAS_DOCENTE.RECUPERACIONES);
   }
   async cargar(forceRefresh = false) {
+    debugger
     try {
-      const params = {
-        seccCcod: this.seccion.seccCcod,
-        ssecNcorr: this.seccion.ssecNcorr
-      };
-      const response = await this.api.getPrincipal(params, forceRefresh);
+      const periCcod = this.seccion.periCcod;
+      const sedeCcod = this.seccion.sedeCcod;
+      const asigCcod = this.seccion.asigCcod;
+      const seccCcod = this.seccion.seccCcod;
+      const ssecNcorr = this.seccion.ssecNcorr;
+      const response = await this.api.getPrincipalV5(periCcod, sedeCcod, asigCcod, seccCcod, ssecNcorr);
       const { data } = response;
 
       if (data.success) {
-        this.recuperaciones = data.recuperaciones;
-        this.solicitudes = data.solicitudes;
-        this.tiposSalas = data.tiposSalas;
-        this.horario = data.horario;
-        this.implementos = data.implementos;
-        this.recuperacion = null;
+        this.suspendidas = data.data.suspendidas;
+        this.aprobadas = data.data.aprobadas;
+        // this.recuperaciones = data.recuperaciones;
+        // this.solicitudes = data.solicitudes;
+        // this.tiposSalas = data.tiposSalas;
+        // this.horario = data.horario;
+        // this.implementos = data.implementos;
+        // this.recuperacion = null;
       }
     }
     catch (error: any) {

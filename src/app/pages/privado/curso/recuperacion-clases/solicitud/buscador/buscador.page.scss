@@ -1,23 +1,31 @@
-section:first-child {
-    margin-top: 15px;
-}
+.section-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 
-.btn-buscar {
-    margin: 20px 15px;
-}
-
-ion-item {
-    ion-input {
-        text-align: right;
+    .section-scroll {
+        height: 100%;
+        overflow-y: auto;
     }
-}
 
-ion-item.picker-item {
-    --background-activated: transparent;
-    --background-focused: transparent;
+    .btn-buscar {
+        margin: 15px;
+    }
 
-    ion-datetime {
-        margin: 0 auto;
-        --background: white
+    ion-item {
+        ion-input {
+            text-align: right;
+        }
+    }
+
+    ion-item.picker-item {
+        --background-activated: transparent;
+        --background-focused: transparent;
+
+        ion-datetime {
+            margin: 0 auto;
+            --background: white;
+        }
     }
 }

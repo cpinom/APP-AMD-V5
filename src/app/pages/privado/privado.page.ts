@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, MenuController, ModalController, NavController, Platform } from '@ionic/angular';
+import { AlertInput, LoadingController, MenuController, ModalController, NavController, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { CursoService } from 'src/app/core/services/curso/curso.service';
 import { ErrorService } from 'src/app/core/services/error.service';
@@ -15,6 +15,7 @@ import { UtilsService } from 'src/app/core/services/utils.service';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
 import { EventsService } from 'src/app/core/services/events.services';
 import { Subscription, interval } from 'rxjs';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-privado',
@@ -34,6 +35,7 @@ export class PrivadoPage implements OnInit, OnDestroy {
   mostrarCargando2 = false;
   mostrarError = false;
   periodoForm: FormGroup;
+  periodoLabel!: string;
   tabletAsignada: any;
   alertPeriodo = {
     header: 'Período Académico',
@@ -51,11 +53,10 @@ export class PrivadoPage implements OnInit, OnDestroy {
     private router: Router,
     private menu: MenuController,
     private auth: AuthService,
-    private modalCtrl: ModalController,
+    private dialog: DialogService,
     private api: CursoService,
     private error: ErrorService,
     private global: AppGlobal,
-    private loading: LoadingController,
     private fb: FormBuilder,
     private snackbar: SnackbarService,
     private utils: UtilsService,
@@ -117,11 +118,43 @@ export class PrivadoPage implements OnInit, OnDestroy {
     //debugger
     // await this.recargar();
   }
-  async guardarPeriodo(periCcod: any) {
-    let loading = await this.loading.create({ message: 'Guardando...' });
-    let revertirCambios = false;
+  async periodoTap() {
+    let options: AlertInput[] = [];
 
-    await loading.present();
+    for (let i = 0; i < this.periodos.length; i++) {
+      options.push({
+        name: 'opcion',
+        type: 'radio',
+        label: this.periodos[i].periTdesc,
+        value: this.periodos[i].periCcod,
+        checked: this.periodos[i].periSeleccionado
+      });
+    }
+
+    await this.dialog.showAlert({
+      subHeader: 'Seleccione el período que desee visualizar',
+      header: 'Período Académico',
+      inputs: options,
+      buttons: [
+        {
+          text: 'Cerrar',
+          role: 'cancel'
+        },
+        {
+          text: 'Actualizar',
+          role: 'destructive',
+          handler: (periCcod) => {
+            if (periCcod) {
+              this.guardarPeriodo(periCcod);
+            }
+          }
+        }
+      ]
+    });
+  }
+  async guardarPeriodo(periCcod: any) {
+    const loading = await this.dialog.showLoading({ message: 'Guardando...' });
+    let revertirCambios = false;
 
     try {
       const params = { periCcod: periCcod };
@@ -156,6 +189,7 @@ export class PrivadoPage implements OnInit, OnDestroy {
   async aplicarPeriodo(periodos: any) {
     const periodo = periodos.filter((t: any) => t.periSeleccionado == true)[0];
     this.periodo?.setValue(periodo.periCcod, { emitEvent: false });
+    this.periodoLabel  = periodo.periTdesc;
   }
   async cargar(forceRefresh = false) {
     try {
@@ -272,7 +306,7 @@ export class PrivadoPage implements OnInit, OnDestroy {
     });
   }
   async pinTap() {
-    const perfilMdl = await this.modalCtrl.create({
+    await this.dialog.showModal({
       component: PerfilPage,
       componentProps: {
         mostrarPin: true
@@ -284,8 +318,6 @@ export class PrivadoPage implements OnInit, OnDestroy {
         return true
       }
     });
-
-    await perfilMdl.present();
   }
   async mostrarCurso(ev: any, data: any, action?: string) {
     ev.stopPropagation();
@@ -311,15 +343,13 @@ export class PrivadoPage implements OnInit, OnDestroy {
     await this.nav.navigateBack('/publico');
   }
   async notificacionesTap() {
-    const notificacionesMdl = await this.modalCtrl.create({
+    await this.dialog.showModal({
       id: 'modal-notificaciones',
       component: NotificacionesPage
     });
-
-    await notificacionesMdl.present();
   }
   async perfilTap() {
-    const perfilMdl = await this.modalCtrl.create({
+    await this.dialog.showModal({
       component: PerfilPage,
       canDismiss: async (data?: any, role?: string) => {
         if (role == 'gesture' || role == 'backdrop') {
@@ -328,8 +358,6 @@ export class PrivadoPage implements OnInit, OnDestroy {
         return true
       }
     });
-
-    await perfilMdl.present();
   }
   async comunicacionesTap() {
     await this.nav.navigateForward('privado/comunicaciones');
@@ -356,7 +384,7 @@ export class PrivadoPage implements OnInit, OnDestroy {
   async versionTap() {
     this.menu.close();
 
-    const modal = await this.modalCtrl.create({
+    await this.dialog.showModal({
       component: InformacionPage,
       canDismiss: async (data?: any, role?: string) => {
         if (role == 'gesture' || role == 'backdrop') {
@@ -365,8 +393,6 @@ export class PrivadoPage implements OnInit, OnDestroy {
         return true
       }
     });
-
-    modal.present();
   }
   async politicasTap() {
     this.utils.openLink('https://portales.inacap.cl/politicas-de-privacidad');

@@ -21,20 +21,14 @@
     }
   </ion-toolbar>
   @if (periodos && periodos.length > 1) {
-  <!-- <ion-toolbar class="periodos" *ngIf="periodos && periodos.length > 1"> -->
-  <form [formGroup]="periodoForm">
-    <!-- <ion-item> -->
-    <ion-select [interfaceOptions]="alertPeriodo" formControlName="periodo" okText="Actualizar" cancelText="Cerrar">
-      <div slot="label">Período</div>
-      @for (item of periodos; track $index) {
-      <ion-select-option [value]="item.periCcod">
-        {{item.periTdesc}}
-      </ion-select-option>
-      }
-    </ion-select>
-    <!-- </ion-item> -->
-  </form>
-  <!-- </ion-toolbar> -->
+  <ion-toolbar class="periodos">
+    <ion-title>
+      <ion-button fill="clear" size="small" (click)="periodoTap()">
+        {{periodoLabel}}
+        <ion-icon slot="end" src="assets/icon/arrow_drop_down.svg"></ion-icon>
+      </ion-button>
+    </ion-title>
+  </ion-toolbar>
   }
 </ion-header>
 
@@ -147,7 +141,7 @@
         }
         @if ((!mostrarCargando && !mostrarCargando2) && mostrarData) {
         @for (clase of clases; track $index) {
-        <ion-item (click)="mostrarCurso($event, clase)" [class.button-action]="clase.estadoLibro != 0"
+        <ion-item (click)="mostrarCurso($event, clase)" class="ion-activatable" [class.button-action]="clase.estadoLibro != 0"
           [class.clase-en-curso]="clase.estadoLibro == 2" [class.clase-finalizada]="clase.estadoLibro == 3">
           <div slot="start" class="horario">
             <span>{{clase.horaHinicio}}</span>

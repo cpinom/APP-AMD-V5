@@ -26,7 +26,7 @@
         <table mat-table [dataSource]="alumnos">
 
           <ng-container matColumnDef="persTnombre" sticky>
-            <th mat-header-cell *matHeaderCellDef>Nombre Estudiante</th>
+            <th mat-header-cell *matHeaderCellDef class="ion-text-center">Nombre Estudiante</th>
             <td mat-cell *matCellDef="let element; let i = index" class="fixed-side ion-text-nowrap ion-text-left">
               <div class="avatar">
                 <app-cached-image [src]="resolverFoto(element.persNcorr)"></app-cached-image>
@@ -46,7 +46,7 @@
           </ng-container>
           
           <ng-container matColumnDef="asistencia">
-            <th mat-header-cell *matHeaderCellDef>Asistencia</th>
+            <th mat-header-cell *matHeaderCellDef class="ion-text-center">Asistencia</th>
             <td mat-cell *matCellDef="let element" class="fixed-side ion-text-center">{{element.asistencia}}%</td>
           </ng-container>
 

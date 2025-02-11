@@ -136,15 +136,15 @@ export class ResumenPage implements OnInit, OnDestroy {
   async ionViewDidEnter() {
     this.iniciarTareas();
 
-    this.estadoClase = {
-      estadoLibro: 1,
-      horaInicio: '',
-      horaTermino: '',
-      porcentajeEnClase: 30,
-      tiempoEnClase: '15 min',
-      salaActual: 'A101',
-      estadoSoporte: 0
-    }
+    // this.estadoClase = {
+    //   estadoLibro: 1,
+    //   horaInicio: '',
+    //   horaTermino: '',
+    //   porcentajeEnClase: 30,
+    //   tiempoEnClase: '15 min',
+    //   salaActual: 'A101',
+    //   estadoSoporte: 0
+    // }
   }
   async cargar(forceRefresh = false) {
     await this.cargarHorario();

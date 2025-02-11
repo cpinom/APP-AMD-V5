@@ -52,6 +52,28 @@
   --ion-color-white-contrast: #333333;
   --ion-color-white-contrast-rgb: 51, 51, 51;
 
+  /** success **/
+  --ion-color-success: #0a7f0f;
+  --ion-color-success-rgb: 10, 127, 15;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #09700d;
+  --ion-color-success-tint: #238c27;
+
+  --ion-color-warning: #ffa000;
+  --ion-color-warning-rgb: 255, 160, 0;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #e08d00;
+  --ion-color-warning-tint: #ffaa1a;
+
+  --ion-color-danger: #cc0000;
+  --ion-color-danger-rgb: 204, 0, 0;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #b40000;
+  --ion-color-danger-tint: #d11a1a;
+
   // Variable app
   --color: #040b15;
   --ion-text-color: #040b15;
@@ -69,6 +91,21 @@
   --ion-item-background: #ffffff;
   --ion-border-color: #d5d6dd;
   --inner-border-width: 0px 0px 0.5px 0px;
+
+  // FONT SIZES
+  --FS9: 9px;
+  --FS10: 10px;
+  --FS11: 11px;
+  --FS12: 12px;
+  --FS13: 13px;
+  --FS14: 14px;
+  --FS15: 15px;
+  --FS16: 16px;
+  --FS18: 18px;
+  --FS20: 20px;
+  --FS22: 22px;
+  --FS24: 24px;
+  --FS26: 26px;
 
   body {
     font-family: "Roboto", sans-serif;
@@ -167,6 +204,12 @@
       &.list-md {
         padding-top: 0;
         padding-bottom: 0;
+      }
+
+      ion-item + .invalid {
+        font-size: var(--FS12);
+        color: var(--ion-color-danger);
+        margin: 5px 15px;
       }
     }
 
@@ -296,6 +339,10 @@
         .section-content {
           box-shadow: 0px 4px 8px 0px rgba(74, 78, 110, 0.15);
         }
+      }
+
+      ion-progress-bar {
+        --background: #41424d;
       }
 
       ion-list {

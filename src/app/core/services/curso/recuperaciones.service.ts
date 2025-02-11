@@ -15,12 +15,15 @@ export class RecuperacionesService extends PrivateService {
     auth: AuthService,
     caching: CachingService,
     toast: ToastController,
-    ) {
+  ) {
     super(global, auth, caching, toast);
   }
 
   getPrincipal(params: any, forceRefresh = false) {
     return this.post(`${this.baseUrl}/recuperaciones/v4/principal`, params, forceRefresh);
+  }
+  getPrincipalV5(periCcod: any, sedeCcod: any, asigCcod: any, seccCcod: any, ssecNcorr: any) {
+    return this.get(`${this.baseUrl}/recuperaciones/v5/principal?periCcod=${periCcod}&sedeCcod=${sedeCcod}&asigCcod=${asigCcod}&seccCcod=${seccCcod}&ssecNcorr=${ssecNcorr}`);
   }
   getDetalleSolicitud(params: any) {
     return this.post(`${this.baseUrl}/recuperaciones/v4/detalle-solicitud`, params, undefined, undefined, true);

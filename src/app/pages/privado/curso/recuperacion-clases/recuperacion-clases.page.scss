@@ -43,6 +43,10 @@ section.tabla {
             font-size: 14px;
             color: #4a4a4a;
             // vertical-align: top;
+
+            ::ng-deep ion-icon.estado {
+                font-size: 24px;
+            }
         }
 
         tr:first-child th {
