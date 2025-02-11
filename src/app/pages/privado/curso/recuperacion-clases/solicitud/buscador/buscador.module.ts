@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { BuscadorPageRoutingModule } from './buscador-routing.module';
 import { BuscadorPage } from './buscador.page';
 
 @NgModule({
@@ -10,8 +9,7 @@ import { BuscadorPage } from './buscador.page';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule,
-    BuscadorPageRoutingModule
+    IonicModule
   ],
   declarations: [BuscadorPage]
 })

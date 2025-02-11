@@ -7,6 +7,10 @@
     .section-scroll {
         height: 100%;
         overflow-y: auto;
+
+        section:first-child {
+            margin-top: 15px;
+        }
     }
 
     .btn-buscar {

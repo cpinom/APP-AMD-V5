@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar class="curso">
     <ion-title *ngIf="seccion">
-      <h2>{{ seccion.asigTdesc }} / {{ seccion.ssecTdesc }}</h2>
-      <span>Sede {{ seccion.sedeTdesc }}</span>
+      <h2>{{seccion.asigTdesc}} / {{seccion.ssecTdesc}}</h2>
+      <span>Sede {{seccion.sedeTdesc}}</span>
     </ion-title>
     <ion-buttons slot="start">
       <ion-back-button text="AMD" defaultHref="/privado/curso"></ion-back-button>
@@ -29,13 +29,13 @@
         <ion-button color="primary" shape="round" fill="outline" (click)="marcarPresentes()">Marcar Todos Presentes</ion-button>
         <div class="indicadores">
           <div>
-            <strong>{{ alumnos.length }}</strong> Total
+            <strong>{{alumnos.length}}</strong> Total
           </div>
           <div>
-            <strong>{{ resolverPorEstado(2) }}</strong> Presentes
+            <strong>{{resolverPorEstado(2)}}</strong> Presentes
           </div>
           <div>
-            <strong>{{ resolverPorEstado(1) }}</strong> Ausentes
+            <strong>{{resolverPorEstado(1)}}</strong> Ausentes
           </div>
         </div>
       </ion-card-title>
@@ -48,7 +48,7 @@
               <th class="ion-text-left">Nombre Estudiante</th>
               <th>% Asistencia</th>
               <th class="blue">
-                {{ resolverDia(alumnos[0].lclaFclase) }}<br />{{ alumnos[0].lclaFclase }}
+                {{resolverDia(alumnos[0].lclaFclase)}}<br />{{alumnos[0].lclaFclase}}
               </th>
             </tr>
           </thead>
@@ -59,18 +59,18 @@
                   <ion-avatar>
                     <img [src]="resolverFoto(item.persNcorr)" />
                   </ion-avatar>
-                  <span>{{ item.persTapePaterno }}, {{ item.persTnombre }}</span>
+                  <span>{{item.persTapePaterno}}, {{item.persTnombre}}</span>
                   <ng-container *ngIf="item.alnoNoportunidad >= 3">
-                    <ion-badge id="est-oportunidad-{{ i }}" color="medium">{{ item.alnoNoportunidad }}</ion-badge>
-                    <ion-popover trigger="est-oportunidad-{{ i }}" side="right" alignment="end">
+                    <ion-badge id="est-oportunidad-{{i}}" color="medium">{{item.alnoNoportunidad}}</ion-badge>
+                    <ion-popover trigger="est-oportunidad-{{i}}" side="right" alignment="end">
                       <ng-template>
-                        <ion-content class="ion-padding">{{ resolverOportunidad(item.alnoNoportunidad) }}</ion-content>
+                        <ion-content class="ion-padding">{{resolverOportunidad(item.alnoNoportunidad)}}</ion-content>
                       </ng-template>
                     </ion-popover>
                   </ng-container>
                   <ng-container *ngIf="item.estadoCumpleanos == 1">
-                    <ion-icon id="est-cumple-{{ i }}" src="assets/icon/cake.svg"></ion-icon>
-                    <ion-popover trigger="est-cumple-{{ i }}" side="right" alignment="end">
+                    <ion-icon id="est-cumple-{{i}}" src="assets/icon/cake.svg"></ion-icon>
+                    <ion-popover trigger="est-cumple-{{i}}" side="right" alignment="end">
                       <ng-template>
                         <ion-content class="ion-padding">Estudiante de cumpleaños</ion-content>
                       </ng-template>
@@ -78,7 +78,7 @@
                   </ng-container>                  
                 </div>
               </td>
-              <td>{{ item.asistencia }}%</td>
+              <td>{{item.asistencia}}%</td>
               <td class="blue">
                 <div (click)="procesarAsistencia(item)">
                   <ion-icon class="no-informada" src="assets/icon/radio_button_unchecked.svg" *ngIf="item.asistenciaActual == 0"></ion-icon>

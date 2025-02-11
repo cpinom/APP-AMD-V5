@@ -60,9 +60,9 @@
                     <ion-avatar>
                       <img [src]="resolverFoto(item.persNcorr)" />
                     </ion-avatar>
-                    <span>{{ item.persTapePaterno }}, {{ item.persTnombre }}</span>
+                    <span>{{item.persTapePaterno}}, {{item.persTnombre}}</span>
                     @if (item.alnoNoportunidad >= 3) {
-                    <ion-badge id="est-oportunidad-{{$index}}" color="medium">{{ item.alnoNoportunidad }}</ion-badge>
+                    <ion-badge id="est-oportunidad-{{$index}}" color="medium">{{item.alnoNoportunidad}}</ion-badge>
                     <ion-popover trigger="est-oportunidad-{{$index}}" side="right" alignment="end">
                       <ng-template>
                         <ion-content class="ion-padding">

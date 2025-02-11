@@ -8,6 +8,7 @@ import { param } from 'jquery';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
 import { ErrorService } from 'src/app/core/services/error.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-recuperacion-clases',
@@ -31,13 +32,14 @@ export class RecuperacionClasesPage implements OnInit {
 
   suspendidas: any[] | undefined;
   aprobadas: any[] | undefined;
-  segmento: any;
+  segmento = 0;
 
   constructor(private api: RecuperacionesService,
     private modal: ModalController,
     private loading: LoadingController,
     private error: ErrorService,
-    private snackbar: SnackbarService) { }
+    private snackbar: SnackbarService,
+    private dialog: DialogService) { }
 
   ngOnInit() {
     Preferences.get({ key: 'Seccion' }).then((result) => {
@@ -48,7 +50,7 @@ export class RecuperacionClasesPage implements OnInit {
     this.api.marcarVista(VISTAS_DOCENTE.RECUPERACIONES);
   }
   async cargar(forceRefresh = false) {
-    debugger
+    // debugger
     try {
       const periCcod = this.seccion.periCcod;
       const sedeCcod = this.seccion.sedeCcod;
@@ -63,9 +65,9 @@ export class RecuperacionClasesPage implements OnInit {
         this.aprobadas = data.data.aprobadas;
         // this.recuperaciones = data.recuperaciones;
         // this.solicitudes = data.solicitudes;
-        // this.tiposSalas = data.tiposSalas;
-        // this.horario = data.horario;
-        // this.implementos = data.implementos;
+        this.tiposSalas = data.data.tiposSalas;
+        this.horario = data.data.horario;
+        this.implementos = data.data.implementos;
         // this.recuperacion = null;
       }
     }
@@ -85,28 +87,55 @@ export class RecuperacionClasesPage implements OnInit {
       ev.target.complete();
     });
   }
-  async solicitar() {
-    let modal = await this.modal.create({
+  async solicitar(recuperacion: any) {
+    const modal = await this.dialog.showModal({
       component: SolicitudPage,
+      cssClass: 'modal-recuperacion-clases',
       componentProps: {
         data: {
           seccion: this.seccion,
-          clase: this.recuperacion,
+          clase: recuperacion,
           horario: this.horario,
           tiposSalas: this.tiposSalas,
           implementos: this.implementos
         }
+      },
+      canDismiss: async (data?: any, role?: string) => {
+        if (role == 'gesture' || role == 'backdrop') {
+          return false;
+        }
+        return true
       }
     });
 
-    await modal.present();
+    const response = await modal.onWillDismiss();
 
-    let response = await modal.onWillDismiss();
-
-    if (response.data && response.data.action == 'reload') {
+    if (response.data?.action == 'reload') {
       await this.cargar();
     }
   }
+  // async solicitar1() {
+  //   let modal = await this.modal.create({
+  //     component: SolicitudPage,
+  //     componentProps: {
+  //       data: {
+  //         seccion: this.seccion,
+  //         clase: this.recuperacion,
+  //         horario: this.horario,
+  //         tiposSalas: this.tiposSalas,
+  //         implementos: this.implementos
+  //       }
+  //     }
+  //   });
+
+  //   await modal.present();
+
+  //   let response = await modal.onWillDismiss();
+
+  //   if (response.data && response.data.action == 'reload') {
+  //     await this.cargar();
+  //   }
+  // }
   async detalle(e: any, record: any) {
     const loading = await this.loading.create({ message: 'Cargando...' });
 

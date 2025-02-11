@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, IonNav, LoadingController, ModalController } from '@ionic/angular';
+import { IonNav, Platform } from '@ionic/angular';
 import { RecuperacionesService } from 'src/app/core/services/curso/recuperaciones.service';
-import * as moment from 'moment';
 import { DisponibilidadPage } from '../disponibilidad/disponibilidad.page';
+import { DialogService } from 'src/app/core/services/dialog.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-buscador',
@@ -15,16 +16,22 @@ export class BuscadorPage implements OnInit {
   data: any;
   mostrarFecha = false;
   form: FormGroup;
-  fechaMinimaSolicitud: string;
+  fechaMinimaSolicitud: string | undefined;
   equipArray: string[] = [];
   submitted!: boolean;
 
-  constructor(private modal: ModalController,
-    private fb: FormBuilder,
+  loading: HTMLIonLoadingElement | null = null;
+  cancelAlert: HTMLIonAlertElement | null = null;
+  updateMessageTimeout: any;
+  cancelOptionTimeout: any;
+  searchInProgress: boolean = false;
+  isCancelled: boolean = false; // Marca de cancelación
+
+  constructor(private fb: FormBuilder,
     private api: RecuperacionesService,
-    private alert: AlertController,
-    private loading: LoadingController,
-    private nav: IonNav) {
+    private dialog: DialogService,
+    private nav: IonNav,
+    private pt: Platform) {
 
     this.form = this.fb.group({
       tsalCcod: [, Validators.required],
@@ -42,21 +49,31 @@ export class BuscadorPage implements OnInit {
       this.lclaFclase?.setValue(moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY'));
     });
 
-    this.fechaPicker?.setValue(moment('07072022', 'DDMMYYYY').toISOString());
-    this.fechaMinimaSolicitud = moment('07072022', 'DDMMYYYY').add('3', 'days').format('YYYY-MM-DD');
-
+    if (this.pt.is('mobileweb')) {
+      this.fechaPicker?.setValue(moment('20042024', 'DDMMYYYY').toISOString());
+      // this.fechaMinimaSolicitud = moment('15042024', 'DDMMYYYY').add('3', 'days').format('YYYY-MM-DD');
+    }
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    const aula = this.data.tiposSalas.find((item: any) => item.tsalCcod == 1);
+
+    if (aula) {
+      this.tsalCcod?.setValue(aula.tsalCcod);
+    }
+  }
   async buscarBloques() {
     this.submitted = true;
+    this.isCancelled = false;
 
     if (this.form.valid) {
-      let loading = await this.loading.create({ message: 'Espere un momento...' });
-      let result: any;
-      let params = {
+
+      this.searchInProgress = true; // Indicar que la búsqueda está en curso
+      this.loading = await this.dialog.showLoading({ message: 'Buscando disponibilidad...' });
+
+      const params = {
         sedeCcod: this.seccion.sedeCcod,
-        lclaNcorr: this.clase.lclaNcorr,
+        lclaNcorr: this.clase.detalle.libro,
         horaCcod: this.horaCcod?.value,
         lclaFclase: this.lclaFclase?.value,
         bloqueUnico: this.bloqueUnico?.value ? 1 : 0,
@@ -64,13 +81,59 @@ export class BuscadorPage implements OnInit {
         tsalCcod: this.tsalCcod?.value
       };
 
-      await loading.present();
+      // Temporizador para cambiar el mensaje si tarda más de 10 segundos
+      this.updateMessageTimeout = setTimeout(() => {
+        if (this.loading) {
+          this.loading.message = 'Verificando espacios disponibles... Gracias por tu paciencia.';
+        }
+      }, 10000);
+
+      // Mostrar opción de cancelar después de 15 segundos
+      this.cancelOptionTimeout = setTimeout(async () => {
+        if (this.searchInProgress) {
+          if (this.loading) {
+            await this.loading.dismiss();
+            this.loading = null;
+          }
+
+          this.cancelAlert = await this.dialog.showAlert({
+            header: '¿Cancelar búsqueda?',
+            message: 'La búsqueda está tardando más de lo esperado. ¿Desea cancelarla?',
+            buttons: [
+              {
+                text: 'Seguir esperando',
+                role: 'cancel',
+                handler: async () => {
+                  if (this.searchInProgress) {
+                    this.loading = await this.dialog.showLoading({ message: 'Seguimos buscando...' });
+                  }
+                }
+              },
+              {
+                text: 'Cancelar búsqueda',
+                role: 'destructive',
+                handler: () => {
+                  this.cancelarBusqueda();
+                }
+              }
+            ]
+          });
+        }
+
+      }, 25000);
+
+      let result: any;
 
       try {
-        result = await this.api.getHorariosDisponibles(params);
+        result = await this.api.getHorariosDisponiblesV5(params);
+
+        // Si se cancela la resuesta es ignorada
+        if (this.isCancelled) {
+          return;
+        }
       }
       finally {
-        await loading.dismiss();
+        this.finalizarBusqueda();
       }
 
       const { data } = result;
@@ -79,7 +142,7 @@ export class BuscadorPage implements OnInit {
         await this.nav.push(DisponibilidadPage, {
           bloques: data.bloques,
           data: {
-            lclaNcorr: this.clase.lclaNcorr,
+            lclaNcorr: this.clase.detalle.libro,
             horaCcod: this.horaCcod?.value,
             lclaFclase: this.lclaFclase?.value,
             tsalCcod: this.tsalCcod?.value,
@@ -87,22 +150,56 @@ export class BuscadorPage implements OnInit {
             seccion: this.data.seccion
           }
         });
-      } else {
-        this.mostrarAlerta(data.message);
+      }
+      else {
+        await this.presentError(data.message);
       }
     }
   }
-  async mostrarAlerta(mensaje: string) {
-    const alert = await this.alert.create({
+  async finalizarBusqueda() {
+    this.searchInProgress = false;
+
+    // Cerrar el loading si sigue abierto
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+
+    // Cerrar la alerta si está abierta
+    if (this.cancelAlert) {
+      await this.cancelAlert.dismiss();
+      this.cancelAlert = null;
+    }
+
+    clearTimeout(this.updateMessageTimeout);
+    clearTimeout(this.cancelOptionTimeout);
+  }
+  async cancelarBusqueda() {
+    this.isCancelled = true; // Marcar que la búsqueda fue cancelada
+    this.searchInProgress = false; // Marcar que la búsqueda fue cancelada
+
+    if (this.loading) {
+      await this.loading.dismiss();
+      this.loading = null;
+    }
+
+    if (this.cancelAlert) {
+      await this.cancelAlert.dismiss();
+      this.cancelAlert = null;
+    }
+
+    clearTimeout(this.updateMessageTimeout);
+    clearTimeout(this.cancelOptionTimeout);
+  }
+  async presentError(message: string) {
+    const alert = await this.dialog.showAlert({
+      cssClass: 'alert-message',
+      message: `<img src="./assets/images/warning.svg" /><br />${message}`,
       header: 'Solicitud Recuperación',
-      message: mensaje,
-      buttons: [
-        {
-          text: 'Cerrar'
-        }
-      ]
+      buttons: ['Aceptar']
     });
-    await alert.present();
+
+    return alert;
   }
   validaDiaDomingo = (dateString: string) => {
     const date = new Date(dateString);
@@ -110,11 +207,12 @@ export class BuscadorPage implements OnInit {
     return utcDay !== 0;
   }
   getEquipamiento(e: any, equipo: string) {
-    let detail = e.detail.checked;
+    const detail = e.detail.checked;
 
     if (detail) {
       this.equipArray.push(equipo);
-    } else {
+    }
+    else {
       let itemIndex!: number;
       this.equipArray.forEach((item, index) => {
         if (item === equipo) {
@@ -129,7 +227,7 @@ export class BuscadorPage implements OnInit {
     }
   }
   async cerrar() {
-    await this.modal.dismiss();
+    await this.dialog.dismissModal();
   }
   get seccion() {
     if (this.data) return this.data.seccion;

@@ -134,7 +134,7 @@ export class ComunicacionesPage implements OnInit, OnDestroy {
           return;
         }
 
-        this.snackbar.showToast('No pudimos procesar su solicitud. Vuelva a intentar.', 3000, 'danger');
+        this.snackbar.showToast('No pudimos procesar tu solicitud. Vuelva a intentar.', 3000, 'danger');
       }
       finally {
         await loading.dismiss();

@@ -24,15 +24,15 @@
           <ion-list>
             <ion-item>
               <ion-label class="text-title text-normal" style="flex: 2">
-                {{ descriptor.descriptor.asig_ccod }} - {{ descriptor.descriptor.asig_tdesc }}
+                {{descriptor.descriptor.asig_ccod}} - {{descriptor.descriptor.asig_tdesc}}
               </ion-label>
               <ion-label class="text-title text-right text-normal">
-                {{ descriptor.descriptor.asig_nhoras }} horas - {{ descriptor.descriptor.moda_tdesc }}
+                {{descriptor.descriptor.asig_nhoras}} horas - {{descriptor.descriptor.moda_tdesc}}
               </ion-label>
             </ion-item>
             <ion-item lines="none" *ngIf="descriptor.descriptor.asig_tdescrip">
               <ion-label>
-                <p class="text-normal">{{ descriptor.descriptor.asig_tdescrip.data | stripHtml }}</p>
+                <p class="text-normal">{{descriptor.descriptor.asig_tdescrip.data | stripHtml}}</p>
               </ion-label>
             </ion-item>
           </ion-list>
@@ -41,8 +41,8 @@
               <table>
                 <thead>
                   <tr>
-                    <th colspan="5">Horas presenciales: {{ descriptor.descriptor.asig_nhoras_presenciales }}</th>
-                    <th colspan="2">Horas online: {{ descriptor.descriptor.asig_nhoras_virtuales }}</th>
+                    <th colspan="5">Horas presenciales: {{descriptor.descriptor.asig_nhoras_presenciales}}</th>
+                    <th colspan="2">Horas online: {{descriptor.descriptor.asig_nhoras_virtuales}}</th>
                   </tr>
                   <tr>
                     <th>Hrs. Aula</th>
@@ -56,13 +56,13 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{{ descriptor.descriptor.asig_nhoras_aula }}</td>
-                    <td>{{ descriptor.descriptor.asig_nhoras_lab }}</td>
-                    <td>{{ descriptor.descriptor.asig_nhoras_taller }}</td>
-                    <td>{{ descriptor.descriptor.asig_nhoras_terreno }}</td>
-                    <td>{{ descriptor.descriptor.asig_nhoras_clinico }}</td>
-                    <td>{{ descriptor.descriptor.asig_nhoras_vir_sincrono }}</td>
-                    <td>{{ descriptor.descriptor.asig_nhoras_vir_asincrono }}</td>
+                    <td>{{descriptor.descriptor.asig_nhoras_aula}}</td>
+                    <td>{{descriptor.descriptor.asig_nhoras_lab}}</td>
+                    <td>{{descriptor.descriptor.asig_nhoras_taller}}</td>
+                    <td>{{descriptor.descriptor.asig_nhoras_terreno}}</td>
+                    <td>{{descriptor.descriptor.asig_nhoras_clinico}}</td>
+                    <td>{{descriptor.descriptor.asig_nhoras_vir_sincrono}}</td>
+                    <td>{{descriptor.descriptor.asig_nhoras_vir_asincrono}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -81,10 +81,10 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{{ descriptor.descriptor.asig_tcualificacion | stripHtml }}</td>
-                    <td>{{ descriptor.descriptor.asig_tperfil_chilevalora | stripHtml }}</td>
-                    <td>{{ descriptor.descriptor.asig_tucl | stripHtml }}</td>
-                    <td>{{ descriptor.descriptor.asig_cnivel_mctp }}</td>
+                    <td>{{descriptor.descriptor.asig_tcualificacion | stripHtml}}</td>
+                    <td>{{descriptor.descriptor.asig_tperfil_chilevalora | stripHtml}}</td>
+                    <td>{{descriptor.descriptor.asig_tucl | stripHtml}}</td>
+                    <td>{{descriptor.descriptor.asig_cnivel_mctp}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -102,8 +102,8 @@
                   <ng-container *ngIf="descriptor.competencias_transversales">
                     <tr
                       *ngFor="let item of resolverCompetencias(descriptor.competencias_transversales.competencia_transversal)">
-                      <td><b>{{ item.comt_tnombre }}</b></td>
-                      <td>{{ item.comt_tdesc.data | stripHtml }}</td>
+                      <td><b>{{item.comt_tnombre}}</b></td>
+                      <td>{{item.comt_tdesc.data | stripHtml}}</td>
                     </tr>
                   </ng-container>
                   <tr *ngIf="!descriptor.competencias_transversales">
@@ -163,18 +163,18 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of descriptor.asignatura_unidades.asignatura_unidad">
-                    <td>{{ item.asun_norden }}</td>
-                    <td>{{ item.asun_tdescrip.data | stripHtml }}</td>
-                    <td>{{ item.asig_nhoras_aula }}</td>
-                    <td>{{ item.asig_nhoras_lab }}</td>
-                    <td>{{ item.tlab_tdesc }}</td>
-                    <td>{{ item.asig_nhoras_taller }}</td>
-                    <td>{{ item.ttal_tdesc }}</td>
-                    <td>{{ item.asig_nhoras_terreno }}</td>
-                    <td>{{ item.asig_nhoras_clinico }}</td>
-                    <td>{{ item.asig_nhoras_vir_sincrono }}</td>
-                    <td>{{ item.asig_nhoras_vir_asincrono }}</td>
-                    <td>{{ item.horas_totales }}</td>
+                    <td>{{item.asun_norden}}</td>
+                    <td>{{item.asun_tdescrip.data | stripHtml}}</td>
+                    <td>{{item.asig_nhoras_aula}}</td>
+                    <td>{{item.asig_nhoras_lab}}</td>
+                    <td>{{item.tlab_tdesc}}</td>
+                    <td>{{item.asig_nhoras_taller}}</td>
+                    <td>{{item.ttal_tdesc}}</td>
+                    <td>{{item.asig_nhoras_terreno}}</td>
+                    <td>{{item.asig_nhoras_clinico}}</td>
+                    <td>{{item.asig_nhoras_vir_sincrono}}</td>
+                    <td>{{item.asig_nhoras_vir_asincrono}}</td>
+                    <td>{{item.horas_totales}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -191,8 +191,8 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{{ descriptor.descriptor.asig_tesp_tec | stripHtml }}</td>
-                    <td>{{ descriptor.descriptor.asig_tesp_ped | stripHtml }}</td>
+                    <td>{{descriptor.descriptor.asig_tesp_tec | stripHtml}}</td>
+                    <td>{{descriptor.descriptor.asig_tesp_ped | stripHtml}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -204,20 +204,20 @@
         <ion-accordion [value]="'unidades_' + i"
           *ngFor="let item of descriptor.asignatura_unidades.asignatura_unidad; let i = index;">
           <ion-item slot="header">
-            <ion-label>Unidad de Aprendizaje {{ resolverNumeroRomano(item.asun_norden) }}</ion-label>
+            <ion-label>Unidad de Aprendizaje {{resolverNumeroRomano(item.asun_norden)}}</ion-label>
           </ion-item>
           <div slot="content">
             <ion-list>
               <ion-item>
-                <ion-label class="text-title text-normal" style="flex: 2">{{ item.asun_norden }} - {{
-                  item.asun_tdescrip.data | stripHtml }}</ion-label>
-                <ion-label class="text-title text-right">Horas Unidad: {{ item.asun_nduracion }}</ion-label>
+                <ion-label class="text-title text-normal" style="flex: 2">{{item.asun_norden}} - {{
+                  item.asun_tdescrip.data | stripHtml}}</ion-label>
+                <ion-label class="text-title text-right">Horas Unidad: {{item.asun_nduracion}}</ion-label>
               </ion-item>
               <ng-container *ngFor="let obj of resolverUnidades(item.unidad_objetivos.unidad_objetivo)">
                 <ion-item>
                   <ion-label style="flex: 1;" class="text-title text-normal">Aprendizajes Esperados</ion-label>
                   <ion-label style="flex: 2;" class="text-normal">
-                    <b style="display: inline;">{{ item.asun_norden }}.{{ obj.unob_norden }} </b> - <span
+                    <b style="display: inline;">{{item.asun_norden}}.{{obj.unob_norden}} </b> - <span
                       style="display: inline;" [innerHTML]="obj.unob_tdescrip.data"></span>
                   </ion-label>
                 </ion-item>
@@ -274,9 +274,9 @@
                 <tbody>
                   <ng-container *ngIf="descriptor.estrategias_metodologicas">
                     <tr *ngFor="let item of descriptor.estrategias_metodologicas.estrategia_metodologica">
-                      <td>{{ item.asun_norden }}</td>
-                      <td>{{ (item.edid_tdesc && item.edid_tdesc.data) || 'Sin dato' }}</td>
-                      <td>{{ (item.tdid_tdesc && item.tdid_tdesc.data) || 'Sin dato' }}</td>
+                      <td>{{item.asun_norden}}</td>
+                      <td>{{(item.edid_tdesc && item.edid_tdesc.data) || 'Sin dato'}}</td>
+                      <td>{{(item.tdid_tdesc && item.tdid_tdesc.data) || 'Sin dato'}}</td>
                     </tr>
                   </ng-container>
                 </tbody>
@@ -321,16 +321,16 @@
                 <tbody>
                   <tr *ngFor="let item of bibliografia('1')">
                     <td class="ion-text-left">
-                      <a *ngIf="item.bibl_turl_enlace" (click)="abrirEnlace(item.bibl_turl_enlace, $event)">{{ item.bibl_ttitulo }}</a>
-                      <span *ngIf="!item.bibl_turl_enlace">{{ item.bibl_ttitulo }}</span>
+                      <a *ngIf="item.bibl_turl_enlace" (click)="abrirEnlace(item.bibl_turl_enlace, $event)">{{item.bibl_ttitulo}}</a>
+                      <span *ngIf="!item.bibl_turl_enlace">{{item.bibl_ttitulo}}</span>
                     </td>
-                    <td>{{ item.bibl_tautor }}</td>
-                    <td>{{ item.bibl_nano }}</td>
-                    <td>{{ item.bibl_isbn }}</td>
-                    <td>{{ item.bibl_teditorial }}</td>
-                    <td>{{ item.bibl_tfuente }}</td>
-                    <td>{{ item.bibl_trecurso_digital }}</td>
-                    <td>{{ item.tipo_material }}</td>
+                    <td>{{item.bibl_tautor}}</td>
+                    <td>{{item.bibl_nano}}</td>
+                    <td>{{item.bibl_isbn}}</td>
+                    <td>{{item.bibl_teditorial}}</td>
+                    <td>{{item.bibl_tfuente}}</td>
+                    <td>{{item.bibl_trecurso_digital}}</td>
+                    <td>{{item.tipo_material}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -355,16 +355,16 @@
                 <tbody>
                   <tr *ngFor="let item of bibliografia('2')">
                     <td class="ion-text-left">
-                      <a *ngIf="item.bibl_turl_enlace" (click)="abrirEnlace(item.bibl_turl_enlace, $event)">{{ item.bibl_ttitulo }}</a>
-                      <span *ngIf="!item.bibl_turl_enlace">{{ item.bibl_ttitulo }}</span>
+                      <a *ngIf="item.bibl_turl_enlace" (click)="abrirEnlace(item.bibl_turl_enlace, $event)">{{item.bibl_ttitulo}}</a>
+                      <span *ngIf="!item.bibl_turl_enlace">{{item.bibl_ttitulo}}</span>
                     </td>
-                    <td>{{ item.bibl_tautor }}</td>
-                    <td>{{ item.bibl_nano }}</td>
-                    <td>{{ item.bibl_isbn }}</td>
-                    <td>{{ item.bibl_teditorial }}</td>
-                    <td>{{ item.bibl_tfuente }}</td>
-                    <td>{{ item.bibl_trecurso_digital }}</td>
-                    <td>{{ item.tipo_material }}</td>
+                    <td>{{item.bibl_tautor}}</td>
+                    <td>{{item.bibl_nano}}</td>
+                    <td>{{item.bibl_isbn}}</td>
+                    <td>{{item.bibl_teditorial}}</td>
+                    <td>{{item.bibl_tfuente}}</td>
+                    <td>{{item.bibl_trecurso_digital}}</td>
+                    <td>{{item.tipo_material}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -391,16 +391,16 @@
                 <tbody>
                   <ng-container *ngIf="descriptor.asignatura_perfiles">
                     <tr *ngFor="let item of resolverPerfilDocente(descriptor.asignatura_perfiles.asignatura_perfil)">
-                      <td>{{ item.aspe_npreferencia }}</td>
-                      <td>{{ item.titulo }}</td>
-                      <td>{{ item.grado }}</td>
-                      <td>{{ item.aspe_nexpe_docente }}</td>
+                      <td>{{item.aspe_npreferencia}}</td>
+                      <td>{{item.titulo}}</td>
+                      <td>{{item.grado}}</td>
+                      <td>{{item.aspe_nexpe_docente}}</td>
                     </tr>
                   </ng-container>
                   <tr>
                     <td colspan="4">
                       <b>Observaciones - </b>
-                      <span>{{ descriptor.descriptor.asig_tobsperfildocente.data | stripHtml }}</span>
+                      <span>{{descriptor.descriptor.asig_tobsperfildocente.data | stripHtml}}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -427,9 +427,9 @@
                 <tbody>
                   <ng-container *ngIf="descriptor.asignatura_softwares">
                     <tr *ngFor="let item of resolverSoftware(descriptor.asignatura_softwares.asignatura_software)">
-                      <td>{{ item.software }}</td>
-                      <td>{{ item.version }}</td>
-                      <td>{{ item.asso_tobservaciones }}</td>
+                      <td>{{item.software}}</td>
+                      <td>{{item.version}}</td>
+                      <td>{{item.asso_tobservaciones}}</td>
                     </tr>
                   </ng-container>
                   <tr *ngIf="!descriptor.asignatura_softwares">

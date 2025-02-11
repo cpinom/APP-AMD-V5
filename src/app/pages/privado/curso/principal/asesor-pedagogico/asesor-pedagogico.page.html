@@ -81,10 +81,10 @@
                   }
                 </div>
               </td>
-              <td>{{ item.cargNnotaFinal }}</td>
-              <td>{{ item.cargNasistencia }}%</td>
-              <td>{{ item.alnoCriesgoAlumno || 'Sin Riesgo' }}</td>
-              <td>{{ resolverBitacora(item, 0) }}</td>
+              <td>{{item.cargNnotaFinal}}</td>
+              <td>{{item.cargNasistencia}}%</td>
+              <td>{{item.alnoCriesgoAlumno || 'Sin Riesgo'}}</td>
+              <td>{{resolverBitacora(item, 0)}}</td>
               <td>
                 @if (item.amtuNestado == 1) {
                 <ion-button id="respuesta-asesor-{{$index}}" size="small" color="medium" shape="round" fill="outline">
@@ -94,7 +94,7 @@
                   <ng-template>
                     <ion-content class="ion-padding">
                       <b>Respuesta del Asesor Pedagógico</b>
-                      <p>{{ item.amtuTsolucion }}</p>
+                      <p>{{item.amtuTsolucion}}</p>
                     </ion-content>
                   </ng-template>
                 </ion-popover>

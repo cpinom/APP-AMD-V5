@@ -27,13 +27,13 @@
         <form class="cuenta" [formGroup]="cuentaForm" (submit)="buscarCuenta()">
           <ion-list>
             <ion-item lines="full">
-              <ion-input #user label="Usuario" labelPlacement="stacked" formControlName="usuario" placeholder="Ingrese su RUN o usuario INACAPMail" clearInput></ion-input>              
+              <ion-input #user label="Usuario" labelPlacement="stacked" formControlName="usuario" placeholder="Ingresa tu RUN o usuario INACAPMail" clearInput></ion-input>              
             </ion-item>
             <div class="error" *ngIf="errorMsg">{{errorMsg}}</div>
           </ion-list>
           <ion-button type="submit" shape="round" color="danger" expand="block" [disabled]="procesando|| !cuentaForm.valid">Continuar</ion-button>
         </form>
-        <p class="recuperar">¿Ha olvidado su clave? <a (click)="abrirNavegador('https://www.inacap.cl/tportalvp/recuperar_clave/')">Ingrese aquí</a></p>
+        <p class="recuperar">¿Has olvidado tu clave? <a (click)="abrirNavegador('https://www.inacap.cl/tportalvp/recuperar_clave/')">Ingrese aquí</a></p>
       </div>
     </swiper-slide>
     <!-- Buscar Cuenta -->
@@ -44,10 +44,10 @@
         <form class="cuenta" [formGroup]="loginForm" (submit)="login()">
           <ion-list>
             <ion-item lines="full" *ngIf="!poseePIN">
-              <ion-input #password type="password" label="Contraseña" labelPlacement="stacked" formControlName="clave" placeholder="Ingrese su contraseña" clearInput></ion-input>
+              <ion-input #password type="password" label="Contraseña" labelPlacement="stacked" formControlName="clave" placeholder="Ingresa tu contraseña" clearInput></ion-input>
             </ion-item>
             <ion-item lines="none" *ngIf="poseePIN">
-              <ion-label position="stacked" class="label-pin">Ingrese su PIN</ion-label>
+              <ion-label position="stacked" class="label-pin">Ingresa tu PIN</ion-label>
               <code-input #codeInput [isCodeHidden]="true" [codeLength]="6" (codeChanged)="onPinChanged($event)" (codeCompleted)="onPinCompleted($event)"></code-input>
             </ion-item>
             <div class="error" *ngIf="errorMsg">{{errorMsg}}</div>

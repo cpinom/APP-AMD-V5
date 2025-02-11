@@ -35,8 +35,8 @@
               <img default [src]="getFotoSede(item.sedeCcod)" alt="Sede INACAP" (error)="updateUrl($event)" appImage />
             </ion-thumbnail>
             <ion-label>
-              <h2>{{ item.sedeTdesc }}</h2>
-              <p *ngIf="activeTab == 1">{{ item.km }}</p>
+              <h2>{{item.sedeTdesc}}</h2>
+              <p *ngIf="activeTab == 1">{{item.km}}</p>
             </ion-label>
           </ion-item>
         </ion-list>
@@ -97,7 +97,7 @@
                   <span>{{sedeData.sedeTfono}}</span>
                 </ion-label>
               </ion-item>
-              <ion-item detail="false" *ngIf="sedeData.sedeTemail" href="{{ 'mailto:' +  sedeData.sedeTemail}}" class="ion-activatable">
+              <ion-item detail="false" *ngIf="sedeData.sedeTemail" href="{{'mailto:' +  sedeData.sedeTemail}}" class="ion-activatable">
                 <ion-icon slot="start" color="medium" src="assets/icon/email.svg"></ion-icon>
                 <ion-label>
                   <span>{{sedeData.sedeTemail}}</span>

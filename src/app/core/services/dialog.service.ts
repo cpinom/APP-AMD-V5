@@ -24,14 +24,14 @@ export class DialogService {
     await alert.present();
     return alert;
   }
-  public async showErrorAlert(opts?: AlertOptions): Promise<HTMLIonAlertElement> {
-    const defaultOpts: AlertOptions = {
-      header: 'Error',
-      buttons: ['OK'],
-    };
-    opts = { ...defaultOpts, ...opts };
-    return this.showAlert(opts);
-  }
+  // public async showErrorAlert(opts?: AlertOptions): Promise<HTMLIonAlertElement> {
+  //   const defaultOpts: AlertOptions = {
+  //     header: 'Error',
+  //     buttons: ['OK'],
+  //   };
+  //   opts = { ...defaultOpts, ...opts };
+  //   return this.showAlert(opts);
+  // }
   public async showModal(opts: ModalOptions): Promise<HTMLIonModalElement> {
     const modal = await this.modalCtrl.create(opts);
     await modal.present();

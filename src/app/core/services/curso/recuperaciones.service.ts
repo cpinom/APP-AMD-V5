@@ -31,6 +31,10 @@ export class RecuperacionesService extends PrivateService {
   getHorariosDisponibles(params: any) {
     return this.post(`${this.baseUrl}/recuperaciones/v4/horarios-disponibles`, params);
   }
+  getHorariosDisponiblesV5(params: any) {
+    const { lclaFclase, lclaNcorr, horaCcod, bloqueUnico, tsalCcod, sedeCcod } = params;
+    return this.get(`${this.baseUrl}/recuperaciones/v5/horarios-disponibles?lclaFclase=${lclaFclase}&lclaNcorr=${lclaNcorr}&horaCcod=${horaCcod}&bloqueUnico=${bloqueUnico}&tsalCcod=${tsalCcod}&sedeCcod=${sedeCcod}`);
+  }
   generarSolicitud(params: any) {
     return this.post(`${this.baseUrl}/recuperaciones/v4/generar-solicitud`, params);
   }

@@ -10,13 +10,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  @if (mostrarCargando) {
-  <div class="loaderInacap">
-    <ion-spinner name="lines" color="primary"></ion-spinner>
-  </div>
-  }
-
-  <section>
+  <section class="tabs">
     <ion-segment [(ngModel)]="segmento" color="primary">
       <ion-segment-button [value]="0">
         <ion-label>Clases Por Recuperar</ion-label>
@@ -27,7 +21,80 @@
     </ion-segment>
   </section>
 
-<!-- 
+  @if (mostrarCargando) {
+  <div class="loaderInacap">
+    <ion-spinner name="lines" color="primary"></ion-spinner>
+  </div>
+  }
+
+  @if (mostrarData) {
+
+  @if (segmento == 0) {
+
+  @if (suspendidas?.length) {
+  <ion-list inset="true">
+    @for (item of suspendidas; track $index) {
+    <ion-item>
+      <ion-label>
+        <h2>Fecha Clase Suspendida: {{item.detalle.lclaFclase}}</h2>
+        <p>Libro de Clases: {{item.detalle.libro}}</p>
+        <p>Número de Bloques: {{item.detalle.bloques}}</p>
+        <p>{{item.detalle.horarioi}} - {{item.detalle.horariot}}</p>
+        @if (item.detalle.rechazada == 'S') {
+        <p>Estado: <b style="color: var(--ion-color-danger)">Rechazada {{item.detalle.fechaRechazo}}</b></p>
+        }
+        @else if (item.detalle.solicitada == 'S') {
+        <p>Estado: <b style="color: var(--ion-color-primary)">Solicitud Enviada {{item.detalle.fechaSolicitud}}</b></p>
+        }
+        @else if (item.detalle.solicitada == 'N') {
+          <p>Estado: <b style="color: var(--ion-color-primary)">Pendiente</b></p>
+        }
+      </ion-label>
+      @if (item.detalle.rechazada == 'S') {
+        <ion-button slot="end" fill="outline" color="primary" shape="round" (click)="solicitar(item)">
+          Solicitar Nuevamente
+        </ion-button>
+      }
+      @else if (item.detalle.solicitada == 'S') {
+        <ion-note slot="end">
+          <ion-icon src="assets/icon/info.svg"></ion-icon>
+          Aprobación Pendiente</ion-note>
+      }
+      @else if (item.detalle.solicitada == 'N') {
+        <ion-button slot="end" fill="outline" color="primary" shape="round" (click)="solicitar(item)">
+          Solicitar Recuperación
+        </ion-button>
+      }
+      
+    </ion-item>
+    }
+  </ion-list>
+  }
+  @else {
+  <div class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>No existen clases por recuperar.</p>
+    </div>
+  </div>
+  }
+  }
+  @else if (segmento==1) {
+  @if (aprobadas?.length) {
+  }
+  @else {
+  <div class="empty-state">
+    <div>
+      <ion-icon src="assets/icon/info.svg"></ion-icon>
+      <p>No existen clases por recuperar aprobadas.</p>
+    </div>
+  </div>
+  }
+  }
+
+  }
+
+  <!-- 
   @if (mostrarData && recuperaciones) {
   <ion-card class="tabla">
     <ion-card-header>
@@ -101,11 +168,11 @@
           <tbody>
             @for (item of solicitudes; track $index) {
             <tr>
-              <td>{{ item.lclaFclase }}</td>
-              <td>{{ item.lclaNcorr }}</td>
-              <td>{{ item.lclaNbloques }}</td>
-              <td>{{ item.lclaNclaseActual }}</td>
-              <td>{{ item.reclFsolicitud }}</td>
+              <td>{{item.lclaFclase}}</td>
+              <td>{{item.lclaNcorr}}</td>
+              <td>{{item.lclaNbloques}}</td>
+              <td>{{item.lclaNclaseActual}}</td>
+              <td>{{item.reclFsolicitud}}</td>
               <td>
                 <ion-icon class="estado" [color]="resolverEstado(item.erecTdesc, 1)"
                   src="assets/icon/{{resolverEstado(item.erecTdesc, 2)}}.svg"></ion-icon>

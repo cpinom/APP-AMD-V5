@@ -1,5 +1,44 @@
 @import "../curso.common.scss";
 
+section.tabs {
+    margin: 15px;
+
+    ion-segment {
+        background: var(--ion-color-white);
+        ion-segment-button {
+            --ion-background-color: var(--ion-color-primary);
+            --indicator-box-shadow: none;
+            min-height: 40px;
+            font-size: var(--FS14);
+
+            &.segment-button-checked {
+                color: #fff;
+            }
+        }
+    }
+}
+
+ion-list {
+    ion-item {
+        ion-button.button-outline {
+            --padding-start: 20px;
+            --padding-end: 20px;
+            font-weight: 700;
+            font-size: var(--FS14);
+        }
+        ion-note {
+            display: flex;
+            align-items: center;
+            font-size: var(--FS14);
+
+            ion-icon {
+                font-size: var(--FS18);
+                margin-right: 5px;
+            }
+        }
+    }
+}
+
 ion-card.tabla {
     margin: 0;
     border-radius: 0;
@@ -117,16 +156,17 @@ ion-popover.detalle-solicitud {
     ion-popover.detalle-solicitud {
         ion-item {
             --background: #000 !important
+        ;
         }
     }
 }
 
 @media only screen and (max-width: 500px) {
     ion-header {
-      ion-toolbar {
-        ion-title {
-          font-size: 18px !important;
+        ion-toolbar {
+            ion-title {
+                font-size: 18px !important;
+            }
         }
-      }
     }
 }

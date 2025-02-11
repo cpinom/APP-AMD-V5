@@ -78,7 +78,7 @@
                     <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{resolverEstadoClase(item)}}</td>
                     <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{item.libro}}</td>
                     <td [attr.rowspan]="item.objetivos.length" [class.d-none]="i > 0">{{item.recuperacion}}</td>
-                    <td>{{ obj.objetivo }}</td>
+                    <td>{{obj.objetivo}}</td>
                     <td>
                       <ng-container *ngIf="item.libro">
                         <ion-radio-group [(ngModel)]="obj.visto" (ngModelChange)="guardar(obj, item.libro)">
