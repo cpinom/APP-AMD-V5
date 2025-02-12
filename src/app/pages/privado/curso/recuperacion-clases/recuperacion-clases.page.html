@@ -15,8 +15,12 @@
       <ion-segment-button [value]="0">
         <ion-label>Clases Por Recuperar</ion-label>
       </ion-segment-button>
-      <ion-segment-button [value]="1">
-        <ion-label>Clases Por Recuperar Aprobadas</ion-label>
+      <ion-segment-button [value]="1" class="aprobadas">
+        <ion-label>Clases Por Recuperar Aprobadas
+          @if(aprobadas?.length) {
+          <ion-badge color="danger">{{aprobadas?.length}}</ion-badge>
+          }
+        </ion-label>
       </ion-segment-button>
     </ion-segment>
   </section>
@@ -47,25 +51,25 @@
         <p>Estado: <b style="color: var(--ion-color-primary)">Solicitud Enviada {{item.detalle.fechaSolicitud}}</b></p>
         }
         @else if (item.detalle.solicitada == 'N') {
-          <p>Estado: <b style="color: var(--ion-color-primary)">Pendiente</b></p>
+        <p>Estado: <b style="color: var(--ion-color-primary)">Pendiente</b></p>
         }
       </ion-label>
       @if (item.detalle.rechazada == 'S') {
-        <ion-button slot="end" fill="outline" color="primary" shape="round" (click)="solicitar(item)">
-          Solicitar Nuevamente
-        </ion-button>
+      <ion-button slot="end" fill="outline" color="primary" shape="round" (click)="solicitar(item)">
+        Solicitar Nuevamente
+      </ion-button>
       }
       @else if (item.detalle.solicitada == 'S') {
-        <ion-note slot="end">
-          <ion-icon src="assets/icon/info.svg"></ion-icon>
-          Aprobación Pendiente</ion-note>
+      <ion-note slot="end" color="warning">
+        <ion-icon src="assets/icon/info.svg"></ion-icon>
+        Aprobación Pendiente</ion-note>
       }
       @else if (item.detalle.solicitada == 'N') {
-        <ion-button slot="end" fill="outline" color="primary" shape="round" (click)="solicitar(item)">
-          Solicitar Recuperación
-        </ion-button>
+      <ion-button slot="end" fill="outline" color="primary" shape="round" (click)="solicitar(item)">
+        Solicitar Recuperación
+      </ion-button>
       }
-      
+
     </ion-item>
     }
   </ion-list>
@@ -79,8 +83,25 @@
   </div>
   }
   }
-  @else if (segmento==1) {
+  @else if (segmento == 1) {
   @if (aprobadas?.length) {
+  <ion-list inset="true">
+    @for (item of aprobadas; track $index) {
+    <ion-item>
+      <ion-icon slot="start" src="assets/icon/check_circle.svg" color="success"></ion-icon>
+      <ion-label>
+        <h2>Fecha Clase Suspendida: {{item.detalle.lclaFclase}}</h2>
+        <h2>Fecha Recuperación: {{item.detalle.fechaRecuperacion}}</h2>
+        <p>Libro de Clases: {{item.detalle.libro}}</p>
+        <p>Número de Bloques: {{item.detalle.nbloques}}</p>
+        <p>Bloque Hora Inicial: {{item.detalle.horarioi}}</p>
+        <p>Bloque Hora Final: {{item.detalle.horariot}}</p>
+        <p>Sala: {{item.detalle.sala}}</p>
+        <p>Estado: <b style="color: var(--ion-color-success)">Aprobada {{item.detalle.fechaAprobacion}}</b></p>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
   }
   @else {
   <div class="empty-state">

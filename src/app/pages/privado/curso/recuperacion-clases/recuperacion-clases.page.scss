@@ -14,6 +14,17 @@ section.tabs {
             &.segment-button-checked {
                 color: #fff;
             }
+
+            &.aprobadas {
+                ion-label {
+                    display: flex;
+                    line-height: 19px;
+
+                    ion-badge {
+                        margin-left: 5px;
+                    }
+                }
+            }
         }
     }
 }
