@@ -25,7 +25,6 @@ import { AppLauncher } from '@capacitor/app-launcher';
 import { PublicoService } from './core/services/publico.service';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { AppShortcuts, ClickEvent } from '@capawesome/capacitor-app-shortcuts';
-// import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
 
 declare const $: any;
 

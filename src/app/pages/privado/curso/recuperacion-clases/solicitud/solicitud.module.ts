@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { SolicitudPage } from './solicitud.page';
 import { BuscadorPageModule } from './buscador/buscador.module';
 import { DisponibilidadPageModule } from './disponibilidad/disponibilidad.module';
+import { EstudiantesPageModule } from './estudiantes/estudiantes.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { DisponibilidadPageModule } from './disponibilidad/disponibilidad.module
     FormsModule,
     IonicModule,
     BuscadorPageModule,
-    DisponibilidadPageModule
+    DisponibilidadPageModule,
+    EstudiantesPageModule
   ],
   declarations: [SolicitudPage]
 })

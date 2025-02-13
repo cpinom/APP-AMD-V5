@@ -5,11 +5,13 @@ import { RecuperacionesService } from 'src/app/core/services/curso/recuperacione
 import { DisponibilidadPage } from '../disponibilidad/disponibilidad.page';
 import { DialogService } from 'src/app/core/services/dialog.service';
 import * as moment from 'moment';
+import { EstudiantesPage } from '../estudiantes/estudiantes.page';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-buscador',
   templateUrl: './buscador.page.html',
-  styleUrls: ['./buscador.page.scss'],
+  styleUrls: ['./buscador.page.scss']
 })
 export class BuscadorPage implements OnInit {
 
@@ -50,8 +52,13 @@ export class BuscadorPage implements OnInit {
     });
 
     if (this.pt.is('mobileweb')) {
-      this.fechaPicker?.setValue(moment('20042024', 'DDMMYYYY').toISOString());
-      // this.fechaMinimaSolicitud = moment('15042024', 'DDMMYYYY').add('3', 'days').format('YYYY-MM-DD');
+      const fechaActual = moment('20042024', 'DDMMYYYY');
+      this.fechaPicker?.setValue(fechaActual.toISOString());
+      this.fechaMinimaSolicitud = fechaActual.add('3', 'days').format('YYYY-MM-DD');
+    }
+    else {
+      this.fechaPicker?.setValue(moment().toISOString());
+      this.fechaMinimaSolicitud = moment().add('3', 'days').format('YYYY-MM-DD');
     }
   }
 
@@ -150,6 +157,9 @@ export class BuscadorPage implements OnInit {
             seccion: this.data.seccion
           }
         });
+      }
+      else if (data.alumnos && data.alumnos.length) {
+        await this.nav.push(EstudiantesPage, { alumnos: data.alumnos });
       }
       else {
         await this.presentError(data.message);

@@ -10,6 +10,7 @@ import * as cordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { Drivers } from '@ionic/storage';
 import { ComponentsModule } from './core/components/components.module';
 import { MensajeModule } from './core/components/mensaje/mensaje.module';
+import { PipesModule } from './core/pipes/pipes.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +26,8 @@ import { MensajeModule } from './core/components/mensaje/mensaje.module';
     MensajeModule,
     IonicStorageModule.forRoot({
       driverOrder: [cordovaSQLiteDriver._driver, Drivers.IndexedDB]
-    })
+    }),
+    PipesModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

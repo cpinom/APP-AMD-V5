@@ -10,9 +10,11 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div class="loaderInacap" *ngIf="mostrarCargando">
+  @if (mostrarCargando) {
+  <div class="loaderInacap">
     <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
+  }
 
   @if (mostrarData && calendario && calendario.length > 0) {
   <ion-row>

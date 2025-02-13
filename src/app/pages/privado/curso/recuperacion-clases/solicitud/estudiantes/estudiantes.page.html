@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Estudiantes con tope de Horario</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button text="Volver"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list inset="true">
+    @for (item of alumnos; track $index) {
+    <ion-item>
+      <app-cached-image slot="start" [src]="resolverFoto(item.persNcorr)"></app-cached-image>
+      <ion-label>
+        <h2>{{item.nombre}}</h2>
+        <p>Asignatura - {{item.asignatura}}</p>
+      </ion-label>
+    </ion-item>
+    }
+  </ion-list>
+
+</ion-content>

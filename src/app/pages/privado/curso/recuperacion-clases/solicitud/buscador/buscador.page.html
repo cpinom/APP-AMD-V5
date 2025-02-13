@@ -54,14 +54,13 @@
             <div class="invalid" *ngIf="submitted && lclaFclase?.hasError('required')">Campo obligatorio.</div>
             <div class="invalid" *ngIf="submitted && lclaFclase?.hasError('pattern')">Formato incorrecto Ej: DD/MM/AAAA.
             </div>
-            <ion-item class="picker-item" *ngIf="mostrarFecha">
-              <ion-datetime #datetime formControlName="fechaPicker" presentation="date" [preferWheel]="true"
-                [min]="fechaMinimaSolicitud" [isDateEnabled]="validaDiaDomingo" locale="es-CL" [firstDayOfWeek]="1"
-                color="danger">
+            <ion-item class="picker-item" [ngClass]="{ 'fade-in': mostrarFecha }">
+              <ion-datetime #datetime formControlName="fechaPicker" presentation="date" [preferWheel]="false" color="primary"
+                [min]="fechaMinimaSolicitud" [isDateEnabled]="validaDiaDomingo" locale="es-CL" [firstDayOfWeek]="1">
                 <ion-buttons slot="buttons">
                   <ion-button color="primary" size="default" (click)="mostrarFecha = false">Cerrar</ion-button>
                   <ion-button color="primary" size="default" (click)="datetime.reset()">Hoy</ion-button>
-                  <ion-button color="danger" size="default" (click)="datetime.confirm();">Seleccionar</ion-button>
+                  <ion-button color="danger" size="default" (click)="datetime.confirm(); mostrarFecha = false">Seleccionar</ion-button>
                 </ion-buttons>
               </ion-datetime>
             </ion-item>

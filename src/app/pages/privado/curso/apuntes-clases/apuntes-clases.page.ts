@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FileOpener } from '@capacitor-community/file-opener';
 import { Directory, Filesystem } from '@capacitor/filesystem';
@@ -18,7 +18,7 @@ import { UtilsService } from 'src/app/core/services/utils.service';
   templateUrl: './apuntes-clases.page.html',
   styleUrls: ['./apuntes-clases.page.scss'],
 })
-export class ApuntesClasesPage implements OnInit {
+export class ApuntesClasesPage implements OnInit, OnDestroy {
 
   @ViewChild('adjuntosInput') adjuntarEl!: ElementRef;
   mostrarCargando = true;
@@ -55,11 +55,25 @@ export class ApuntesClasesPage implements OnInit {
 
   }
 
-  ngOnInit() {
-    Preferences.get({ key: 'Seccion' }).then((result) => {
-      this.data = JSON.parse(result.value!);
-      this.cargar(true);
-    });
+  async getStorage(key: string) {
+    const result = await Preferences.get({ key: key });
+
+    if (result.value) {
+      return JSON.parse(result.value);
+    }
+    return null;
+  }
+  async ngOnInit() {
+    this.data = await this.getStorage('Seccion');
+    console.log(this.data);
+    this.apunte = await this.getStorage('Apunte');
+    console.log(this.apunte);
+    await this.cargar(true);
+  }
+  async ngOnDestroy() {
+    if (this.apunte) {
+      await Preferences.remove({ key: 'Apunte' });
+    }
   }
   async cargar(forceRefresh: boolean) {
     try {
@@ -129,7 +143,24 @@ export class ApuntesClasesPage implements OnInit {
     try {
       this.calendario = data;
 
-      if (this.libro) {
+      if (this.apunte) {
+        let found = false;
+
+        this.calendario?.forEach((item: any) => {
+          if (item.lclaNcorr == this.apunte.lclaNcorr) {
+            item.selected = true;
+            found = true;
+            this.libro = item;
+          }
+        });
+
+        if (found) {
+          await this.cargarApuntes(this.libro);
+          await Preferences.remove({ key: 'Apunte' });
+          delete this.apunte;
+        }
+      }
+      else if (this.libro) {
         let found = false;
 
         this.calendario?.forEach((item: any) => {

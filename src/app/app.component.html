@@ -1,7 +1,7 @@
 <ion-app>
   <ion-router-outlet id="ion-router-outlet-content"></ion-router-outlet>
   <div class="network-status">
-    <span class="off-text">Sin conexión</span>
-    <span class="on-text">De nuevo en línea</span>
+    <span class="off-text">{{'offline' | message}}</span>
+    <span class="on-text">{{'online' | message}}</span>
   </div>
 </ion-app>

@@ -26,10 +26,31 @@
     ion-item.picker-item {
         --background-activated: transparent;
         --background-focused: transparent;
+        display: none;
 
         ion-datetime {
             margin: 0 auto;
-            --background: white;
+            --background: #fff;
+            --background-rgb: #fff;
+            width: 100%;
+        }
+    }
+
+    .fade-in {
+        opacity: 0;
+        transform: translateY(-10px);
+        animation: fadeInAnimation 0.3s ease-in forwards;
+        display: block !important;
+    }
+
+    @keyframes fadeInAnimation {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
 }
