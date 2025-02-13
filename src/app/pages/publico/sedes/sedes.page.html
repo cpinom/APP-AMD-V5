@@ -7,65 +7,75 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <div class="tabs" *ngIf="mostrarData && sedesFiltradas">
-    <ion-segment (ionChange)="tabsChanged($event)" [value]="activeTab" scrollable>
-      <ion-segment-button [value]="0">Todas</ion-segment-button>
-      <ion-segment-button [value]="1">Cercanas</ion-segment-button>
-    </ion-segment>
-  </div>
 </ion-header>
 
-<ion-content>
+<ion-content scrollY="false">
 
-  <div class="loaderInacap" *ngIf="mostrarCargando">
+  @if (mostrarCargando) {
+  <div class="loaderInacap">
     <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
+  }
 
-  <ng-container *ngIf="mostrarData && sedesFiltradas">
-
+  @if (mostrarData && sedesFiltradas) {
+  <section class="section-main">
+    <section class="tabs">
+      <ion-segment (ionChange)="tabsChanged($event)" [value]="activeTab" scrollable>
+        <ion-segment-button [value]="0">Todas</ion-segment-button>
+        <ion-segment-button [value]="1">Cercanas</ion-segment-button>
+      </ion-segment>
+    </section>
+    @if (activeTab == 0) {
     <ion-searchbar color="white" placeholder="Buscar sede..." [(ngModel)]="sedesFiltro" (ionInput)="filtrarSedes()"
-    (ionClear)="resetSedes()"></ion-searchbar>
+      (ionClear)="resetSedes()"></ion-searchbar>
+    }
+    <section class="section-scroll">
 
-    <section *ngIf="sedesFiltradas.length">
-      <div class="section-header">Sedes</div>
-      <div class="section-content">
-        <ion-list>
-          <ion-item *ngFor="let item of sedesFiltradas" detail="true" (click)="mostrarSede(item, sedeMdl)">
-            <ion-thumbnail slot="start">
-              <img default [src]="getFotoSede(item.sedeCcod)" alt="Sede INACAP" (error)="updateUrl($event)" appImage />
-            </ion-thumbnail>
-            <ion-label>
-              <h2>{{item.sedeTdesc}}</h2>
-              <p *ngIf="activeTab == 1">{{item.km}}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
+      @if (sedesFiltradas?.length) {
+      <ion-list inset="true">
+        @for (item of sedesFiltradas; track $index) {
+        <ion-item detail="true" (click)="mostrarSede(item, sedeMdl)">
+          <ion-thumbnail slot="start">
+            <img default [src]="resolverFoto(item.sedeCcod)" alt="Sede INACAP" (error)="updateUrl($event)" appImage />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{item.sedeTdesc}}</h2>
+            <p *ngIf="activeTab == 1">{{item.km}}</p>
+          </ion-label>
+        </ion-item>
+        }
+      </ion-list>
+      }
+      @else if (sedesFiltro?.length) {
+      <section class="empty-state">
+        <div>
+          <ion-icon src="assets/icon/search.svg"></ion-icon>
+          <p>Sin resultados</p>
+        </div>
+      </section>
+      }
+      @else {
+      <section class="empty-state">
+        <div>
+          <ion-icon src="assets/icon/info.svg"></ion-icon>
+          <p>No hay sedes disponibles</p>
+        </div>
+      </section>
+      }
+
     </section>
+  </section>
+  }
 
-    <section *ngIf="activeTab == 1 && sedesFiltradas.length == 0" class="empty-state">
-      <div>
-        <ion-icon src="assets/icon/location_off.svg"></ion-icon>
-        <p>No disponible en este momento</p>
-      </div>
-    </section>
-
-    <section *ngIf="activeTab == 0 && sedesFiltradas.length == 0" class="empty-state">
-      <div>
-        <ion-icon src="assets/icon/search.svg"></ion-icon>
-        <p>Sin resultados</p>
-      </div>
-    </section>
-
-  </ng-container>
-
-  <section *ngIf="mostrarData && !sedesFiltradas" class="empty-state">
+  @if (mostrarData && !sedesFiltradas) {
+  <section class="empty-state">
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Información no disponible en este momento.</p>
       <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
     </div>
   </section>
+  }
 
 
   <ion-modal #sedeMdl>
@@ -91,13 +101,15 @@
                   <span>{{sedeData.sedeTdireccion}}, {{sedeData.ciudTcomuna}}</span>
                 </ion-label>
               </ion-item>
-              <ion-item detail="false" *ngIf="sedeData.sedeTfono" href="{{'tel:' +  sedeData.sedeTfono}}" class="ion-activatable">
+              <ion-item detail="false" *ngIf="sedeData.sedeTfono" href="{{'tel:' +  sedeData.sedeTfono}}"
+                class="ion-activatable">
                 <ion-icon slot="start" color="medium" src="assets/icon/phone.svg"></ion-icon>
                 <ion-label>
                   <span>{{sedeData.sedeTfono}}</span>
                 </ion-label>
               </ion-item>
-              <ion-item detail="false" *ngIf="sedeData.sedeTemail" href="{{'mailto:' +  sedeData.sedeTemail}}" class="ion-activatable">
+              <ion-item detail="false" *ngIf="sedeData.sedeTemail" href="{{'mailto:' +  sedeData.sedeTemail}}"
+                class="ion-activatable">
                 <ion-icon slot="start" color="medium" src="assets/icon/email.svg"></ion-icon>
                 <ion-label>
                   <span>{{sedeData.sedeTemail}}</span>

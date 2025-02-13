@@ -17,7 +17,8 @@ export class DetalleCarreraPage implements OnInit {
   matricula = false;
   modalidad = {
     'diurna': false,
-    'vespertina': false
+    'vespertina': false,
+    'online': false
   };
   infoTitulo!: string;
   infoHTML!: string;
@@ -59,6 +60,7 @@ export class DetalleCarreraPage implements OnInit {
                       if (carrera.regimen) {
                         this.modalidad.diurna = carrera.regimen.indexOf('diurna') > -1;
                         this.modalidad.vespertina = carrera.regimen.indexOf('vespertina') > -1;
+                        this.modalidad.vespertina = carrera.regimen.indexOf('online') > -1;
                       }
                     }
                   });

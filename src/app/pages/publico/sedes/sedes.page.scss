@@ -1,90 +1,42 @@
-ion-header {
-  &.ios {
-    .tabs {
-      padding: 10px;
-      background-color: #fff;
-    }
-  }
-  &.md {
-    .tabs {
-      background: #fff;
+.section-main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
 
-      ion-segment {
-        display: flex;
-
-        ion-segment-button {
-          flex: 1;
-          font-size: var(--FS16);
-          font-weight: 600;
-          letter-spacing: 0;
-          text-transform: none;
-          --indicator-height: 6px;
-          --color: #999;
-
-          max-width: 100%;
-
-          &::part(indicator) {
-            --indicator-color: #fff;
-            opacity: 1;
-          }
-
-          &.segment-button-checked {
-            color: #000000;
-
-            ion-icon,
-            ion-label {
-              color: var(--ion-color-primary);
-            }
-
-            &::part(indicator) {
-              --indicator-color: var(--ion-color-primary);
-            }
-          }
-
-          ion-icon {
-            margin-top: 10px;
-          }
-
-          ion-label {
-            margin-top: 5px;
-            margin-bottom: 9px;
-          }
-        }
-      }
-    }
-  }
-}
-
-ion-content {
-  ion-searchbar {
+  section.tabs {
     padding: 15px;
-  }
-  section {
-    .section-content {
-      ion-thumbnail {
-        margin-top: 10px;
-        margin-bottom: 10px;
+
+    ion-segment {
+      background: var(--ion-color-white);
+      ion-segment-button {
+        --ion-background-color: var(--ion-color-primary);
+        --indicator-box-shadow: none;
+        min-height: 40px;
+        font-size: var(--FS14);
+
+        &.segment-button-checked {
+          color: #fff;
+        }
       }
     }
   }
-}
 
-::ng-deep body.dark {
-  ion-header {
-    &.ios {
-      .tabs {
-        background-color: var(--ion-color-dark-shade) !important;
+  ion-searchbar {
+    padding: 0 15px 15px;
+  }
 
-        ion-segment {
-          --background: #000;
+  .section-scroll {
+    height: 100%;
+    overflow-y: auto;
 
-          ion-segment-button {
-            &.segment-button-checked {
-              color: #000 !important;
-            }
-          }
-        }
-      }
+    .empty-state {
+      top: 50%;
+      position: absolute;
+      left: 0;
+      right: 0;
+      transform: translateY(calc(-50% - 44px));
+      padding: 0;
     }
   }
 }

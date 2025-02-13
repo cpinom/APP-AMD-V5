@@ -1,14 +1,13 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IonContent, IonModal, LoadingController, Platform } from '@ionic/angular';
+import { IonContent, IonModal, Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { EventsService } from 'src/app/core/services/events.services';
 import { PublicoService } from 'src/app/core/services/publico.service';
 import { AppGlobal } from 'src/app/app.global';
 import { Geolocation } from '@capacitor/geolocation';
-// import { GoogleMap } from '@capacitor/google-maps';
 import * as geometry from 'spherical-geometry-js';
-import { environment } from 'src/environments/environment';
 import { UtilsService } from 'src/app/core/services/utils.service';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-sedes',
@@ -33,7 +32,7 @@ export class SedesPage implements OnInit, OnDestroy {
   constructor(private api: PublicoService,
     private events: EventsService,
     private global: AppGlobal,
-    private loading: LoadingController,
+    private dialog: DialogService,
     private pt: Platform,
     private utils: UtilsService) {
 
@@ -90,19 +89,17 @@ export class SedesPage implements OnInit, OnDestroy {
       return [];
     }
 
-    let cercanas = [];
-    let loading = await this.loading.create({ message: 'Cargando...' });
-
-    loading.present();
+    const loading = await this.dialog.showLoading({ message: 'Cargando...' });
+    var cercanas = [];
 
     try {
-      let position = await this.getCurrentPosition();
+      const position = await this.getCurrentPosition();
 
       if (position != null) {
-        let latitude = position.coords.latitude;
-        let longitude = position.coords.longitude;
-        let currentPosition = new geometry.LatLng(latitude, longitude);
-        let distances: any = [];
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const currentPosition = new geometry.LatLng(latitude, longitude);
+        const distances: any = [];
 
         this.sedes.forEach((sede: any) => {
           var sedePosition = new geometry.LatLng(sede.sedeTlatitud, sede.sedeTlongitud);
@@ -128,7 +125,8 @@ export class SedesPage implements OnInit, OnDestroy {
 
           try {
             cercanas.push(distances[i].data);
-          } catch { }
+          }
+          catch { }
 
           i++;
         }
@@ -136,7 +134,7 @@ export class SedesPage implements OnInit, OnDestroy {
     }
     catch (error) { }
     finally {
-      loading.dismiss();
+      await loading.dismiss();
     }
 
     return cercanas;
@@ -150,6 +148,13 @@ export class SedesPage implements OnInit, OnDestroy {
       if (permission.location == 'denied' || permission.location == 'prompt') {
         if (this.pt.is('capacitor')) {
           permission = await Geolocation.requestPermissions();
+        }
+      }
+
+      if (permission.location == 'denied') {
+        if (this.pt.is('capacitor')) {
+          this.utils.showAlertCamera();
+          return null;
         }
       }
 
@@ -173,7 +178,7 @@ export class SedesPage implements OnInit, OnDestroy {
     this.sedesFiltro = '';
     this.sedesFiltradas = this.sedes;
   }
-  getFotoSede(sedeCcod: string) {
+  resolverFoto(sedeCcod: string) {
     return `${this.global.Api}/api/v3/imagen-sede/${sedeCcod}`;
   }
   updateUrl(ev: any) {

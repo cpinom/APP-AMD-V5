@@ -42,8 +42,8 @@ export class PrincipalPage implements OnInit {
             width: 2.5,
             displayValue: true,
             format: 'CODE128A',
-            background: '#000',
-            lineColor: '#fff'
+            background: '#000000',
+            lineColor: '#ffffff'
           });
         }
         else {
@@ -52,7 +52,7 @@ export class PrincipalPage implements OnInit {
             width: 2.5,
             displayValue: true,
             format: 'CODE128A',
-            background: '#f0f0f0',
+            background: '#fafafa',
             lineColor: '#000'
           });
         }

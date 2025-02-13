@@ -7,34 +7,36 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content scrollY="false">
 
   <form [formGroup]="tabletForm" (ngSubmit)="guardarTablet()">
-    <ion-list inset="true">
-      <ion-item>
-        <ion-input formControlName="aptaTuuid" readonly label="UUI" labelPlacement="stacked"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input formControlName="aptaNcorr" readonly label="ID APP" labelPlacement="stacked"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input formControlName="sedeTdesc" readonly label="Sede Asociada" labelPlacement="stacked"></ion-input>
-      </ion-item>
-      <ion-item lines="none" style="--inner-padding-end: 0">
-        <ion-input formControlName="aptaCtablets" placeholder="Ingrese código" label="Código Tablet"
-          labelPlacement="stacked" clearInput [errorText]="codigoError" counter="true" maxlength="10"
-          (ionInput)="onCodigoInput($event)" #codigoEl></ion-input>
-      </ion-item>
-      <ion-item lines="none" style="--inner-padding-end: 0">
-        <ion-input formControlName="aptaNserie" placeholder="Ingrese Nº de serie" label="Nº de serie"
-          labelPlacement="stacked" clearInput [errorText]="serieError" counter="true" maxlength="40"
-          (ionInput)="onSerieInput($event)" #serieEl></ion-input>
-      </ion-item>
-    </ion-list>
+    <section class="section-scroll">
+      <ion-list inset="true">
+        <ion-item>
+          <ion-input formControlName="aptaTuuid" readonly label="UUI" labelPlacement="stacked"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input formControlName="aptaNcorr" readonly label="ID APP" labelPlacement="stacked"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input formControlName="sedeTdesc" readonly label="Sede Asociada" labelPlacement="stacked"></ion-input>
+        </ion-item>
+        <ion-item lines="none" style="--inner-padding-end: 0">
+          <ion-input formControlName="aptaCtablets" placeholder="Ingrese código" label="Código Tablet"
+            labelPlacement="stacked" clearInput [errorText]="codigoError" counter="true" maxlength="10"
+            (ionInput)="onCodigoInput($event)" #codigoEl></ion-input>
+        </ion-item>
+        <ion-item lines="none" style="--inner-padding-end: 0">
+          <ion-input formControlName="aptaNserie" placeholder="Ingrese Nº de serie" label="Nº de serie"
+            labelPlacement="stacked" clearInput [errorText]="serieError" counter="true" maxlength="40"
+            (ionInput)="onSerieInput($event)" #serieEl></ion-input>
+        </ion-item>
+      </ion-list>
+    </section>
     <div class="section-buttons">
       <ion-nav-link router-direction="back">
         <ion-button fill="outline" shape="round" color="primary">Volver</ion-button>
-      </ion-nav-link>      
+      </ion-nav-link>
       <ion-button type="submit" color="primary" shape="round">Guardar</ion-button>
     </div>
   </form>

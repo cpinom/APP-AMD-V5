@@ -7,8 +7,13 @@ ion-content {
     flex-direction: column;
     height: 100%;
 
-    ion-list {
-      box-shadow: none !important;
+    .section-scroll {
+      height: 100%;
+      overflow-y: auto;
+
+      ion-list {
+        box-shadow: none !important;
+      }
     }
 
     .section-buttons {

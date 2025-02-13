@@ -70,6 +70,10 @@ ion-content {
         font-size: 20px;
       }
     }
+    .section-items {
+      height: 100%;
+      overflow-y: auto;
+    }
     .section-buttons {
       margin: 16px;
       display: flex;

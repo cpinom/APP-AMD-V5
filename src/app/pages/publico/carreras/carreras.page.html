@@ -9,25 +9,69 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content scrollY="false">
 
-  <div class="loaderInacap" *ngIf="mostrarCargando">
+  @if (mostrarCargando) {
+  <div class="loaderInacap">
     <ion-spinner name="lines" color="primary"></ion-spinner>
   </div>
+  }
 
-  <ng-container *ngIf="mostrarData && carrerasFiltradas">
+  @if (mostrarData && carrerasFiltradas) {
+  <section class="section-main">
+    <ion-searchbar color="white" placeholder="Buscar" [(ngModel)]="carrerasFiltro" (ionInput)="filtrarCarreras()"
+      (ionClear)="resetCarreras()"></ion-searchbar>
+    <section class="section-scroll">
+      @if (carrerasFiltradas.length) {
+      <ion-list inset="true">
+        @for (item of carrerasFiltradas; track $index) {
+        <ion-item detail="true" routerLink="detalle-carrera/{{item.areaCcod}}/{{item.espeCcod}}">
+          <ion-label [innerHTML]="item.nombre"></ion-label>
+          @if (resolverRegimen(item, 'diurna')) {
+          <ion-icon slot="end" color="medium" src="assets/icon/wb_sunny.svg"></ion-icon>
+          }
+          @if (resolverRegimen(item, 'vespertina')) {
+          <ion-icon slot="end" color="medium" src="assets/icon/brightness_2.svg"></ion-icon>
+          }
+          @if (resolverRegimen(item, 'online')) {
+          <ion-icon slot="end" color="medium" src="assets/icon/laptop.svg"></ion-icon>
+          }
+        </ion-item>
+        }
+      </ion-list>
+      }
+      @else if (carrerasFiltro.length) {
+      <section class="empty-state">
+        <div>
+          <ion-icon src="assets/icon/search.svg"></ion-icon>
+          <p>Sin resultados.</p>
+        </div>
+      </section>
+      }
+    </section>
+  </section>
 
-    <ion-searchbar color="white" placeholder="Buscar" [(ngModel)]="carrerasFiltro" (ionInput)="filtrarCarreras()" (ionClear)="resetCarreras()"></ion-searchbar>
+
+  }
+
+  <!-- <ng-container *ngIf="mostrarData && carrerasFiltradas">
+
+    <ion-searchbar color="white" placeholder="Buscar" [(ngModel)]="carrerasFiltro" (ionInput)="filtrarCarreras()"
+      (ionClear)="resetCarreras()"></ion-searchbar>
 
     <section class="carreras" *ngIf="carrerasFiltradas.length">
       <div class="section-header">Pregado</div>
       <div class="section-content">
         <ion-list class="carrerasList">
-          <ion-item *ngFor="let item of carrerasFiltradas" detail="true" routerLink="detalle-carrera/{{item.areaCcod}}/{{item.espeCcod}}">
+          <ion-item *ngFor="let item of carrerasFiltradas" detail="true"
+            routerLink="detalle-carrera/{{item.areaCcod}}/{{item.espeCcod}}">
             <ion-label [innerHTML]="item.nombre"></ion-label>
-            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'diurna')" src="assets/icon/wb_sunny.svg"></ion-icon>
-            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'vespertina')" src="assets/icon/brightness_2.svg"></ion-icon>
-            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'psi')" src="assets/icon/devices.svg"></ion-icon>
+            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'diurna')"
+              src="assets/icon/wb_sunny.svg"></ion-icon>
+            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'vespertina')"
+              src="assets/icon/brightness_2.svg"></ion-icon>
+            <ion-icon slot="end" color="medium" *ngIf="resolverRegimen(item, 'psi')"
+              src="assets/icon/devices.svg"></ion-icon>
           </ion-item>
         </ion-list>
       </div>
@@ -40,14 +84,16 @@
       </div>
     </section>
 
-  </ng-container>
+  </ng-container> -->
 
-  <section *ngIf="mostrarData && !carrerasFiltradas" class="empty-state">
+  @if (mostrarData && !carrerasFiltradas) {
+  <section class="empty-state">
     <div>
       <ion-icon src="assets/icon/info.svg"></ion-icon>
       <p>Información no disponible en este momento.</p>
       <ion-button color="primary" shape="round" (click)="recargar()">Recargar</ion-button>
     </div>
   </section>
+  }
 
 </ion-content>
