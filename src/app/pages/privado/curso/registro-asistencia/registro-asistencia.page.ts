@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import * as moment from 'moment';
 import { CursoService } from 'src/app/core/services/curso/curso.service';
 import { AppGlobal } from '../../../../app.global';
 import { ExcepcionPage } from './excepcion/excepcion.page';
-import { Geolocation } from '@capacitor/geolocation';
 import { ErrorService } from 'src/app/core/services/error.service';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { DialogService } from 'src/app/core/services/dialog.service';
 
 @Component({
   selector: 'app-registro-asistencia',
@@ -21,13 +20,11 @@ export class RegistroAsistenciaPage implements OnInit {
   alumnos: any;
   jefeCarrera: any;
   mostrarCargando = true;
-  // coordinadas: any
+  mostrarData = false;
 
   constructor(private api: CursoService,
     private global: AppGlobal,
-    private modalCtrl: ModalController,
-    private loading: LoadingController,
-    private pt: Platform,
+    private dialog: DialogService,
     private error: ErrorService,
     private snackbar: SnackbarService) {
     moment.locale('es');
@@ -38,22 +35,6 @@ export class RegistroAsistenciaPage implements OnInit {
       this.seccion = JSON.parse(result.value!);
       this.cargar();
     });
-
-    // let permission = await Geolocation.checkPermissions();
-    // let coordinates: any;
-
-    // if (permission.location == 'denied' || permission.location == 'prompt') {
-    //   if (this.pt.is('capacitor')) {
-    //     permission = await Geolocation.requestPermissions();
-    //   }
-    // }
-
-    // try {
-    //   coordinates = await Geolocation.getCurrentPosition();
-    // }
-    // catch { }
-
-    // this.coordinadas = coordinates;
   }
   async cargar() {
     try {
@@ -76,11 +57,12 @@ export class RegistroAsistenciaPage implements OnInit {
       }
     }
     finally {
+      this.mostrarData = true;
       this.mostrarCargando = false;
     }
   }
   async reportar() {
-    let modal = await this.modalCtrl.create({
+    await this.dialog.showModal({
       component: ExcepcionPage,
       componentProps: {
         seccion: this.seccion,
@@ -88,8 +70,6 @@ export class RegistroAsistenciaPage implements OnInit {
         jefeCarrera: this.jefeCarrera
       }
     });
-
-    await modal.present();
   }
   async marcarPresentes() {
     this.alumnos.forEach((item: { asistenciaActual: number; }) => item.asistenciaActual = 2);
@@ -109,17 +89,9 @@ export class RegistroAsistenciaPage implements OnInit {
       });
     });
 
-    const loading = await this.loading.create({ message: 'Guardando...' });
-
-    await loading.present();
+    const loading = await this.dialog.showLoading({ message: 'Guardando...' });
 
     try {
-      // const params = {
-      //   lclaNcorr: this.seccion.lclaNcorr,
-      //   alumnos: alumnos,
-      //   lcmoNlatitud: this.coordinadas ? this.coordinadas.coords.latitude : null,
-      //   lcmoNlongitud: this.coordinadas ? this.coordinadas.coords.longitude : null
-      // }
       const params = {
         lclaNcorr: this.seccion.lclaNcorr,
         alumnos: alumnos,
@@ -143,7 +115,7 @@ export class RegistroAsistenciaPage implements OnInit {
         return;
       }
 
-      this.snackbar.showToast('No pudimos procesar su solicitud. Vuelva a intentar.', 3000, 'danger');
+      await this.snackbar.showToast('No pudimos procesar su solicitud. Vuelva a intentar.', 3000, 'danger');
     }
     finally {
       await loading.dismiss();

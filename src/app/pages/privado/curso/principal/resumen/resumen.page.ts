@@ -217,7 +217,6 @@ export class ResumenPage implements OnInit, OnDestroy {
     }
   }
   async confirmarSala(codigoValido: boolean, salaCcodEjecucion?: number) {
-    debugger
     const loading = await this.dialog.showLoading({ message: 'Iniciando...' });
 
     const params = {
@@ -238,11 +237,11 @@ export class ResumenPage implements OnInit, OnDestroy {
       if (data.success) {
         this.estadoClase = data.estadoClase;
         this.iniciarTareas();
-        this.nav.navigateForward('/privado/curso/registro-asistencia');
+        await this.nav.navigateForward('/privado/curso/registro-asistencia');
         this.api.marcarVista(VISTAS_DOCENTE.CURSO_INICIA_CLASE);
       }
       else {
-        await this.presentFail(data.message);
+        await this.presentError(data.message);
         await this.hapticsVibrate();
       }
     }
@@ -867,7 +866,7 @@ export class ResumenPage implements OnInit, OnDestroy {
 
     await alert.present();
   }
-  async presentFail(mensaje: string) {
+  async presentError(mensaje: string) {
     await this.dialog.showAlert({
       backdropDismiss: false,
       keyboardClose: false,

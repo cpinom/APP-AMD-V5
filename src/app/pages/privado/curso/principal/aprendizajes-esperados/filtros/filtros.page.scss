@@ -1,6 +1,15 @@
-section.filtros {
-    margin-top: 15px;
-}
-section.btn-buscar {
-    margin-inline: 15px;
+
+section.section-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    height: 100%;
+
+    section.filtros {
+        // height: 100%;
+        // overflow-y: auto;
+    }
+    section.btn-buscar {
+        margin-inline: 15px;
+    }
 }

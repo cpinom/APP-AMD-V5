@@ -45,7 +45,6 @@ export class AprendizajesEsperadosPage implements OnInit {
     this.api.marcarVista(VISTAS_DOCENTE.CURSO_APRENDIZAJES_ESPERADOS);
   }
   async cargar(forceRefresh = false) {
-    // debugger
     const params = {
       periCcod: this.seccion.periCcod,
       asigCcod: this.seccion.asigCcod,

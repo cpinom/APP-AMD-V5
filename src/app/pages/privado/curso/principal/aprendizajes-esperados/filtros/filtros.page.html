@@ -9,14 +9,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content scrollY="false">
 
-  <section class="filtros">
-    <div class="section-content">
-      <ion-list>
+  <section class="section-main">
+    <section class="filtros">
+      <ion-list inset="true">
         <ion-item>
-          <ion-label>Tipo Clase</ion-label>
-          <ion-select [(ngModel)]="codClase" placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+          <!-- <ion-label>Tipo Clase</ion-label> -->
+          <ion-select label="Tipo Clase" labelPlacement="fixed" [(ngModel)]="codClase" placeholder="Seleccione..."
+            okText="Aceptar" cancelText="Cancelar">
             <ion-select-option [value]="0">Todos</ion-select-option>
             <ion-select-option [value]="1">Clase Realizada</ion-select-option>
             <ion-select-option [value]="2">Clase con Recuperación</ion-select-option>
@@ -27,26 +28,27 @@
           </ion-select>
         </ion-item>
         <ion-item>
-          <ion-label>Aprendizaje Esperado</ion-label>
-          <ion-select [(ngModel)]="codVisto" placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+          <!-- <ion-label>Aprendizaje Esperado</ion-label> -->
+          <ion-select label="Aprendizaje Esperado" [(ngModel)]="codVisto" placeholder="Seleccione..." okText="Aceptar"
+            cancelText="Cancelar">
             <ion-select-option [value]="0">Todos</ion-select-option>
             <ion-select-option [value]="1">Visto</ion-select-option>
             <ion-select-option [value]="2">No Visto</ion-select-option>
           </ion-select>
         </ion-item>
         <ion-item>
-          <ion-label>Fecha Clase</ion-label>
-          <ion-select [(ngModel)]="lclaFclase" placeholder="Seleccione..." okText="Aceptar" cancelText="Cancelar">
+          <!-- <ion-label>Fecha Clase</ion-label> -->
+          <ion-select label="Fecha Clase" [(ngModel)]="lclaFclase" placeholder="Seleccione..." okText="Aceptar"
+            cancelText="Cancelar">
             <ion-select-option value="">Todos</ion-select-option>
             <ion-select-option [value]="fecha" *ngFor="let fecha of clases">{{fecha}}</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-list>
-    </div>
-  </section>
-
-  <section class="btn-buscar">
-    <ion-button color="primary" shape="round" expand="block" (click)="buscar()">Buscar</ion-button>
+    </section>
+    <section class="btn-buscar">
+      <ion-button color="primary" shape="round" expand="block" (click)="buscar()">Buscar</ion-button>
+    </section>
   </section>
 
 </ion-content>
