@@ -187,7 +187,13 @@ export class ApuntesClasesPage implements OnInit, OnDestroy {
       return Promise.reject();
     }
   }
-  recargar(e?: any) { }
+  async recargar(e?: any) {
+    this.mostrarCargando = e ? false : true;
+    this.mostrarData = false;
+    this.cargar(true).finally(() => {
+      e?.target.complete();
+    });
+  }
   async adjuntarArchivo(inputEl: any) {
     if (this.pt.is('mobileweb')) {
       inputEl.click();
