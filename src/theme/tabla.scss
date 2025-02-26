@@ -12,6 +12,7 @@ section.tabla {
   table {
     width: 100%;
     text-align: center;
+    background-color: transparent !important;
 
     // &.clone {
     //     width: auto;
@@ -27,7 +28,7 @@ section.tabla {
       border-right: 1px solid #dee2e6;
       padding: 8px;
       font-size: 14px;
-      color: #4a4a4a;
+      color: var(--table-text-color);
       // vertical-align: top;
 
       ion-icon {
@@ -88,6 +89,19 @@ section.tabla {
 
     tbody tr.selected {
       background-color: #1565c01a !important;
+    }
+  }
+}
+
+::ng-deep body.dark {
+  section.tabla {
+    box-shadow: 0 0 0 1px var(--ion-color-dark-tint) !important;
+
+    th,
+    td {
+      border-top-color: var(--ion-color-dark-tint) !important;
+      border-right-color: var(--ion-color-dark-tint) !important;
+      color: #fff !important;
     }
   }
 }

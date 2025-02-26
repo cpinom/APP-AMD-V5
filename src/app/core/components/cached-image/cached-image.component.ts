@@ -69,6 +69,7 @@ export class CachedImageComponent {
       cssClass: 'transparent-modal',
       showBackdrop: true,
       keyboardClose: true,
+      animated: false,
       enterAnimation: this.enterAnimation
     });
 

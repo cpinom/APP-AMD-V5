@@ -36,7 +36,7 @@ ion-accordion-group {
             .text-title {
                 font-size: 14px;
                 font-weight: bold;
-                color: #4a4a4a;
+                color: var(--table-text-color);
             }
 
             .text-right {
@@ -45,7 +45,7 @@ ion-accordion-group {
 
             .text-normal {
                 white-space: normal;
-                color: #4a4a4a;
+                color: var(--table-text-color);
 
                 span {
                     display: inline-block;
@@ -91,7 +91,7 @@ ion-accordion-group {
                 border: 1px solid #dee2e6;
                 padding: 8px 4px;
                 font-size: 14px;
-                color: #4a4a4a;
+                color: var(--table-text-color);
                 vertical-align: top;
                 // word-break: break-word;
             }

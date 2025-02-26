@@ -182,3 +182,29 @@ ion-content {
     }
   }
 }
+
+::ng-deep body.dark {
+  ion-col {
+    &.clases,
+    &.apuntes {
+      ion-card {
+        ion-card-header {
+          border-bottom-color: var(--ion-color-dark-tint) !important;
+        }
+      }
+    }
+
+    &.apuntes {
+      ion-item.archivo {
+        ion-thumbnail {
+          background: var(--ion-color-dark-shade) !important;
+        }
+      }
+      .archivos {
+        .archivo {
+          background-color: var(--ion-color-dark-shade) !important;
+        }
+      }
+    }
+  }
+}

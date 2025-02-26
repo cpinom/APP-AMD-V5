@@ -21,7 +21,7 @@ ion-toolbar {
 ion-header {
     ion-toolbar {
         ion-progress-bar {
-            --background: #41424D;
+            --background: #41424d;
         }
     }
 }
@@ -459,63 +459,63 @@ ion-grid.botones {
                 }
 
                 &.moddle {
-                    --background: #DEEDED;
-                    --background-activated: #DEEDED;
+                    --background: #deeded;
+                    --background-activated: #deeded;
 
                     ion-avatar {
-                        background: #ABD3D3 !important;
+                        background: #abd3d3 !important;
                     }
 
                     .action {
-                        color: #5AA8A8;
+                        color: #5aa8a8;
                     }
                 }
                 &.mail {
-                    --background: #F6F8E7;
-                    --background-activated: #F6F8E7;
+                    --background: #f6f8e7;
+                    --background-activated: #f6f8e7;
 
                     ion-avatar {
-                        background: #D7E099 !important;
+                        background: #d7e099 !important;
                     }
 
                     .action {
-                        color: #B9C94C;
+                        color: #b9c94c;
                     }
                 }
                 &.comunicaciones {
-                    --background: #DBE3EF;
-                    --background-activated: #DBE3EF;
+                    --background: #dbe3ef;
+                    --background-activated: #dbe3ef;
 
                     ion-avatar {
-                        background: #B4C5DF !important;
+                        background: #b4c5df !important;
                     }
 
                     .action {
-                        color: #6C8CBF;
+                        color: #6c8cbf;
                     }
                 }
                 &.teams {
-                    --background: #F7F3D4;
-                    --background-activated: #F7F3D4;
+                    --background: #f7f3d4;
+                    --background-activated: #f7f3d4;
 
                     ion-avatar {
-                        background: #EEE6AA !important;
+                        background: #eee6aa !important;
                     }
 
                     .action {
-                        color: #E2D46B;
+                        color: #e2d46b;
                     }
                 }
                 &.onedrive {
-                    --background: #DEF2ED;
-                    --background-activated: #DEF2ED;
+                    --background: #def2ed;
+                    --background-activated: #def2ed;
 
                     ion-avatar {
-                        background: #B9E4D8 !important;
+                        background: #b9e4d8 !important;
                     }
 
                     .action {
-                        color: #96D6C5;
+                        color: #96d6c5;
                     }
                 }
             }
@@ -712,6 +712,9 @@ p.version {
         ion-label {
             h2 {
                 color: #fff !important;
+            }
+            p {
+                color: #aaa !important;
             }
         }
     }
