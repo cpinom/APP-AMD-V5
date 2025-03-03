@@ -724,3 +724,236 @@ p.version {
         }
     }
 }
+
+section.accesos-directos {
+    margin-inline: 10px;
+
+    ion-row {
+        ion-col {
+            ion-button {
+                width: 100%;
+                height: 112px;
+                --border-radius: 8px;
+                --padding-bottom: 11px;
+                --padding-end: 11px;
+                --padding-start: 11px;
+                --padding-top: 11px;
+                margin-top: 0;
+                margin-bottom: 0;
+
+                .btn-inner {
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    width: 100%;
+                    text-align: left;
+                    position: relative;
+                    justify-content: space-between;
+
+                    .rounded {
+                        padding: 10px;
+                        margin: 0 0 10px;
+                    }
+
+                    .launch {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        font-size: 18px;
+                    }
+
+                    ion-label {
+                        color: #040b15;
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        h1 {
+                            font-size: 24px;
+                            font-weight: 700;
+                            margin: 0;
+                        }
+                        h2 {
+                            font-size: 16px;
+                            font-weight: 700;
+                        }
+                        p {
+                            font-size: 14px;
+                        }
+                        i {
+                            font-size: 12px;
+                            font-style: normal;
+                            line-height: 14px;
+                            padding: 7px 3px;
+                            background: #1d78bf;
+                            color: #fff;
+                            border-radius: 50%;
+                            width: 27px;
+                            height: 27px;
+                            text-align: center;
+                        }
+                    }
+                }
+
+                &.color-1 {
+                    --background: #deeded;
+                    --background-activated: #deeded;
+
+                    ion-icon {
+                        &.rounded {
+                            background-color: #abd3d3;
+                        }
+                        &.launch {
+                            color: #5aa8a8;
+                        }
+                    }
+                }
+                &.color-2 {
+                    --background: #f6f8e7;
+                    --background-activated: #f6f8e7;
+
+                    ion-icon {
+                        &.rounded {
+                            background-color: #d7e099;
+                        }
+                        &.launch {
+                            color: #b9c94c;
+                        }
+                    }
+                }
+                &.color-3 {
+                    --background: #dbe3ef;
+                    --background-activated: #dbe3ef;
+
+                    ion-icon {
+                        &.rounded {
+                            background-color: #b4c5df;
+                        }
+                        &.launch {
+                            color: #6c8cbf;
+                        }
+                    }
+                }
+                &.color-4 {
+                    --background: #f7f3d4;
+                    --background-activated: #f7f3d4;
+
+                    ion-icon {
+                        &.rounded {
+                            background-color: #eee6aa;
+                        }
+                        &.launch {
+                            color: #e2d46b;
+                        }
+                    }
+                }
+                &.color-5 {
+                    --background: #def2ed;
+                    --background-activated: #def2ed;
+
+                    ion-icon {
+                        &.rounded {
+                            background-color: #b9e4d8;
+                        }
+                        &.launch {
+                            color: #96d6c5;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+::ng-deep body.dark {
+    section.accesos-directos {
+        ion-button {
+            &.color-1 {
+                --background: #2b3b3b !important;
+                --background-activated: #2b3b3b !important;
+
+                ion-label {
+                    color: #fff !important;
+                }
+
+                ion-icon {
+                    &.rounded {
+                        background-color: #ABD3D3 !important;
+                    }
+                    &.launch {
+                        color: #5AA8A8 !important;
+                    }
+                }
+            }
+            &.color-2 {
+                --background: #393B2B !important;
+                --background-activated: #393B2B !important;
+
+                ion-label {
+                    color: #fff !important;
+                }
+
+                ion-icon {
+                    &.rounded {
+                        background-color: #D7E099 !important;
+                    }
+                    &.launch {
+                        color: #B9C94C !important;
+                    }
+                }
+            }
+            &.color-3 {
+                --background: #2b3b3b !important;
+                --background-activated: #2b3b3b !important;
+
+                ion-label {
+                    color: #fff !important;
+                }
+
+                ion-icon {
+                    &.rounded {
+                        background-color: #ABD3D3 !important;
+                    }
+                    &.launch {
+                        color: #5AA8A8 !important;
+                    }
+                }
+            }
+            &.color-4 {
+                --background: #393B2B !important;
+                --background-activated: #393B2B !important;
+
+                ion-label {
+                    color: #fff !important;
+                }
+
+                ion-icon {
+                    &.rounded {
+                        background-color: #D7E099 !important;
+                    }
+                    &.launch {
+                        color: #B9C94C !important;
+                    }
+                }
+            }
+            &.color-5 {
+                --background: #2b3b3b !important;
+                --background-activated: #2b3b3b !important;
+
+                ion-label {
+                    color: #fff !important;
+                }
+
+                ion-icon {
+                    &.rounded {
+                        background-color: #ABD3D3 !important;
+                    }
+                    &.launch {
+                        color: #5AA8A8 !important;
+                    }
+                }
+            }
+        }
+    }
+}

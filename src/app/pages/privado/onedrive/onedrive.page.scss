@@ -47,3 +47,10 @@ ion-content {
     }
   }
 }
+
+::ng-deep body.dark {
+  ion-toolbar.title {
+    --background: var(--ion-color-dark-shade) !important;
+    --color: white !important;
+  }
+}

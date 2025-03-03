@@ -89,18 +89,18 @@ export class AppComponent {
             title: 'INACAPMail',
             // description: 'Send us your feedback',
             icon: 16
-          },
-          {
-            id: 'rate',
-            title: 'Rate',
-            description: 'Rate our app',
           }
         ],
       });
 
-      AppShortcuts.addListener('click', (event: ClickEvent) => {
+      AppShortcuts.addListener('click', async (event: ClickEvent) => {
         console.log('Shortcut clicked:', event.shortcutId);
-        alert(JSON.stringify(event));
+        //alert(JSON.stringify(event));
+
+        if (event.shortcutId == 'inacapmail') {
+          await this.nav.navigateForward('/privado/inacapmail');
+        }
+
       });
     }
     else {

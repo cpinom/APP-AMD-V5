@@ -96,7 +96,7 @@ export class PrivadoPage implements OnInit, OnDestroy {
     this.cargarCuentasCorreos();
   }
   ngOnInit() {
-    this.global.NotificationFlag = true;
+    // this.global.NotificationFlag = true;
     // this.cargar();
     this.api.marcarVista(VISTAS_DOCENTE.PRINCIPAL);
   }
@@ -192,9 +192,10 @@ export class PrivadoPage implements OnInit, OnDestroy {
     this.periodoLabel  = periodo.periTdesc;
   }
   async cargar(forceRefresh = false) {
+    // debugger
     try {
       const params = { aptaTuuid: this.global.DeviceId };
-      const response = await this.api.getPrincipal(params, forceRefresh);
+      const response = await this.api.getPrincipal(params, true);
       const { data } = response;
 
       if (data.success) {
@@ -246,7 +247,7 @@ export class PrivadoPage implements OnInit, OnDestroy {
 
     try {
       const params = { aptaTuuid: this.global.DeviceId };
-      const response = await this.api.getClases(params);
+      const response = await this.api.getClases(params, true);
       const { data } = response;
 
       if (data.success) {

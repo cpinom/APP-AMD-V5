@@ -318,6 +318,36 @@
       }
     }
 
+    ion-icon {
+      &.rounded {
+        background: #a7b0f1;
+        color: #000;
+        border-radius: 50%;
+        padding: 4px;
+        font-size: 24px;
+        margin-inline-end: 11px;
+
+        &.variant-1 {
+          background: #c8dce9;
+        }
+        &.variant-2 {
+          background: #feeb80;
+        }
+        &.variant-3 {
+          background: #e381ab;
+        }
+        &.variant-4 {
+          background: #a7b0f1;
+        }
+        &.variant-5 {
+          background: #ffb066;
+        }
+      }
+      &[slot="end"] {
+        font-size: 18px;
+      }
+    }
+
     &.barcode-scanning-active {
       background: transparent;
       visibility: hidden;

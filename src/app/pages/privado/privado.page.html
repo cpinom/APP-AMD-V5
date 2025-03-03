@@ -24,7 +24,7 @@
   <ion-toolbar class="periodos">
     <ion-title>
       <ion-button fill="clear" size="small" (click)="periodoTap()">
-        {{periodoLabel}}
+        <ion-label class="ion-text-nowrap">{{periodoLabel}}</ion-label> 
         <ion-icon slot="end" src="assets/icon/arrow_drop_down.svg"></ion-icon>
       </ion-button>
     </ion-title>
@@ -163,13 +163,13 @@
           }
           @if (clase.estadoLibro == 1) {
           <ion-button slot="end" color="success" shape="round" (click)="mostrarCurso($event, clase, 'INICIAR')">
-            Comenzar Clase
+            <ion-label class="ion-text-nowrap">Comenzar Clase</ion-label> 
             <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
           </ion-button>
           }
           @else if (clase.estadoLibro == 2) {
           <ion-button slot="end" color="danger" shape="round" (click)="mostrarCurso($event, clase, 'TERMINAR')">
-            Terminar Clase
+            <ion-label class="ion-text-nowrap">Terminar Clase</ion-label>
             <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
           </ion-button>
           }
@@ -223,7 +223,70 @@
   </section>
   }
 
-  <ion-grid class="botones">
+  <section class="accesos-directos">
+    <ion-row>
+      <ion-col size="4">
+        <ion-button class="color-1" (click)="moodleTap()">
+          <div class="btn-inner">
+            <ion-icon src="assets/icon/cast.svg" class="rounded"></ion-icon>
+            <ion-label>
+              <h2>Ambiente de Aprendizaje</h2>
+            </ion-label>
+            <ion-icon src="assets/icon/arrow_forward.svg" class="launch"></ion-icon>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button class="color-2" routerLink="inacapmail">
+          <div class="btn-inner">
+            <ion-icon src="assets/icon/mail_outline.svg" class="rounded"></ion-icon>
+            <ion-label>
+              <h2>INACAPMail</h2>
+              @if (inacapMail?.unReadTotal > 0) {
+              <i>{{inacapMail?.unReadTotal > 99 ? '99+' : inacapMail?.unReadTotal}}</i>
+              }
+            </ion-label>
+            <ion-icon src="assets/icon/arrow_forward.svg" class="launch"></ion-icon>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button class="color-3" (click)="comunicacionesTap()">
+          <div class="btn-inner">
+            <ion-icon src="assets/icon/send.svg" class="rounded"></ion-icon>
+            <ion-label>
+              <h2>Enviar Mensaje a Secciones</h2>
+            </ion-label>
+            <ion-icon src="assets/icon/arrow_forward.svg" class="launch"></ion-icon>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button class="color-4" routerLink="microsoft-teams">
+          <div class="btn-inner">
+            <ion-icon src="assets/icon/teams.svg" class="rounded"></ion-icon>
+            <ion-label>
+              <h2>Microsoft Teams</h2>
+            </ion-label>
+            <ion-icon src="assets/icon/arrow_forward.svg" class="launch"></ion-icon>
+          </div>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button class="color-5" routerLink="onedrive">
+          <div class="btn-inner">
+            <ion-icon src="assets/icon/cloud.svg" class="rounded"></ion-icon>
+            <ion-label>
+              <h2>One Drive</h2>
+            </ion-label>
+            <ion-icon src="assets/icon/arrow_forward.svg" class="launch"></ion-icon>
+          </div>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </section>
+
+  <!-- <ion-grid class="botones">
     <ion-row>
       <ion-col size="4">
         <ion-button class="moddle" (click)="moodleTap()">
@@ -293,49 +356,8 @@
           </div>
         </ion-button>
       </ion-col>
-      <!-- <ion-col size="6">
-        <ion-button color="white" expand="block" (click)="moodleTap()">
-          <div>
-            <ion-icon slot="start" src="assets/icon/cast.svg"></ion-icon>
-            <span>Ambiente de Aprendizaje</span>
-          </div>
-        </ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button color="white" expand="block" routerLink="inacapmail">
-          <div [matBadge]="'-'" matBadgePosition="after" matBadgeColor="accent"
-            [matBadgeHidden]="!(inacapMail && inacapMail.unReadTotal > 0)">
-            <ion-icon slot="start" src="assets/icon/mail_outline.svg"></ion-icon>
-            <span>INACAPMail</span>
-          </div>
-        </ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button color="white" expand="block" (click)="comunicacionesTap()">
-          <div>
-            <ion-icon slot="start" src="assets/icon/send.svg"></ion-icon>
-            <span>Enviar mensaje<span>a secciones</span></span>
-          </div>
-        </ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button color="white" expand="block" routerLink="microsoft-teams">
-          <div>
-            <ion-icon slot="start" name="logo-microsoft"></ion-icon>
-            <span>Microsoft Teams</span>
-          </div>
-        </ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button color="white" expand="block" routerLink="onedrive">
-          <div>
-            <ion-icon slot="start" name="logo-microsoft"></ion-icon>
-            <span>One Drive</span>
-          </div>
-        </ion-button>
-      </ion-col> -->
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
 
   <section class="btn-cerrar">
     <ion-button expand="full" color="white" shape="round" (click)="logout()">Cerrar Sesión</ion-button>
