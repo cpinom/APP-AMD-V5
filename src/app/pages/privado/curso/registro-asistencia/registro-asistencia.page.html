@@ -85,6 +85,17 @@
                           </ng-template>
                         </ion-popover>
                       </ng-container>
+                      @if (muestraTomaConocimiento) {
+                      @if (item.validaTomaConocimiento == 0) {
+                      <ion-icon id="est-conocimiento-c{{i}}" src="assets/icon/pencil_off.svg" style="font-size: 24px;"></ion-icon>
+                      <ion-popover trigger="est-conocimiento-c{{i}}" side="right" alignment="end">
+                        <ng-template>
+                          <ion-content class="ion-padding" style="font-size: 12px;">Estudiante no ha firmado la Toma de
+                            Conocimiento</ion-content>
+                        </ng-template>
+                      </ion-popover>
+                      }
+                      }
                     </div>
                   </td>
                   <td>{{item.asistencia}}%</td>

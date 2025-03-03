@@ -19,6 +19,7 @@ export class AsistenciaClasesPage implements OnInit {
   mostrarData = false;
   displayedColumns: any[] = [];
   infoColumns: any[] = [];
+  muestraTomaConocimiento: any;
 
   constructor(private api: AsistenciaService,
     private global: AppGlobal,
@@ -33,12 +34,15 @@ export class AsistenciaClasesPage implements OnInit {
     this.api.marcarVista(VISTAS_DOCENTE.CURSO_ASISTENCIA);
   }
   async cargar(forceRefresh = false) {
+    debugger
     try {
-      const params = { seccCcod: this.data.seccCcod, ssecNcorr: this.data.ssecNcorr };
-      const response = await this.api.getPrincipal(params, forceRefresh);
-      const { data } = response;
+      const seccCcod = this.data.seccCcod;
+      const ssecNcorr = this.data.ssecNcorr;
+      const response = await this.api.getPrincipalV5(seccCcod, ssecNcorr);
 
-      if (data.success) {
+      if (response.data.success) {
+        const { data } = response.data;
+        this.muestraTomaConocimiento = data.muestraTomaConocimiento;
         await this.resolverAsistencia(data.alumnos);
       }
       else {
@@ -90,7 +94,7 @@ export class AsistenciaClasesPage implements OnInit {
         });
 
       });
-      
+
       this.alumnos = data;
 
       return Promise.resolve();

@@ -28,6 +28,8 @@ export class PrincipalPage implements OnInit {
   alumnos: any;
   alumnosFiltrados: any;
   jefeCarrera: any;
+  validaRetiroAnticipado: any;
+  muestraTomaConocimiento: any;
   filtroAsistencia = Filtro.ausentes;
   mostrarCargando = true;
   coordinadas: any;
@@ -48,13 +50,16 @@ export class PrincipalPage implements OnInit {
   }
   async cargar() {
     try {
-      const params = { seccCcod: this.seccion.seccCcod, lclaNcorr: this.seccion.lclaNcorr };
-      const response = await this.api.getAsistenciaClase(params);
-      const { data } = response;
+      const seccCcod = this.seccion.seccCcod;
+      const lclaNcorr = this.seccion.lclaNcorr;
+      const response = await this.api.getAsistenciaClaseV5(seccCcod, lclaNcorr);
 
-      if (data.success) {
+      if (response.data.success) {
+        const { data } = response.data;
         this.alumnos = data.alumnos;
         this.jefeCarrera = data.jefeCarrera;
+        this.validaRetiroAnticipado = data.validaRetiroAnticipado;
+        this.muestraTomaConocimiento = data.muestraTomaConocimiento;
         this.aplicarFiltro(this.filtroAsistencia);
       }
       else {
@@ -77,7 +82,46 @@ export class PrincipalPage implements OnInit {
     }
     else if (alumno.asistenciaActual == 2) {
 
-      if (alumno.rasiFregistroInicio && !alumno.rasiFregistroTermino) {
+      debugger
+
+      if (this.validaRetiroAnticipado === true) {
+
+        if (alumno.rasiFregistroInicio && !alumno.rasiFregistroTermino) {
+          const resultUsario = await this.resolverMarcaAsistencia();
+
+          if (resultUsario == 'AUSENTE') {
+            alumno.asistenciaActual = 1;
+          }
+          else if (resultUsario == 'RETIRO_ANTICIPADO') {
+            alumno.retiroAnticipado = true;
+          }
+          else {
+            return;
+          }
+        }
+        else if (alumno.rasiFregistroInicio && alumno.rasiFregistroTermino) {
+          const confirm = await this.confirmarMarcaAusencia();
+
+          if (!confirm) {
+            return;
+          }
+
+          alumno.asistenciaActual = 1;
+        }
+      }
+      else {
+
+        const confirm = await this.confirmarMarcaAusencia();
+
+        if (!confirm) {
+          return;
+        }
+
+        alumno.asistenciaActual = 1;
+
+      }
+
+      /*if (alumno.rasiFregistroInicio && !alumno.rasiFregistroTermino) {
         const resultUsario = await this.resolverMarcaAsistencia();
 
         if (resultUsario == 'AUSENTE') {
@@ -98,7 +142,7 @@ export class PrincipalPage implements OnInit {
         }
 
         alumno.asistenciaActual = 1;
-      }
+      }*/
     }
     else if (alumno.asistenciaActual == 1) {
       alumno.asistenciaActual = 2;

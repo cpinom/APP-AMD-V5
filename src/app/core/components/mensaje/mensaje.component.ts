@@ -282,18 +282,18 @@ export class MensajeComponent implements OnInit, OnDestroy {
             const progreso = Math.round(result.progress);
             loading.message = `(${progreso}%) procesando....`;
           }
-          else if (result.id) {
+          else if (result.code == 200) {
             const index = this.adjuntos.length;
 
             this.adjuntos[index] = {
-              id: result.id,
+              id: result.data.id,
               name: fileName,
-              type: result.type,
-              size: result.size,
+              type: result.data.type,
+              size: result.data.size,
               content: base64String
             };
 
-            this.snackbar.showToast('Archivo cargado correctamente.', 3000, 'success');
+            await this.snackbar.showToast('Archivo cargado correctamente.', 3000, 'success');
           }
         }
         else {

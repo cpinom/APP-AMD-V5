@@ -21,5 +21,8 @@ export class AsistenciaService extends PrivateService {
   getPrincipal(params: any, forceRefresh = false) {
     return this.post(`${this.baseUrl}/asistencia/v4/principal`, params, forceRefresh, undefined, true);
   }
+  getPrincipalV5(seccCcod: any, ssecNcorr:any) {
+    return this.get(`${this.baseUrl}/asistencia/v5/principal?seccCcod=${seccCcod}&ssecNcorr=${ssecNcorr}`, true);
+  }
 
 }

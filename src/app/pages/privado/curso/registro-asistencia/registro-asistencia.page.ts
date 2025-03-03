@@ -21,6 +21,8 @@ export class RegistroAsistenciaPage implements OnInit {
   jefeCarrera: any;
   mostrarCargando = true;
   mostrarData = false;
+  validaRetiroAnticipado: any;
+  muestraTomaConocimiento: any;
 
   constructor(private api: CursoService,
     private global: AppGlobal,
@@ -37,14 +39,18 @@ export class RegistroAsistenciaPage implements OnInit {
     });
   }
   async cargar() {
+    debugger
     try {
-      const params = { seccCcod: this.seccion.seccCcod, lclaNcorr: this.seccion.lclaNcorr };
-      const response = await this.api.getAsistenciaClase(params);
-      const { data } = response;
+      const seccCcod = this.seccion.seccCcod;
+      const lclaNcorr = this.seccion.lclaNcorr;
+      const response = await this.api.getAsistenciaClaseV5(seccCcod, lclaNcorr);
 
-      if (data.success) {
+      if (response.data.success) {
+        const { data } = response.data;
         this.alumnos = data.alumnos;
         this.jefeCarrera = data.jefeCarrera;
+        this.validaRetiroAnticipado = data.validaRetiroAnticipado;
+        this.muestraTomaConocimiento = data.muestraTomaConocimiento;
       }
       else {
         throw Error();

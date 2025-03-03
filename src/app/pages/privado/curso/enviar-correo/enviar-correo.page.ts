@@ -124,6 +124,12 @@ export class EnviarCorreoPage implements OnInit, OnDestroy {
     const isValid = this.form.valid;
 
     if (isValid) {
+      const confirm = await this.confirmarEnvio();
+
+      if (!confirm) {
+        return;
+      }
+
       const loading = await this.dialog.showLoading({ message: 'Enviando correo...' });
 
       try {
@@ -157,6 +163,26 @@ export class EnviarCorreoPage implements OnInit, OnDestroy {
       this.form.markAllAsTouched();
     }
 
+  }
+  async confirmarEnvio(): Promise<boolean> {
+    return new Promise(async (resolve) => {
+      const alert = await this.dialog.showAlert({
+        header: 'Confirmación Correo',
+        message: '¿Esta seguro de enviar el correo a los estudiantes seleccionados?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => resolve(false)
+          },
+          {
+            text: 'Confirmar',
+            role: 'destructive',
+            handler: () => resolve(true)
+          }
+        ]
+      });
+    });
   }
   resolverFoto(persNcorr: any) {
     return `${this.global.Api}/api/v4/avatar/${persNcorr}`;

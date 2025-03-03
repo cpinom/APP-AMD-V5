@@ -111,6 +111,12 @@ export class ComunicacionesPage implements OnInit, OnDestroy {
     const isValid = this.form.valid;
 
     if (isValid) {
+      const confirm = await this.confirmarEnvio();
+
+      if (!confirm) {
+        return;
+      }
+
       const loading = await this.dialog.showLoading({ message: 'Enviando comunicación...' });
 
       try {
@@ -144,6 +150,26 @@ export class ComunicacionesPage implements OnInit, OnDestroy {
       this.form.markAllAsTouched();
     }
 
+  }
+  async confirmarEnvio(): Promise<boolean> {
+    return new Promise(async (resolve) => {
+      const alert = await this.dialog.showAlert({
+        header: 'Confirmación Correo',
+        message: '¿Esta seguro de enviar el correo a las secciones seleccionadas?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => resolve(false)
+          },
+          {
+            text: 'Confirmar',
+            role: 'destructive',
+            handler: () => resolve(true)
+          }
+        ]
+      });
+    });
   }
   async adjuntar(input: any) {
     if (this.pt.is('mobileweb')) {
