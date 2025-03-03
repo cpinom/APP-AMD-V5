@@ -350,12 +350,12 @@ export class OnedrivePage implements OnInit {
             this.descargarTap(item);
           }
         },
-        {
-          text: 'Compartir',
-          handler: () => {
-            this.compartirTap(item);
-          }
-        },
+        // {
+        //   text: 'Compartir',
+        //   handler: () => {
+        //     this.compartirTap(item);
+        //   }
+        // },
         {
           text: 'Eliminar',
           role: 'destructive',

@@ -175,6 +175,14 @@
           }
         </ion-item>
         }
+        @if (clases.length) {
+          <section class="clases-aol">
+            <span>
+              <b>Importante:</b>
+              Las clases impartidas bajo modalidad AOL asincrónica no quedan sujetas a día ni horario, siendo meramente referencia las horas aquí indicadas.
+            </span>
+          </section>
+        }
         }
       </ion-list>
       @if ((!mostrarCargando && !mostrarCargando2) && mostrarData && clases.length == 0) {
