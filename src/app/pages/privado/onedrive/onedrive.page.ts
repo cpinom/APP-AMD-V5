@@ -65,7 +65,6 @@ export class OnedrivePage implements OnInit {
         const { data } = result;
         this.driveId = data.driveId;
         this.items = this.resolverItems(data.items);
-        this.mostrarData = true;
         await this.api.setStorage('driveId', this.driveId)
       }
       else {
@@ -80,6 +79,7 @@ export class OnedrivePage implements OnInit {
     }
     finally {
       this.mostrarCargando = false;
+      this.mostrarData = true;
     }
   }
   recargar(e: any) {

@@ -22,6 +22,7 @@ export class InacapmailPage implements OnInit, OnDestroy {
   selectedFolder: any;
   eventSubscription!: Subscription;
   mostrarCargando = true;
+  mostrarData = false;
 
   constructor(private api: InacapmailService,
     private mensaje: MensajeService,
@@ -36,8 +37,8 @@ export class InacapmailPage implements OnInit, OnDestroy {
     })
 
   }
-  ngOnInit() {
-    this.cargar();
+  async ngOnInit() {
+    await this.cargar();
     this.api.marcarVista(VISTAS_DOCENTE.MAIL);
   }
   ngOnDestroy() {
@@ -65,18 +66,31 @@ export class InacapmailPage implements OnInit, OnDestroy {
     }
     finally {
       this.mostrarCargando = false;
+      this.mostrarData = true;
     }
   }
   async recargar(ev?: any) {
+    this.mostrarCargando = true;
+    this.mostrarData = false;
+
     try {
       const response = await this.api.getPrincipal(true);
       const { data } = response;
 
-      if (this.selectedFolder) {
-        data.folders.forEach((item: any) => item.selected = item.id == this.selectedFolder.id);
-      }
+      if (data.success) {
+        if (this.selectedFolder) {
+          data.folders.forEach((item: any) => item.selected = item.id == this.selectedFolder.id);
+        }
+        else {
+          const selectedFolder = data.folders.find((f: any) => f.isInbox);
+          this.folderTap(selectedFolder);
+        }
 
-      this.folders = [...data.folders];
+        this.folders = [...data.folders];
+      }
+      else {
+        throw Error();
+      }
     }
     catch (error: any) {
       if (error && error.status == 401) {
