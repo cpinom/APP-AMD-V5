@@ -190,7 +190,7 @@ export class UtilsService {
   async showAlertCamera(header: string = 'Escanear Código QR') {
     const alert = await this.dialog.showAlert({
       header: header,
-      message: 'Permitir que AMD acceda a la cámara del dispositivo.',
+      message: 'Permitir que AMD acceda a la cámara y fotos del dispositivo.',
       buttons: [
         {
           text: '"Abrir" Configuración',

@@ -3,6 +3,7 @@ import { ActionSheetController } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Filesystem } from '@capacitor/filesystem';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
+import { UtilsService } from './utils.service';
 
 interface MediaFile {
   path: string,
@@ -16,7 +17,7 @@ interface MediaFile {
 })
 export class MediaService {
 
-  constructor(private action: ActionSheetController) { }
+  constructor(private action: ActionSheetController, private utils: UtilsService) { }
   async getMedia(excludeDocument = false): Promise<MediaFile | null> {
 
     try {
@@ -36,25 +37,55 @@ export class MediaService {
           name: result.files[0].name,
           size: result.files[0].size
         } as MediaFile);
-      } else {
-        const image = await Camera.getPhoto({
-          quality: 70,
-          allowEditing: true,
-          resultType: CameraResultType.Uri,
-          height: 1000,
-          width: 1000,
-          source: sourceType == 'CAMERA' ? CameraSource.Camera : CameraSource.Photos
-        });
+      }
+      else {
 
-        const statFile = await Filesystem.stat({ path: image.path! });
-        const readFile = await Filesystem.readFile({ path: image.path! });
+        let permission = await Camera.checkPermissions();
+        let hasPermission = false;
 
-        return Promise.resolve({
-          path: image.path,
-          data: 'data:image/jpeg;base64,' + readFile.data,
-          name: `foto_${(new Date()).getTime()}.jpg`,
-          size: statFile.size
-        } as MediaFile);
+        if (sourceType == 'CAMERA') {
+          if (permission.camera == 'denied' || permission.camera == 'prompt') {
+            permission = await Camera.requestPermissions({ permissions: ['camera'] });
+          }
+
+          if (permission.camera == 'granted') {
+            hasPermission = true;
+          }
+        }
+        else if (sourceType == 'PHOTOS') {
+          if (permission.photos == 'denied' || permission.photos == 'prompt') {
+            permission = await Camera.requestPermissions({ permissions: ['photos'] });
+          }
+
+          if (permission.photos == 'granted') {
+            hasPermission = true;
+          }
+        }
+
+        if (hasPermission) {
+          const image = await Camera.getPhoto({
+            quality: 70,
+            allowEditing: true,
+            resultType: CameraResultType.Uri,
+            height: 1000,
+            width: 1000,
+            source: sourceType == 'CAMERA' ? CameraSource.Camera : CameraSource.Photos
+          });
+
+          const statFile = await Filesystem.stat({ path: image.path! });
+          const readFile = await Filesystem.readFile({ path: image.path! });
+
+          return Promise.resolve({
+            path: image.path,
+            data: 'data:image/jpeg;base64,' + readFile.data,
+            name: `foto_${(new Date()).getTime()}.jpg`,
+            size: statFile.size
+          } as MediaFile);
+        }
+        else {
+          await this.utils.showAlertCamera('No se puede acceder a la cámara');
+          return Promise.resolve(null);
+        }
       }
     }
     catch (error) {

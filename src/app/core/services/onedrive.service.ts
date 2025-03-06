@@ -40,6 +40,8 @@ export class OnedriveService extends PrivateService {
     return this.post(`${this.baseUrl}/v1/cargar-archivo?folderId=${folderId}`, params);
   }
   descargarArchivo(folderId: string, fileId: string) {
+    folderId = encodeURIComponent(folderId);
+    fileId = encodeURIComponent(fileId);
     return this.get(`${this.baseUrl}/v1/descargar-archivo?folderId=${folderId}&fileId=${fileId}`);
   }
   renombrarCarpeta(params: any) {

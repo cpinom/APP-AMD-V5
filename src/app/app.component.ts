@@ -25,6 +25,7 @@ import { AppLauncher } from '@capacitor/app-launcher';
 import { PublicoService } from './core/services/publico.service';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { AppShortcuts, ClickEvent } from '@capawesome/capacitor-app-shortcuts';
+import { OnedriveService } from './core/services/onedrive.service';
 
 declare const $: any;
 
@@ -45,6 +46,7 @@ export class AppComponent {
     private config: Config,
     private api: DispositivoService,
     private publicApi: PublicoService,
+    private oneDrive: OnedriveService,
     private perfil: PerfilService,
     private events: EventsService,
     private caching: CachingService,
@@ -154,6 +156,7 @@ export class AppComponent {
     this.clearCacheFolder();
     this.cursos.clearStorage();
     this.perfil.clearStorage();
+    this.oneDrive.clearStorage();
     this.perfil.toggleBodyClass('dark', true);
     this.perfil.registrarSalida({ uuid: usuario.uuid }).catch(() => { });
   }

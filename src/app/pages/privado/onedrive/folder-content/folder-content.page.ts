@@ -423,6 +423,8 @@ export class FolderContentPage implements OnInit {
       const response = await this.api.descargarArchivo(this.driveItemId, file.id);
       const result = response.data;
 
+      console.log(result);
+
       if (result.success) {
         if (this.pt.is('mobileweb')) {
           const linkSource = `data:${file.contentType};base64,${result.data}`;
@@ -449,6 +451,7 @@ export class FolderContentPage implements OnInit {
       }
     }
     catch (error: any) {
+      console.log(error);
       if (error && error.status == 401) {
         this.error.handle(error);
         return;

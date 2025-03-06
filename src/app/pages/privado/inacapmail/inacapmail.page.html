@@ -15,19 +15,19 @@
 </ion-header>
 
 <ion-content>
-
+<!-- 
   @if (mostrarCargando) {
     <div class="loaderInacap">
       <ion-spinner name="lines" color="primary"></ion-spinner>
     </div>
-  }
+  } -->
 
-  @if (mostrarData && folders) {
+  <!-- @if (mostrarData && folders) { -->
   <ion-split-pane contentId="main" when="sm">
     <ion-menu contentId="main">
-      <!-- <div class="loaderInacap" *ngIf="mostrarCargando">
+      <div class="loaderInacap" *ngIf="mostrarCargando">
         <ion-spinner name="lines" color="primary"></ion-spinner>
-      </div> -->
+      </div>
       <ion-list>
         <ion-menu-toggle [autoHide]="false">
           <ion-item (click)="folderTap(item)" *ngFor="let item of folders" [class.selected]="item.selected">
@@ -41,7 +41,7 @@
     </ion-menu>
     <ion-nav #nav id="main"></ion-nav>
   </ion-split-pane>
-  }
+  <!-- }
 
   @if (mostrarData && !folders) {
   <section class="empty-state">
@@ -51,6 +51,6 @@
       <ion-button color="primary" shape="round" (click)="recargar(true)">Recargar</ion-button>
     </div>
   </section>
-  }
+  } -->
 
 </ion-content>
