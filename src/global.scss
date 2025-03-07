@@ -353,10 +353,16 @@
       visibility: hidden;
       --background: transparent;
       --ion-background-color: transparent;
+
+      // ion-modal {
+      //   display: none;
+      //   --background: transparent;
+      //   --ion-background-color: transparent;
+      // }
     }
 
     .barcode-scanning-modal {
-      visibility: visible;
+      visibility: visible !important;
       --height: 100%;
       --width: 100%;
     }
@@ -432,6 +438,13 @@
 
       ion-checkbox {
         --border-color: #888;
+      }
+
+      &.barcode-scanning-active {
+        background: transparent;
+        visibility: hidden;
+        --background: transparent;
+        --ion-background-color: transparent;
       }
     }
   }

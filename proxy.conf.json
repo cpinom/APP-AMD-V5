@@ -1,6 +1,6 @@
 {
   "/api": {
-      "target": "http://localhost:52309/",
+      "target": "https://siga.inacap.cl/inacap.api.amd.v4",
       "secure": false,
       "changeOrigin": true,
       "timeout": 3600000

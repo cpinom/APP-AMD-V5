@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  version: '5.0.0',
+  version: '5.0.4',
   apiUrl: '',
   environmentTitle: 'Local',
   mapsKey: 'AIzaSyBoGvWsUMvPL0glLPRSx-7V5GRWSEnC-Ns',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Barcode, BarcodeFormat, LensFacing } from '@capacitor-mlkit/barcode-scanning';
+import { BarcodeScanner, SupportedFormat } from '@capacitor-community/barcode-scanner';
 import { Camera } from '@capacitor/camera';
 import { Geolocation } from '@capacitor/geolocation';
 import { Platform } from '@ionic/angular';
@@ -65,47 +65,61 @@ export class CambiarSalaPage implements OnInit {
       const barcode = await this.escanearQR();
 
       if (barcode) {
-        if (barcode.format == BarcodeFormat.QrCode) {
-          const regex = /^\d{1,4}$/;
-          const validString = regex.test(barcode.rawValue);
+        // if (barcode.format == BarcodeFormat.QrCode) {
+        const regex = /^\d{1,4}$/;
+        const validString = regex.test(barcode);
 
-          if (validString) {
-            const salaCcod = Number(barcode.rawValue);
-            const existeSala = this.salas.filter((t: any) => t.salaCcod == salaCcod).length > 0;
+        if (validString) {
+          const salaCcod = Number(barcode);
+          const existeSala = this.salas.filter((t: any) => t.salaCcod == salaCcod).length > 0;
 
-            if (existeSala) {
-              this.sala?.setValue(salaCcod);
-            }
-            else {
-              await this.snackbar.showToast('El código QR escaneado no existe en el listado de salas disponibles. Intente seleccionando la sala.');
-            }
-
+          if (existeSala) {
+            this.sala?.setValue(salaCcod);
           }
           else {
-            await this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.');
+            await this.snackbar.showToast('El código QR escaneado no existe en el listado de salas disponibles. Intente seleccionando la sala.', 3000, 'danger');
           }
+
         }
         else {
-          await this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
+          await this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.', 3000, 'danger');
         }
+        // }
+        // else {
+        //   await this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
+        // }
       }
     }
   }
   async escanearQR() {
-    return new Promise<Barcode | undefined>(async resolve => {
+    document.querySelector('body')?.classList.add('barcode-scanning-active');
+
+    // return new Promise<string | undefined>(async resolve => {
+    //   await BarcodeScanner.hideBackground();
+
+    //   const result = await BarcodeScanner.startScan({ targetedFormats: [SupportedFormat.QR_CODE] });
+
+    //   document.querySelector('body')?.classList.remove('barcode-scanning-active');
+
+    //   if (result.hasContent) {
+    //     console.log(result.content);
+    //     resolve(result.content)
+    //   }
+    //   else {
+    //     resolve(undefined)
+    //   }
+    // });
+    return new Promise<string | undefined>(async resolve => {
       const element = await this.dialog.showModal({
         component: BarcodeScanningModalComponent,
         cssClass: 'barcode-scanning-modal',
         showBackdrop: false,
-        componentProps: {
-          formats: [BarcodeFormat.QrCode],
-          lensFacing: LensFacing.Back,
-        },
         animated: false
       });
 
       element.onDidDismiss().then((result) => {
-        const barcode: Barcode | undefined = result.data?.barcode;
+        debugger
+        const barcode: string | undefined = result.data?.barcode;
 
         if (barcode) {
           resolve(barcode)

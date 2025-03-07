@@ -23,10 +23,10 @@ import { TiposAlumnosPage } from '../tipos-alumnos/tipos-alumnos.page';
 import { PerfilAlumnosPage } from '../perfil-alumnos/perfil-alumnos.page';
 import { AsignaturasPrerequisitosPage } from '../asignaturas-prerequisitos/asignaturas-prerequisitos.page';
 import { VISTAS_DOCENTE } from 'src/app/app.contants';
-import { BarcodeScanningModalComponent } from 'src/app/core/components/barcode-scanning-modal/barcode-scanning-modal.component';
 import { DialogService } from 'src/app/core/services/dialog.service';
-import { Barcode, BarcodeFormat, LensFacing } from '@capacitor-mlkit/barcode-scanning';
 import { UtilsService } from 'src/app/core/services/utils.service';
+import { BarcodeScanner, SupportedFormat } from '@capacitor-community/barcode-scanner';
+import { BarcodeScanningModalComponent } from 'src/app/core/components/barcode-scanning-modal/barcode-scanning-modal.component';
 
 enum FORMA_COMENZAR {
   VALIDA_SALA = 1,
@@ -306,22 +306,23 @@ export class ResumenPage implements OnInit, OnDestroy {
 
         if (permission.camera == 'granted') {
           const barcode = await this.escanearQR();
+          console.log(barcode);
 
           if (barcode) {
-            if (barcode.format == BarcodeFormat.QrCode) {
-              const regex = /^\d{1,4}$/;
-              const validString = regex.test(barcode.rawValue);
+            //if (barcode.format == BarcodeFormat.QrCode) {
+            const regex = /^\d{1,4}$/;
+            const validString = regex.test(barcode);
 
-              if (validString) {
-                salaCcod = Number(barcode.rawValue);
-              }
-              else {
-                await this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.');
-              }
+            if (validString) {
+              salaCcod = Number(barcode);
             }
             else {
-              await this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
+              await this.snackbar.showToast('El código QR no es válido. Vuelva a intentar.', 3000, 'danger');
             }
+            // }
+            // else {
+            //   await this.snackbar.showToast('Debe posicionar la cámara en frente de un código tipo QR.');
+            // }
           }
         }
         else {
@@ -391,20 +392,33 @@ export class ResumenPage implements OnInit, OnDestroy {
     this.deshabilitarIniciar = false;
   }
   async escanearQR() {
-    return new Promise<Barcode | undefined>(async resolve => {
+    // document.querySelector('body')?.classList.add('barcode-scanning-active');
+
+    // return new Promise<string | undefined>(async resolve => {
+    //   await BarcodeScanner.hideBackground();
+
+    //   const result = await BarcodeScanner.startScan({ targetedFormats: [SupportedFormat.QR_CODE] });
+
+    //   document.querySelector('body')?.classList.remove('barcode-scanning-active');
+
+    //   if (result.hasContent) {
+    //     console.log(result.content);
+    //     resolve(result.content)
+    //   }
+    //   else {
+    //     resolve(undefined)
+    //   }
+    // });
+    return new Promise<string | undefined>(async resolve => {
       const element = await this.dialog.showModal({
         component: BarcodeScanningModalComponent,
         cssClass: 'barcode-scanning-modal',
         showBackdrop: false,
-        componentProps: {
-          formats: [BarcodeFormat.QrCode],
-          lensFacing: LensFacing.Back,
-        },
         animated: false
       });
 
       element.onDidDismiss().then((result) => {
-        const barcode: Barcode | undefined = result.data?.barcode;
+        const barcode: string | undefined = result.data?.barcode;
         if (barcode) {
           resolve(barcode)
         }

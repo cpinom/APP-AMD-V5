@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version: '5.0.0',
+  version: '5.0.4',
   apiUrl: 'https://siga.inacap.cl/inacap.api.amd.v4',
   environmentTitle: 'Producción',
   mapsKey: 'AIzaSyBoGvWsUMvPL0glLPRSx-7V5GRWSEnC-Ns',
