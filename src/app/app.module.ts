@@ -17,7 +17,7 @@ import { PipesModule } from './core/pipes/pipes.module';
   imports: [
     BrowserModule,
     IonicModule.forRoot({
-      mode: 'ios',
+      // mode: 'ios',
       innerHTMLTemplatesEnabled: true
     }),
     AppRoutingModule,

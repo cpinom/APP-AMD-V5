@@ -23,6 +23,7 @@ log.txt
 /platforms
 /plugins
 /ios
+/android
 
 # Compiled output
 /dist
@@ -71,3 +72,4 @@ testem.log
 Thumbs.db
 
 resources/ios/**/*
+resources/android/**/*
